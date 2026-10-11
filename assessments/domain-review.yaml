@@ -1,0 +1,300 @@
+schema_version: 1
+kind: question_bank
+id: ats054-domain-review
+course_id: ATS054
+exam_code: CCA
+status: draft
+provenance: Original practice material; not official examination questions.
+scope:
+  type: domain
+  id: domain-review
+  title: Service Mesh
+placement:
+  position: after
+  reading: sections/section-050/module-01/course-02-summary.md
+questions:
+- id: ats054-domain-review-q01
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Trace external requests through listener, route and backend.
+  source_readings:
+  - sections/section-010/module-01/course-01-cilium-ingress-and-gateway-request-paths.md
+  prompt: Does creating an Ingress automatically select every installed controller?
+  options:
+  - id: a
+    text: Yes; all controllers always merge it identically.
+    explanation: Ownership and feature configuration differ.
+  - id: b
+    text: Yes; the application parses the resource directly.
+    explanation: Controllers realize ingress intent.
+  - id: c
+    text: No; controller and class selection determine ownership.
+    explanation: The responsible implementation must recognize it.
+  correct_option: c
+  explanation: The responsible implementation must recognize it.
+- id: ats054-domain-review-q02
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Distinguish controller selection from route acceptance.
+  source_readings:
+  - sections/section-010/module-01/course-01-cilium-ingress-and-gateway-request-paths.md
+  prompt: Why can a request reach a gateway but fail routing?
+  options:
+  - id: a
+    text: Hubble Relay forwards all external requests.
+    explanation: Relay is an observation component.
+  - id: b
+    text: Host, path or route attachment may not match.
+    explanation: Reachability is distinct from route selection.
+  - id: c
+    text: Every reachable listener guarantees every backend.
+    explanation: Backends and routes have separate requirements.
+  correct_option: b
+  explanation: Reachability is distinct from route selection.
+- id: ats054-domain-review-q03
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Evaluate TLS termination separately from backend encryption.
+  source_readings:
+  - sections/section-010/module-01/course-01-cilium-ingress-and-gateway-request-paths.md
+  prompt: What does TLS termination at ingress establish?
+  options:
+  - id: a
+    text: Protection of the client-to-termination segment under its trust configuration.
+    explanation: Backend transport has a separate contract.
+  - id: b
+    text: Universal encryption of every database call.
+    explanation: Those paths require their own protection.
+  - id: c
+    text: Automatic business authorization for every URL.
+    explanation: Encryption does not grant application permission.
+  correct_option: a
+  explanation: Backend transport has a separate contract.
+- id: ats054-domain-review-q04
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Identify traffic management, visibility and security use cases.
+  source_readings:
+  - sections/section-020/module-01/course-01-service-mesh-use-cases-and-responsibility-boundaries.md
+  prompt: Which is a service-mesh use case?
+  options:
+  - id: a
+    text: Automatically implementing every application business rule.
+    explanation: Business logic remains in the application.
+  - id: b
+    text: Replacing the Kubernetes scheduler universally.
+    explanation: Placement is a different responsibility.
+  - id: c
+    text: Managing and observing communication between services.
+    explanation: It addresses service traffic behavior.
+  correct_option: c
+  explanation: It addresses service traffic behavior.
+- id: ats054-domain-review-q05
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Explain proxy and datapath participation in mesh features.
+  source_readings:
+  - sections/section-020/module-01/course-01-service-mesh-use-cases-and-responsibility-boundaries.md
+  prompt: Why can mesh traffic management use a proxy?
+  options:
+  - id: a
+    text: Proxies allocate all persistent volumes.
+    explanation: Storage has a separate contract.
+  - id: b
+    text: Application-aware routing needs protocol context.
+    explanation: It can evaluate supported request operations.
+  - id: c
+    text: Every Layer 3 route contains a complete HTTP path.
+    explanation: The path is application-layer data.
+  correct_option: b
+  explanation: It can evaluate supported request operations.
+- id: ats054-domain-review-q06
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Evaluate authentication, encryption and authorization independently.
+  source_readings:
+  - sections/section-020/module-01/course-01-service-mesh-use-cases-and-responsibility-boundaries.md
+  prompt: Does encrypted transport automatically authorize a business operation?
+  options:
+  - id: a
+    text: No; application authorization remains necessary.
+    explanation: Confidentiality and permission answer different questions.
+  - id: b
+    text: Yes; every encrypted caller is an administrator.
+    explanation: Encryption alone grants no such authority.
+  - id: c
+    text: Yes; Service discovery creates a user role.
+    explanation: Discovery does not define business permissions.
+  correct_option: a
+  explanation: Confidentiality and permission answer different questions.
+- id: ats054-domain-review-q07
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Compare Ingress's combined model with Gateway API's separated roles.
+  source_readings:
+  - sections/section-030/module-01/course-01-gateway-api-roles-attachment-and-delegation.md
+  prompt: Which resource describes an application's HTTP routing rules?
+  options:
+  - id: a
+    text: Only GatewayClass.
+    explanation: GatewayClass describes implementation-level responsibility.
+  - id: b
+    text: A PersistentVolumeClaim.
+    explanation: Storage requests do not define HTTP routing.
+  - id: c
+    text: HTTPRoute under the supported Gateway API model.
+    explanation: It separates application route intent from listener ownership.
+  correct_option: c
+  explanation: It separates application route intent from listener ownership.
+- id: ats054-domain-review-q08
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Explain GatewayClass, Gateway and route ownership.
+  source_readings:
+  - sections/section-030/module-01/course-01-gateway-api-roles-attachment-and-delegation.md
+  prompt: Why is role separation useful?
+  options:
+  - id: a
+    text: It removes all controller prerequisites.
+    explanation: The implementation remains necessary.
+  - id: b
+    text: Infrastructure and application owners can manage distinct routing responsibilities.
+    explanation: It supports deliberate delegation.
+  - id: c
+    text: It grants every namespace unrestricted gateway access.
+    explanation: Attachment permissions still constrain access.
+  correct_option: b
+  explanation: It supports deliberate delegation.
+- id: ats054-domain-review-q09
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Interpret attachment permissions and cross-namespace references.
+  source_readings:
+  - sections/section-030/module-01/course-01-gateway-api-roles-attachment-and-delegation.md
+  prompt: What does a supported ReferenceGrant authorize?
+  options:
+  - id: a
+    text: An otherwise permitted cross-namespace reference to resources in its namespace.
+    explanation: It is a scoped reference permission.
+  - id: b
+    text: Every network connection between all tenants.
+    explanation: It is not a general traffic allowlist.
+  - id: c
+    text: Every API verb for the route's user.
+    explanation: RBAC is separate.
+  correct_option: a
+  explanation: It is a scoped reference permission.
+- id: ats054-domain-review-q10
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Compare Cilium IPsec and WireGuard at a conceptual level.
+  source_readings:
+  - sections/section-040/module-01/course-01-transparent-encryption-and-its-traffic-boundaries.md
+  prompt: What must be established before claiming all relevant traffic is encrypted?
+  options:
+  - id: a
+    text: Only that an encryption checkbox is visible.
+    explanation: Presentation does not prove datapath behavior.
+  - id: b
+    text: Only that Pods share a namespace.
+    explanation: Namespace scope does not encrypt payloads.
+  - id: c
+    text: The active mechanism's supported path coverage and configuration.
+    explanation: Different segments and exclusions can exist.
+  correct_option: c
+  explanation: Different segments and exclusions can exist.
+- id: ats054-domain-review-q11
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Separate transparent encryption from application TLS and authentication.
+  source_readings:
+  - sections/section-040/module-01/course-01-transparent-encryption-and-its-traffic-boundaries.md
+  prompt: Is transparent network encryption universally equivalent to application mutual TLS?
+  options:
+  - id: a
+    text: Yes; encrypted traffic requires no authorization.
+    explanation: Permission remains separate.
+  - id: b
+    text: No; their identity and termination boundaries can differ.
+    explanation: They make different security claims.
+  - id: c
+    text: Yes; every node key is every application's business credential.
+    explanation: Node and application identities differ.
+  correct_option: b
+  explanation: They make different security claims.
+- id: ats054-domain-review-q12
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Evaluate keys, peer reachability, MTU and observability.
+  source_readings:
+  - sections/section-040/module-01/course-01-transparent-encryption-and-its-traffic-boundaries.md
+  prompt: Why can encryption affect connectivity?
+  options:
+  - id: a
+    text: Key, peer or MTU dependencies can fail.
+    explanation: Protection adds its own operational contract.
+  - id: b
+    text: Encryption always deletes DNS records.
+    explanation: That is not its universal behavior.
+  - id: c
+    text: Every encrypted packet bypasses all policy.
+    explanation: Policy can still apply under supported paths.
+  correct_option: a
+  explanation: Protection adds its own operational contract.
+- id: ats054-domain-review-q13
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Compare per-Pod sidecars with shared node proxy processing.
+  source_readings:
+  - sections/section-050/module-01/course-01-sidecar-and-shared-proxy-architecture-tradeoffs.md
+  prompt: What characterizes a sidecar proxy arrangement?
+  options:
+  - id: a
+    text: Every packet must pass through a dashboard.
+    explanation: Dashboards are presentation.
+  - id: b
+    text: No application Pod can contain multiple containers.
+    explanation: Sidecars use multi-container Pods.
+  - id: c
+    text: A proxy runs alongside the workload in its Pod.
+    explanation: It associates proxy lifecycle with that workload.
+  correct_option: c
+  explanation: It associates proxy lifecycle with that workload.
+- id: ats054-domain-review-q14
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Explain eBPF redirection and application-layer responsibilities.
+  source_readings:
+  - sections/section-050/module-01/course-01-sidecar-and-shared-proxy-architecture-tradeoffs.md
+  prompt: Does sidecarless mean no Layer 7 proxy can exist?
+  options:
+  - id: a
+    text: Yes; the UI becomes the packet forwarder.
+    explanation: The UI remains observability presentation.
+  - id: b
+    text: No; shared proxy processing can still provide application-aware features.
+    explanation: Placement differs from protocol responsibility.
+  - id: c
+    text: Yes; all HTTP parsing must vanish.
+    explanation: Features can require protocol interpretation.
+  correct_option: b
+  explanation: Placement differs from protocol responsibility.
+- id: ats054-domain-review-q15
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Evaluate resource, upgrade and failure-scope tradeoffs.
+  source_readings:
+  - sections/section-050/module-01/course-01-sidecar-and-shared-proxy-architecture-tradeoffs.md
+  prompt: What tradeoff can a shared node proxy introduce?
+  options:
+  - id: a
+    text: A failure can affect multiple workloads sharing that processing point.
+    explanation: Placement changes failure scope.
+  - id: b
+    text: Every workload receives independent dedicated hardware automatically.
+    explanation: That is not implied by shared processing.
+  - id: c
+    text: All upgrade planning becomes unnecessary.
+    explanation: Shared components still require supported lifecycle management.
+  correct_option: a
+  explanation: Placement changes failure scope.

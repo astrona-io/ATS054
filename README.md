@@ -1,18 +1,19 @@
-# ATS054 — CCA: Service Mesh
+# Service Mesh (ATS054)
 
-Preparation for the **Service Mesh** domain of **Cilium Certified Associate (CCA)**.
-The published domain weight is **16%**. This repository belongs to
-the [ATP011 training path](https://github.com/astrona-io/ATP011).
+Cilium Certified Associate (CCA): Service Mesh, worth 16% of the official curriculum. This course belongs to ATP011.
 
-**Status:** Preparation scaffold; content authoring has not started.
+Developed reading explains mechanisms, responsible components, examples and limits. Every section has an introduction and every module closes with a summary. Reusable YAML checks contain 5–15 questions per bank. Technical content remains draft. No labs or playgrounds are included.
 
-The initial commit reserves the curriculum structure. Lessons, playgrounds,
-labs and assessments are planned and are not ready for learner use.
+## Course Outline
 
-See [CURRICULUM.md](CURRICULUM.md) for the objective map and authoring checklist,
-[astrona.yaml](astrona.yaml) for the course manifest, and
-[CLAUDE.md](CLAUDE.md) for writing and environment rules.
+| Section / module | Module | Teaching files |
+| --- | --- | --- |
+| 010 / 01 | Cilium Ingress And Gateway Request Paths | Cilium Ingress And Gateway Request Paths |
+| 020 / 01 | Service Mesh Use Cases And Responsibility Boundaries | Service Mesh Use Cases And Responsibility Boundaries |
+| 030 / 01 | Gateway API Roles, Attachment And Delegation | Gateway API Roles, Attachment And Delegation |
+| 040 / 01 | Transparent Encryption And Its Traffic Boundaries | Transparent Encryption And Its Traffic Boundaries |
+| 050 / 01 | Sidecar And Shared-Proxy Architecture Tradeoffs | Sidecar And Shared-Proxy Architecture Tradeoffs |
 
-Curriculum source: [official CCA page](https://training.linuxfoundation.org/certification/cilium-certified-associate-cca/), checked 2026-10-10.
-License: [Apache-2.0](LICENSE). Curriculum objectives retain attribution to
-The Linux Foundation and CNCF; see [CNCF curriculum licensing](https://github.com/cncf/curriculum).
+## Author Review
+
+See [curriculum coverage](CURRICULUM.md), [primary sources](SOURCES.md), [question-bank documentation](ASSESSMENTS.md) and [contribution instructions](CONTRIBUTING.md). No runtime execution is claimed.

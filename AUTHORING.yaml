@@ -1,0 +1,124 @@
+version: 1
+approval: CCA requested 2026-10-11; established reading-only scope
+course:
+  id: ATS054
+  certification:
+    name: Cilium Certified Associate
+    code: CCA
+    provider: CNCF / Linux Foundation
+    domain: Service Mesh
+    weight: 16
+    competencies:
+    - Know How to use Ingress or Gateway API for Ingress Routing
+    - Service Mesh Use Cases
+    - Understand the Benefits of Gateway API over Ingress
+    - Encrypting Traffic in Transit with Cilium
+    - Sidecar-based versus Sidecarless Architectures
+defaults:
+  playground: false
+  module_lab: false
+  capstone: false
+  section_quiz: false
+  final_quiz: true
+assessment_format: YAML question banks v1, registered in assessments/index.yaml
+sections:
+- id: section-010
+  title: Know How to use Ingress or Gateway API for Ingress Routing
+  curriculum_item: Know How to use Ingress or Gateway API for Ingress Routing
+  capstone: false
+  section_quiz: false
+  modules:
+  - id: module-01
+    title: Cilium Ingress And Gateway Request Paths
+    objectives:
+    - Trace external requests through listener, route and backend.
+    - Distinguish controller selection from route acceptance.
+    - Explain Cilium proxy participation and feature prerequisites.
+    - Evaluate TLS termination separately from backend encryption.
+    outline:
+    - Cilium Ingress And Gateway Request Paths
+    playground: false
+    module_lab: false
+    sources:
+    - reading: sections/section-010/module-01/course-01-cilium-ingress-and-gateway-request-paths.md
+      adapted_from: null
+- id: section-020
+  title: Service Mesh Use Cases
+  curriculum_item: Service Mesh Use Cases
+  capstone: false
+  section_quiz: false
+  modules:
+  - id: module-01
+    title: Service Mesh Use Cases And Responsibility Boundaries
+    objectives:
+    - Identify traffic management, visibility and security use cases.
+    - Distinguish service discovery from application-aware routing.
+    - Explain proxy and datapath participation in mesh features.
+    - Evaluate authentication, encryption and authorization independently.
+    outline:
+    - Service Mesh Use Cases And Responsibility Boundaries
+    playground: false
+    module_lab: false
+    sources:
+    - reading: sections/section-020/module-01/course-01-service-mesh-use-cases-and-responsibility-boundaries.md
+      adapted_from: null
+- id: section-030
+  title: Understand the Benefits of Gateway API over Ingress
+  curriculum_item: Understand the Benefits of Gateway API over Ingress
+  capstone: false
+  section_quiz: false
+  modules:
+  - id: module-01
+    title: Gateway API Roles, Attachment And Delegation
+    objectives:
+    - Compare Ingress's combined model with Gateway API's separated roles.
+    - Explain GatewayClass, Gateway and route ownership.
+    - Interpret attachment permissions and cross-namespace references.
+    - Evaluate portability through supported implementation features and status.
+    outline:
+    - Gateway API Roles, Attachment And Delegation
+    playground: false
+    module_lab: false
+    sources:
+    - reading: sections/section-030/module-01/course-01-gateway-api-roles-attachment-and-delegation.md
+      adapted_from: null
+- id: section-040
+  title: Encrypting Traffic in Transit with Cilium
+  curriculum_item: Encrypting Traffic in Transit with Cilium
+  capstone: false
+  section_quiz: false
+  modules:
+  - id: module-01
+    title: Transparent Encryption And Its Traffic Boundaries
+    objectives:
+    - Compare Cilium IPsec and WireGuard at a conceptual level.
+    - Identify covered segments and exceptions in the active deployment.
+    - Separate transparent encryption from application TLS and authentication.
+    - Evaluate keys, peer reachability, MTU and observability.
+    outline:
+    - Transparent Encryption And Its Traffic Boundaries
+    playground: false
+    module_lab: false
+    sources:
+    - reading: sections/section-040/module-01/course-01-transparent-encryption-and-its-traffic-boundaries.md
+      adapted_from: null
+- id: section-050
+  title: Sidecar-based versus Sidecarless Architectures
+  curriculum_item: Sidecar-based versus Sidecarless Architectures
+  capstone: false
+  section_quiz: false
+  modules:
+  - id: module-01
+    title: Sidecar And Shared-Proxy Architecture Tradeoffs
+    objectives:
+    - Compare per-Pod sidecars with shared node proxy processing.
+    - Explain eBPF redirection and application-layer responsibilities.
+    - Evaluate resource, upgrade and failure-scope tradeoffs.
+    - Distinguish architecture labels from security guarantees.
+    outline:
+    - Sidecar And Shared-Proxy Architecture Tradeoffs
+    playground: false
+    module_lab: false
+    sources:
+    - reading: sections/section-050/module-01/course-01-sidecar-and-shared-proxy-architecture-tradeoffs.md
+      adapted_from: null

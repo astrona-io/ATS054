@@ -37,7 +37,7 @@ modules:
   title: Know How to use Ingress or Gateway API for Ingress Routing
   description: Developed reading and reasoning for Know How to use Ingress or Gateway
     API for Ingress Routing.
-  status: alpha
+  maturity: alpha
   content:
   - type: reading
     title: Know How to use Ingress or Gateway API for Ingress Routing
@@ -75,7 +75,7 @@ modules:
 - id: module-020
   title: Service Mesh Use Cases
   description: Developed reading and reasoning for Service Mesh Use Cases.
-  status: alpha
+  maturity: alpha
   content:
   - type: reading
     title: Service Mesh Use Cases
@@ -114,7 +114,7 @@ modules:
   title: Understand the Benefits of Gateway API over Ingress
   description: Developed reading and reasoning for Understand the Benefits of Gateway
     API over Ingress.
-  status: alpha
+  maturity: alpha
   content:
   - type: reading
     title: Understand the Benefits of Gateway API over Ingress
@@ -153,7 +153,7 @@ modules:
   title: Encrypting Traffic in Transit with Cilium
   description: Developed reading and reasoning for Encrypting Traffic in Transit with
     Cilium.
-  status: alpha
+  maturity: alpha
   content:
   - type: reading
     title: Encrypting Traffic in Transit with Cilium
@@ -210,7 +210,7 @@ modules:
   title: Sidecar-based versus Sidecarless Architectures
   description: Developed reading and reasoning for Sidecar-based versus Sidecarless
     Architectures.
-  status: alpha
+  maturity: alpha
   content:
   - type: reading
     title: Sidecar-based versus Sidecarless Architectures

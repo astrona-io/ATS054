@@ -1,0 +1,121 @@
+{
+  "context": "kind-astro-ats-054-lab-040-01-02",
+  "resources": [
+    {
+      "kind": "deployment",
+      "name": "probe",
+      "namespace": "starfleet",
+      "expected": {
+        "apiVersion": "apps/v1",
+        "kind": "Deployment",
+        "metadata": {
+          "name": "probe",
+          "namespace": "starfleet"
+        },
+        "spec": {
+          "replicas": 1,
+          "selector": {
+            "matchLabels": {
+              "app": "probe"
+            }
+          },
+          "template": {
+            "metadata": {
+              "labels": {
+                "app": "probe"
+              }
+            },
+            "spec": {
+              "containers": [
+                {
+                  "name": "probe",
+                  "image": "docker.io/library/python:3.13-alpine",
+                  "ports": [
+                    {
+                      "containerPort": 8080
+                    }
+                  ],
+                  "command": [
+                    "python",
+                    "-u",
+                    "/code/app.py"
+                  ],
+                  "volumeMounts": [
+                    {
+                      "name": "code",
+                      "mountPath": "/code"
+                    }
+                  ]
+                }
+              ],
+              "volumes": [
+                {
+                  "name": "code",
+                  "configMap": {
+                    "name": "probe-code"
+                  }
+                }
+              ],
+              "nodeSelector": {
+                "kubernetes.io/hostname": "astro-ats-054-lab-040-01-02-control-plane"
+              },
+              "tolerations": [
+                {
+                  "key": "node-role.kubernetes.io/control-plane",
+                  "operator": "Exists",
+                  "effect": "NoSchedule"
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "kind": "pod",
+      "name": "shuttle",
+      "namespace": "starfleet",
+      "expected": {
+        "apiVersion": "v1",
+        "kind": "Pod",
+        "metadata": {
+          "name": "shuttle",
+          "namespace": "starfleet"
+        },
+        "spec": {
+          "restartPolicy": "Never",
+          "containers": [
+            {
+              "name": "reader",
+              "image": "docker.io/library/python:3.13-alpine",
+              "command": [
+                "python",
+                "-c",
+                "import time; time.sleep(86400)"
+              ]
+            }
+          ],
+          "nodeName": "astro-ats-054-lab-040-01-02-worker"
+        }
+      }
+    }
+  ],
+  "behavior": [
+    {
+      "args": [
+        "kubectl",
+        "-n",
+        "starfleet",
+        "exec",
+        "shuttle",
+        "--",
+        "python",
+        "-c",
+        "import urllib.request; print(urllib.request.urlopen('http://probe:8080/',timeout=4).read().decode())"
+      ],
+      "contains": [
+        "probe-ready"
+      ]
+    }
+  ]
+}

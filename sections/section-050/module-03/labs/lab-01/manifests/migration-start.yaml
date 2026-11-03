@@ -1,0 +1,65 @@
+# Starting state: a legacy namespace with a sidecar-style pod, an L7 policy, and
+# an inventory with empty values.
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: outpost
+  labels:
+    sidecar.example.io/inject: "true"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: relay
+  namespace: outpost
+  labels:
+    app: relay
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: relay
+  template:
+    metadata:
+      labels:
+        app: relay
+    spec:
+      containers:
+        - name: app
+          image: curlimages/curl:8.22.0
+          command: ["sleep", "86400"]
+        - name: proxy
+          image: curlimages/curl:8.22.0
+          command: ["sleep", "86400"]
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: probe-get-only
+  namespace: starfleet
+spec:
+  endpointSelector:
+    matchLabels:
+      app: probe
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            app: shuttle
+      toPorts:
+        - ports:
+            - port: "8080"
+              protocol: TCP
+          rules:
+            http:
+              - method: GET
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: migration-inventory
+  namespace: starfleet
+data:
+  injected-namespaces: "TODO"
+  sidecar-pods: "TODO"
+  l7-policies: "TODO"
+  envoy-ready: "TODO"

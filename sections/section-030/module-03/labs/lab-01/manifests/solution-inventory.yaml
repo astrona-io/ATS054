@@ -1,0 +1,12 @@
+# The reference solution fills the values by reading the cluster. The script
+# solution/apply.sh uses kubectl instead of this file.
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: gateway-inventory
+  namespace: starfleet
+data:
+  channel: "experimental"
+  bundle-version: "v1.6.3"
+  class-accepted: "True"
+  has-tlsroute: "yes"

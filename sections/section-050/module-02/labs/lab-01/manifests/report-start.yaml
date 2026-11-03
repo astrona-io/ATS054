@@ -1,0 +1,11 @@
+# Starting state: a report with empty values.
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: architecture-report
+  namespace: starfleet
+data:
+  agent-pods: "TODO"
+  envoy-pods: "TODO"
+  max-containers: "TODO"
+  sidecar-webhooks: "TODO"

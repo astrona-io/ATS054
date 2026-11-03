@@ -1,0 +1,11 @@
+# Starting state: a report with empty values.
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: encryption-report
+  namespace: starfleet
+data:
+  interface: "TODO"
+  port: "TODO"
+  peers: "TODO"
+  node-encryption: "TODO"

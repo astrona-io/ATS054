@@ -1,0 +1,65 @@
+# yaml-language-server: $schema=https://cli.astrona.io/schema/lab-config.schema.json
+#
+# Inventory The Gateway API Of A Cluster (LAB). Graded against the live cluster. UNTESTED.
+apiVersion: astrona.io/v1
+metadata:
+  name: ats-054-lab-030-03
+  docs:
+    prerequisites: prerequisites.md
+    question: question.md
+    solution: solution.md
+
+runtime:
+  type: kind
+  kind:
+    image: kindest/node:v1.35.0@sha256:452d707d4862f52530247495d180205e029056831160e22870e37e3f6c1ac31f
+    nodes:
+      workers: 1
+    networking:
+      disableDefaultCNI: true
+      podSubnet: 10.244.0.0/16
+    preloadImages:
+      - ghcr.io/stefanprodan/podinfo:6.15.0
+      - mccutchen/go-httpbin:2.25.0
+      - curlimages/curl:8.22.0
+
+bootstrap:
+  init:
+    - name: seed-cluster
+      description: Install Cilium and create the Starfleet workloads
+      type: file
+      source: bootstrap/01-seed-cluster.sh
+
+# Applied only by `astrona test`: the reference solution.
+testing:
+  init:
+    - name: apply-solution
+      description: Apply the reference solution
+      type: file
+      source: solution/apply.sh
+
+validation:
+  scripts:
+    - name: channel-recorded
+      description: "The key channel matches the channel of the installed CRDs"
+      type: file
+      source: validation/validate-channel-recorded.sh
+      hint: "Read the annotation gateway.networking.k8s.io/channel on the CRD gateways.gateway.networking.k8s.io."
+    - name: bundle-version-recorded
+      description: "The key bundle-version matches the installed bundle version"
+      type: file
+      source: validation/validate-bundle-version-recorded.sh
+      hint: "Read the annotation gateway.networking.k8s.io/bundle-version on the same CRD."
+    - name: class-accepted-recorded
+      description: "The key class-accepted matches the Accepted condition of the GatewayClass cilium"
+      type: file
+      source: validation/validate-class-accepted-recorded.sh
+      hint: "Read the condition Accepted in the status of the GatewayClass cilium."
+    - name: tlsroute-recorded
+      description: "The key has-tlsroute is yes when the CRD tlsroutes exists and no when it does not"
+      type: file
+      source: validation/validate-tlsroute-recorded.sh
+      hint: "List the CRDs of group gateway.networking.k8s.io and write yes or no."
+
+teardown:
+  keepCluster: false

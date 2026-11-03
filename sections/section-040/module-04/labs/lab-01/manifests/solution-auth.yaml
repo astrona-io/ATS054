@@ -1,0 +1,19 @@
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: scout-require-auth
+  namespace: starfleet
+spec:
+  endpointSelector:
+    matchLabels:
+      app: scout
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            app: shuttle
+      authentication:
+        mode: required
+      toPorts:
+        - ports:
+            - port: "9898"
+              protocol: TCP

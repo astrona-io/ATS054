@@ -1,0 +1,9 @@
+# Starting state: the key secret with SPI 1.
+apiVersion: v1
+kind: Secret
+metadata:
+  name: cilium-ipsec-keys
+  namespace: kube-system
+type: Opaque
+stringData:
+  keys: "1+ rfc4106(gcm(aes)) 0123456789abcdef0123456789abcdef01234567 128"

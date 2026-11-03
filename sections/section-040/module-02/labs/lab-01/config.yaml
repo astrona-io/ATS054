@@ -1,0 +1,65 @@
+# yaml-language-server: $schema=https://cli.astrona.io/schema/lab-config.schema.json
+#
+# Record The WireGuard Settings Of A Cluster (LAB). Graded against the live cluster. UNTESTED.
+apiVersion: astrona.io/v1
+metadata:
+  name: ats-054-lab-040-02
+  docs:
+    prerequisites: prerequisites.md
+    question: question.md
+    solution: solution.md
+
+runtime:
+  type: kind
+  kind:
+    image: kindest/node:v1.35.0@sha256:452d707d4862f52530247495d180205e029056831160e22870e37e3f6c1ac31f
+    nodes:
+      workers: 1
+    networking:
+      disableDefaultCNI: true
+      podSubnet: 10.244.0.0/16
+    preloadImages:
+      - ghcr.io/stefanprodan/podinfo:6.15.0
+      - mccutchen/go-httpbin:2.25.0
+      - curlimages/curl:8.22.0
+
+bootstrap:
+  init:
+    - name: seed-cluster
+      description: Install Cilium and create the Starfleet workloads
+      type: file
+      source: bootstrap/01-seed-cluster.sh
+
+# Applied only by `astrona test`: the reference solution.
+testing:
+  init:
+    - name: apply-solution
+      description: Apply the reference solution
+      type: file
+      source: solution/apply.sh
+
+validation:
+  scripts:
+    - name: interface-recorded
+      description: "The key interface is the WireGuard device the agent reports"
+      type: file
+      source: validation/validate-interface-recorded.sh
+      hint: "Read the Encryption line of cilium-dbg status: the device name comes before (Pubkey."
+    - name: port-recorded
+      description: "The key port is the UDP listen port the agent reports"
+      type: file
+      source: validation/validate-port-recorded.sh
+      hint: "The Encryption line shows Port: followed by the number."
+    - name: peers-recorded
+      description: "The key peers is the number of WireGuard peers the agent reports"
+      type: file
+      source: validation/validate-peers-recorded.sh
+      hint: "The Encryption line shows Peers: followed by the number."
+    - name: node-encryption-recorded
+      description: "The key node-encryption is Enabled or Disabled as the agent reports"
+      type: file
+      source: validation/validate-node-encryption-recorded.sh
+      hint: "The Encryption line shows NodeEncryption: followed by Enabled or Disabled."
+
+teardown:
+  keepCluster: false

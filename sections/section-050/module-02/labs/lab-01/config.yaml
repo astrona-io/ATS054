@@ -1,0 +1,65 @@
+# yaml-language-server: $schema=https://cli.astrona.io/schema/lab-config.schema.json
+#
+# Prove The Cluster Runs Without Sidecars (LAB). Graded against the live cluster. UNTESTED.
+apiVersion: astrona.io/v1
+metadata:
+  name: ats-054-lab-050-02
+  docs:
+    prerequisites: prerequisites.md
+    question: question.md
+    solution: solution.md
+
+runtime:
+  type: kind
+  kind:
+    image: kindest/node:v1.35.0@sha256:452d707d4862f52530247495d180205e029056831160e22870e37e3f6c1ac31f
+    nodes:
+      workers: 1
+    networking:
+      disableDefaultCNI: true
+      podSubnet: 10.244.0.0/16
+    preloadImages:
+      - ghcr.io/stefanprodan/podinfo:6.15.0
+      - mccutchen/go-httpbin:2.25.0
+      - curlimages/curl:8.22.0
+
+bootstrap:
+  init:
+    - name: seed-cluster
+      description: Install Cilium and create the Starfleet workloads
+      type: file
+      source: bootstrap/01-seed-cluster.sh
+
+# Applied only by `astrona test`: the reference solution.
+testing:
+  init:
+    - name: apply-solution
+      description: Apply the reference solution
+      type: file
+      source: solution/apply.sh
+
+validation:
+  scripts:
+    - name: agent-pods-recorded
+      description: "The key agent-pods is the number of Cilium agent pods"
+      type: file
+      source: validation/validate-agent-pods-recorded.sh
+      hint: "Count the pods with the label k8s-app=cilium in kube-system."
+    - name: envoy-pods-recorded
+      description: "The key envoy-pods is the number of cilium-envoy pods"
+      type: file
+      source: validation/validate-envoy-pods-recorded.sh
+      hint: "Count the pods with the label k8s-app=cilium-envoy in kube-system."
+    - name: max-containers-recorded
+      description: "The key max-containers is the largest number of containers in one pod of starfleet and outpost"
+      type: file
+      source: validation/validate-max-containers-recorded.sh
+      hint: "List the container names of every pod in the two namespaces and take the largest count."
+    - name: sidecar-webhooks-recorded
+      description: "The key sidecar-webhooks is the number of mutating webhooks whose name has istio or linkerd"
+      type: file
+      source: validation/validate-sidecar-webhooks-recorded.sh
+      hint: "List the mutating webhook configurations and count the names that match."
+
+teardown:
+  keepCluster: false

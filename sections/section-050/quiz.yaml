@@ -195,3 +195,444 @@ questions:
     correct_option: b
     explanation: "Correct. The boundary improves and the failure scope grows."
 
+  - id: ats054-050-m02-q01
+    type: single_choice
+    difficulty: beginner
+    learning_objective: Count the proxies
+    source_readings:
+    - sections/section-050/module-02/course-01-what-runs-where.md
+    prompt: How many cilium-envoy pods does a two-node cluster have?
+    options:
+    - id: a
+      text: '2'
+      explanation: Correct. It is a DaemonSet with one pod per node.
+    - id: b
+      text: '1'
+      explanation: Incorrect. It is a DaemonSet with one pod per node.
+    - id: c
+      text: One per pod
+      explanation: Incorrect. It is a DaemonSet with one pod per node.
+    - id: d
+      text: '0'
+      explanation: Incorrect. It is a DaemonSet with one pod per node.
+    correct_option: a
+    explanation: Correct. It is a DaemonSet with one pod per node.
+  - id: ats054-050-m02-q02
+    type: single_choice
+    difficulty: beginner
+    learning_objective: Find the kernel work
+    source_readings:
+    - sections/section-050/module-02/course-01-what-runs-where.md
+    prompt: Which traffic stays in the kernel?
+    options:
+    - id: a
+      text: Layer 3 and Layer 4
+      explanation: Correct. Layer 7 goes through the node proxy.
+    - id: b
+      text: Layer 7 rules
+      explanation: Incorrect. Layer 7 goes through the node proxy.
+    - id: c
+      text: Gateway routes
+      explanation: Incorrect. Layer 7 goes through the node proxy.
+    - id: d
+      text: HTTP header rules
+      explanation: Incorrect. Layer 7 goes through the node proxy.
+    correct_option: a
+    explanation: Correct. Layer 7 goes through the node proxy.
+  - id: ats054-050-m02-q03
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: Check for sidecars
+    source_readings:
+    - sections/section-050/module-02/course-01-what-runs-where.md
+    prompt: What would show a sidecar mesh injector in the cluster?
+    options:
+    - id: a
+      text: A mutating webhook with a mesh name
+      explanation: Correct. The injector is a mutating webhook.
+    - id: b
+      text: A DaemonSet named cilium
+      explanation: Incorrect. The injector is a mutating webhook.
+    - id: c
+      text: A Service of type ClusterIP
+      explanation: Incorrect. The injector is a mutating webhook.
+    - id: d
+      text: A ConfigMap
+      explanation: Incorrect. The injector is a mutating webhook.
+    correct_option: a
+    explanation: Correct. The injector is a mutating webhook.
+  - id: ats054-050-m02-q04
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: Compare the count
+    source_readings:
+    - sections/section-050/module-02/course-02-cost-and-footprint.md
+    prompt: What does the number of proxies follow in the sidecarless design?
+    options:
+    - id: a
+      text: The number of nodes
+      explanation: Correct. One proxy per node.
+    - id: b
+      text: The number of pods
+      explanation: Incorrect. One proxy per node.
+    - id: c
+      text: The number of Services
+      explanation: Incorrect. One proxy per node.
+    - id: d
+      text: The number of namespaces
+      explanation: Incorrect. One proxy per node.
+    correct_option: a
+    explanation: Correct. One proxy per node.
+  - id: ats054-050-m02-q05
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: Do the arithmetic
+    source_readings:
+    - sections/section-050/module-02/course-02-cost-and-footprint.md
+    prompt: 400 pods at 50 MiB each as sidecars cost about how much memory at rest?
+    options:
+    - id: a
+      text: 20 GiB
+      explanation: Correct. 400 x 50 MiB = 20,000 MiB.
+    - id: b
+      text: 500 MiB
+      explanation: Incorrect. 400 x 50 MiB = 20,000 MiB.
+    - id: c
+      text: 2 GiB
+      explanation: Incorrect. 400 x 50 MiB = 20,000 MiB.
+    - id: d
+      text: 50 MiB
+      explanation: Incorrect. 400 x 50 MiB = 20,000 MiB.
+    correct_option: a
+    explanation: Correct. 400 x 50 MiB = 20,000 MiB.
+  - id: ats054-050-m02-q06
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: Avoid a claim
+    source_readings:
+    - sections/section-050/module-02/course-02-cost-and-footprint.md
+    prompt: Why must you measure before you claim a saving?
+    options:
+    - id: a
+      text: It depends on pod density and Layer 7 traffic
+      explanation: Correct. If little traffic needs Layer 7, both are cheap.
+    - id: b
+      text: It is always the same
+      explanation: Incorrect. If little traffic needs Layer 7, both are cheap.
+    - id: c
+      text: Kubernetes requires it
+      explanation: Incorrect. If little traffic needs Layer 7, both are cheap.
+    - id: d
+      text: Hubble reports it
+      explanation: Incorrect. If little traffic needs Layer 7, both are cheap.
+    correct_option: a
+    explanation: Correct. If little traffic needs Layer 7, both are cheap.
+  - id: ats054-050-m02-q07
+    type: single_choice
+    difficulty: beginner
+    learning_objective: Know who upgrades
+    source_readings:
+    - sections/section-050/module-02/course-03-upgrades-and-failure-scope.md
+    prompt: Who owns the upgrade of the node proxy?
+    options:
+    - id: a
+      text: The platform team
+      explanation: Correct. It is a DaemonSet in kube-system.
+    - id: b
+      text: Each application team
+      explanation: Incorrect. It is a DaemonSet in kube-system.
+    - id: c
+      text: The end users
+      explanation: Incorrect. It is a DaemonSet in kube-system.
+    - id: d
+      text: No one
+      explanation: Incorrect. It is a DaemonSet in kube-system.
+    correct_option: a
+    explanation: Correct. It is a DaemonSet in kube-system.
+  - id: ats054-050-m02-q08
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: Read the blast radius
+    source_readings:
+    - sections/section-050/module-02/course-03-upgrades-and-failure-scope.md
+    prompt: What does a failing cilium-envoy affect?
+    options:
+    - id: a
+      text: Layer 7 traffic of the pods on that node
+      explanation: Correct. Layer 3 and Layer 4 traffic keeps working.
+    - id: b
+      text: All pods of the cluster
+      explanation: Incorrect. Layer 3 and Layer 4 traffic keeps working.
+    - id: c
+      text: Only one pod
+      explanation: Incorrect. Layer 3 and Layer 4 traffic keeps working.
+    - id: d
+      text: Nothing
+      explanation: Incorrect. Layer 3 and Layer 4 traffic keeps working.
+    correct_option: a
+    explanation: Correct. Layer 3 and Layer 4 traffic keeps working.
+  - id: ats054-050-m02-q09
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: Weigh the trade-off
+    source_readings:
+    - sections/section-050/module-02/course-04-security-boundaries-and-trade-offs.md
+    prompt: What does a shared node proxy trade away?
+    options:
+    - id: a
+      text: Per-pod proxy isolation and settings
+      explanation: Correct. It gains no injection and lower cost.
+    - id: b
+      text: Policy enforcement
+      explanation: Incorrect. It gains no injection and lower cost.
+    - id: c
+      text: Hubble
+      explanation: Incorrect. It gains no injection and lower cost.
+    - id: d
+      text: Identity
+      explanation: Incorrect. It gains no injection and lower cost.
+    correct_option: a
+    explanation: Correct. It gains no injection and lower cost.
+  - id: ats054-050-m02-q10
+    type: single_choice
+    difficulty: advanced
+    learning_objective: Be precise
+    source_readings:
+    - sections/section-050/module-02/course-04-security-boundaries-and-trade-offs.md
+    prompt: Why avoid saying the sidecarless design is simply more secure?
+    options:
+    - id: a
+      text: It removes some risks and adds others
+      explanation: Correct. Say which risk you mean.
+    - id: b
+      text: It has no encryption
+      explanation: Incorrect. Say which risk you mean.
+    - id: c
+      text: It has no policy
+      explanation: Incorrect. Say which risk you mean.
+    - id: d
+      text: It is slower
+      explanation: Incorrect. Say which risk you mean.
+    correct_option: a
+    explanation: Correct. Say which risk you mean.
+
+  - id: ats054-050-m03-q01
+    type: single_choice
+    difficulty: beginner
+    learning_objective: Decide per workload
+    source_readings:
+    - sections/section-050/module-03/course-01-decision-factors.md
+    prompt: At which level should the design decision be made?
+    options:
+    - id: a
+      text: Per workload
+      explanation: Correct. Facts differ per workload.
+    - id: b
+      text: Once for the company
+      explanation: Incorrect. Facts differ per workload.
+    - id: c
+      text: Per node
+      explanation: Incorrect. Facts differ per workload.
+    - id: d
+      text: Per Service port
+      explanation: Incorrect. Facts differ per workload.
+    correct_option: a
+    explanation: Correct. Facts differ per workload.
+  - id: ats054-050-m03-q02
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: Read a firm requirement
+    source_readings:
+    - sections/section-050/module-03/course-01-decision-factors.md
+    prompt: What settles the question for a workload that needs its own proxy version?
+    options:
+    - id: a
+      text: A sidecar
+      explanation: Correct. A firm requirement outweighs preferences.
+    - id: b
+      text: The node proxy
+      explanation: Incorrect. A firm requirement outweighs preferences.
+    - id: c
+      text: Hubble
+      explanation: Incorrect. A firm requirement outweighs preferences.
+    - id: d
+      text: A ConfigMap
+      explanation: Incorrect. A firm requirement outweighs preferences.
+    correct_option: a
+    explanation: Correct. A firm requirement outweighs preferences.
+  - id: ats054-050-m03-q03
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: Avoid overlap
+    source_readings:
+    - sections/section-050/module-03/course-01-decision-factors.md
+    prompt: Why avoid two meshes that enforce overlapping rules?
+    options:
+    - id: a
+      text: Failures are hard to place
+      explanation: Correct. A request passes two sets of policies.
+    - id: b
+      text: It is not allowed
+      explanation: Incorrect. A request passes two sets of policies.
+    - id: c
+      text: It is faster
+      explanation: Incorrect. A request passes two sets of policies.
+    - id: d
+      text: It saves memory
+      explanation: Incorrect. A request passes two sets of policies.
+    correct_option: a
+    explanation: Correct. A request passes two sets of policies.
+  - id: ats054-050-m03-q04
+    type: single_choice
+    difficulty: beginner
+    learning_objective: Start with facts
+    source_readings:
+    - sections/section-050/module-03/course-02-inventory-and-feature-mapping.md
+    prompt: What do you collect before you change anything?
+    options:
+    - id: a
+      text: An inventory
+      explanation: Correct. You cannot migrate what you have not counted.
+    - id: b
+      text: A new Helm chart
+      explanation: Incorrect. You cannot migrate what you have not counted.
+    - id: c
+      text: A new cluster
+      explanation: Incorrect. You cannot migrate what you have not counted.
+    - id: d
+      text: A bill
+      explanation: Incorrect. You cannot migrate what you have not counted.
+    correct_option: a
+    explanation: Correct. You cannot migrate what you have not counted.
+  - id: ats054-050-m03-q05
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: Map the guarantee
+    source_readings:
+    - sections/section-050/module-03/course-02-inventory-and-feature-mapping.md
+    prompt: Why not map mutual TLS to mutual authentication by name?
+    options:
+    - id: a
+      text: They give different guarantees
+      explanation: Correct. One encrypts in the proxy, the other proves identity.
+    - id: b
+      text: They are the same
+      explanation: Incorrect. One encrypts in the proxy, the other proves identity.
+    - id: c
+      text: One is deprecated
+      explanation: Incorrect. One encrypts in the proxy, the other proves identity.
+    - id: d
+      text: Names are random
+      explanation: Incorrect. One encrypts in the proxy, the other proves identity.
+    correct_option: a
+    explanation: Correct. One encrypts in the proxy, the other proves identity.
+  - id: ats054-050-m03-q06
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: Handle a gap
+    source_readings:
+    - sections/section-050/module-03/course-02-inventory-and-feature-mapping.md
+    prompt: What do you do with a feature that has no Cilium equivalent?
+    options:
+    - id: a
+      text: Record the gap and keep the sidecar or accept the loss
+      explanation: Correct. A gap needs a decision.
+    - id: b
+      text: Ignore it
+      explanation: Incorrect. A gap needs a decision.
+    - id: c
+      text: Delete the workload
+      explanation: Incorrect. A gap needs a decision.
+    - id: d
+      text: Rename it
+      explanation: Incorrect. A gap needs a decision.
+    correct_option: a
+    explanation: Correct. A gap needs a decision.
+  - id: ats054-050-m03-q07
+    type: single_choice
+    difficulty: beginner
+    learning_objective: Pick the unit
+    source_readings:
+    - sections/section-050/module-03/course-03-migrate-one-namespace-at-a-time.md
+    prompt: What is a good unit of migration?
+    options:
+    - id: a
+      text: A namespace
+      explanation: Correct. It has an owner and a label.
+    - id: b
+      text: A single packet
+      explanation: Incorrect. It has an owner and a label.
+    - id: c
+      text: A node image
+      explanation: Incorrect. It has an owner and a label.
+    - id: d
+      text: A Secret
+      explanation: Incorrect. It has an owner and a label.
+    correct_option: a
+    explanation: Correct. It has an owner and a label.
+  - id: ats054-050-m03-q08
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: Order the steps
+    source_readings:
+    - sections/section-050/module-03/course-03-migrate-one-namespace-at-a-time.md
+    prompt: What comes right after you stop new injection?
+    options:
+    - id: a
+      text: Restart the workloads with a rolling update
+      explanation: Correct. Existing pods keep sidecars until restarted.
+    - id: b
+      text: Delete the cluster
+      explanation: Incorrect. Existing pods keep sidecars until restarted.
+    - id: c
+      text: Remove Cilium
+      explanation: Incorrect. Existing pods keep sidecars until restarted.
+    - id: d
+      text: Scale to zero
+      explanation: Incorrect. Existing pods keep sidecars until restarted.
+    correct_option: a
+    explanation: Correct. Existing pods keep sidecars until restarted.
+  - id: ats054-050-m03-q09
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: Plan the way back
+    source_readings:
+    - sections/section-050/module-03/course-04-verify-and-roll-back.md
+    prompt: Which step has no easy rollback?
+    options:
+    - id: a
+      text: Removing the old mesh objects
+      explanation: Correct. Keep a copy of the objects first.
+    - id: b
+      text: Adding the label
+      explanation: Incorrect. Keep a copy of the objects first.
+    - id: c
+      text: Adding a policy
+      explanation: Incorrect. Keep a copy of the objects first.
+    - id: d
+      text: Restarting a pod
+      explanation: Incorrect. Keep a copy of the objects first.
+    correct_option: a
+    explanation: Correct. Keep a copy of the objects first.
+  - id: ats054-050-m03-q10
+    type: single_choice
+    difficulty: advanced
+    learning_objective: Remove the webhooks
+    source_readings:
+    - sections/section-050/module-03/course-04-verify-and-roll-back.md
+    prompt: Why remove old webhooks with the old control plane?
+    options:
+    - id: a
+      text: A webhook for a deleted service can reject new pods
+      explanation: Correct. Test by creating a pod.
+    - id: b
+      text: They use memory
+      explanation: Incorrect. Test by creating a pod.
+    - id: c
+      text: They break Hubble
+      explanation: Incorrect. Test by creating a pod.
+    - id: d
+      text: They change labels
+      explanation: Incorrect. Test by creating a pod.
+    correct_option: a
+    explanation: Correct. Test by creating a pod.

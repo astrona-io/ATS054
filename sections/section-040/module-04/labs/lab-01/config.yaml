@@ -1,0 +1,65 @@
+# yaml-language-server: $schema=https://cli.astrona.io/schema/lab-config.schema.json
+#
+# Require Mutual Authentication For A Service (LAB). Graded against the live cluster. UNTESTED.
+apiVersion: astrona.io/v1
+metadata:
+  name: ats-054-lab-040-04
+  docs:
+    prerequisites: prerequisites.md
+    question: question.md
+    solution: solution.md
+
+runtime:
+  type: kind
+  kind:
+    image: kindest/node:v1.35.0@sha256:452d707d4862f52530247495d180205e029056831160e22870e37e3f6c1ac31f
+    nodes:
+      workers: 1
+    networking:
+      disableDefaultCNI: true
+      podSubnet: 10.244.0.0/16
+    preloadImages:
+      - ghcr.io/stefanprodan/podinfo:6.15.0
+      - mccutchen/go-httpbin:2.25.0
+      - curlimages/curl:8.22.0
+
+bootstrap:
+  init:
+    - name: seed-cluster
+      description: Install Cilium and create the Starfleet workloads
+      type: file
+      source: bootstrap/01-seed-cluster.sh
+
+# Applied only by `astrona test`: the reference solution.
+testing:
+  init:
+    - name: apply-solution
+      description: Apply the reference solution
+      type: file
+      source: solution/apply.sh
+
+validation:
+  scripts:
+    - name: policy-requires-auth
+      description: "A policy for scout requires authentication in an ingress rule"
+      type: file
+      source: validation/validate-policy-requires-auth.sh
+      hint: "Add authentication with mode: required to the ingress rule, next to fromEndpoints."
+    - name: policy-selects-scout-and-shuttle
+      description: "The policy selects scout and accepts shuttle"
+      type: file
+      source: validation/validate-policy-selects-scout-and-shuttle.sh
+      hint: "Use endpointSelector app: scout and fromEndpoints app: shuttle."
+    - name: shuttle-reaches-scout
+      description: "shuttle reaches scout and gets 200 after the authentication"
+      type: file
+      source: validation/validate-shuttle-reaches-scout.sh
+      hint: "The first packet can be dropped while the handshake runs. Wait and try again."
+    - name: drifter-is-denied
+      description: "drifter in another namespace does not reach scout"
+      type: file
+      source: validation/validate-drifter-is-denied.sh
+      hint: "Do not allow other sources. A request that no rule accepts gets no answer."
+
+teardown:
+  keepCluster: false

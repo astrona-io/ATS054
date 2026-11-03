@@ -1,0 +1,11 @@
+# Starting state: an inventory with empty values.
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: gateway-inventory
+  namespace: starfleet
+data:
+  channel: "TODO"
+  bundle-version: "TODO"
+  class-accepted: "TODO"
+  has-tlsroute: "TODO"

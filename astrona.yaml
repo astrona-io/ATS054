@@ -511,6 +511,84 @@ modules:
     title: Summary
     path: sections/section-030/module-01/course-04-summary.md
   - type: reading
+    title: Migrate From Ingress To Gateway API
+    path: sections/section-030/module-02/course.md
+  - type: reading
+    title: Map Ingress Fields To Gateway API
+    path: sections/section-030/module-02/course-01-map-ingress-fields-to-gateway-api.md
+  - type: reading
+    title: Replace Annotations With Fields And Filters
+    path: sections/section-030/module-02/course-02-replace-annotations-with-fields-and-filters.md
+  - type: reading
+    title: Convert With ingress2gateway
+    path: sections/section-030/module-02/course-03-convert-with-ingress2gateway.md
+  - type: reading
+    title: Plan A Cutover With A Rollback
+    path: sections/section-030/module-02/course-04-plan-a-cutover-with-a-rollback.md
+  - type: reading
+    title: Question
+    path: sections/section-030/module-02/labs/lab-01/question.md
+  - type: lab
+    title: Migrate An Ingress To A Gateway And An HTTPRoute (Lab)
+    path: sections/section-030/module-02/labs/lab-01
+    difficulty: intermediate
+    estimated_duration: 25m
+    topic: gateway-migration
+    task_kind: build
+    tags:
+    - gateway-api
+    - ingress
+    - migration
+    - ingress2gateway
+    - cutover
+    learning_goals:
+    - An HTTPRoute is accepted
+    - / reaches scout through the Gateway
+    - /probe is served by probe
+    - The old Ingress is deleted
+  - type: reading
+    title: Summary
+    path: sections/section-030/module-02/course-05-summary.md
+  - type: reading
+    title: Gateway API Channels, Conformance And Extensions
+    path: sections/section-030/module-03/course.md
+  - type: reading
+    title: Release Channels And Versions
+    path: sections/section-030/module-03/course-01-release-channels-and-versions.md
+  - type: reading
+    title: Question
+    path: sections/section-030/module-03/labs/lab-01/question.md
+  - type: lab
+    title: Inventory The Gateway API Of A Cluster (Lab)
+    path: sections/section-030/module-03/labs/lab-01
+    difficulty: intermediate
+    estimated_duration: 25m
+    topic: gateway-api-channels
+    task_kind: investigate
+    tags:
+    - gateway-api
+    - channels
+    - conformance
+    - extensions
+    - upgrade
+    learning_goals:
+    - The channel is recorded
+    - The bundle version is recorded
+    - The class status is recorded
+    - TLSRoute availability is recorded
+  - type: reading
+    title: Support Levels And Conformance
+    path: sections/section-030/module-03/course-02-support-levels-and-conformance.md
+  - type: reading
+    title: Extension Points
+    path: sections/section-030/module-03/course-03-extension-points.md
+  - type: reading
+    title: Upgrade And Compatibility
+    path: sections/section-030/module-03/course-04-upgrade-and-compatibility.md
+  - type: reading
+    title: Summary
+    path: sections/section-030/module-03/course-05-summary.md
+  - type: reading
     title: Question
     path: sections/section-030/capstone/labs/lab-01/question.md
   - type: lab
@@ -583,6 +661,122 @@ modules:
   - type: reading
     title: Summary
     path: sections/section-040/module-01/course-04-summary.md
+  - type: reading
+    title: Operate WireGuard Encryption
+    path: sections/section-040/module-02/course.md
+  - type: reading
+    title: Verify That WireGuard Is Active
+    path: sections/section-040/module-02/course-01-verify-that-wireguard-is-active.md
+  - type: reading
+    title: Node Encryption And Strict Mode
+    path: sections/section-040/module-02/course-02-node-encryption-and-strict-mode.md
+  - type: reading
+    title: Ports, MTU And Overhead
+    path: sections/section-040/module-02/course-03-ports-mtu-and-overhead.md
+  - type: reading
+    title: Troubleshoot WireGuard
+    path: sections/section-040/module-02/course-04-troubleshoot-wireguard.md
+  - type: reading
+    title: Question
+    path: sections/section-040/module-02/labs/lab-01/question.md
+  - type: lab
+    title: Record The WireGuard Settings Of A Cluster (Lab)
+    path: sections/section-040/module-02/labs/lab-01
+    difficulty: intermediate
+    estimated_duration: 25m
+    topic: wireguard-operations
+    task_kind: investigate
+    tags:
+    - wireguard
+    - encryption
+    - mtu
+    - strict-mode
+    - troubleshooting
+    learning_goals:
+    - The device name is recorded
+    - The UDP port is recorded
+    - The peer count is recorded
+    - The node encryption state is recorded
+  - type: reading
+    title: Summary
+    path: sections/section-040/module-02/course-05-summary.md
+  - type: reading
+    title: Operate IPsec Encryption
+    path: sections/section-040/module-03/course.md
+  - type: reading
+    title: How Cilium Uses IPsec
+    path: sections/section-040/module-03/course-01-how-cilium-uses-ipsec.md
+  - type: reading
+    title: The Key Secret
+    path: sections/section-040/module-03/course-02-the-key-secret.md
+  - type: reading
+    title: Rotate The Keys
+    path: sections/section-040/module-03/course-03-rotate-the-keys.md
+  - type: reading
+    title: Read The State And Choose A Mode
+    path: sections/section-040/module-03/course-04-read-the-state-and-choose-a-mode.md
+  - type: reading
+    title: Question
+    path: sections/section-040/module-03/labs/lab-01/question.md
+  - type: lab
+    title: Rotate The IPsec Key Secret (Lab)
+    path: sections/section-040/module-03/labs/lab-01
+    difficulty: intermediate
+    estimated_duration: 25m
+    topic: ipsec-operations
+    task_kind: build
+    tags:
+    - ipsec
+    - encryption
+    - keys
+    - rotation
+    - xfrm
+    learning_goals:
+    - The Secret has one key line
+    - The SPI is 2
+    - The algorithm and sizes are valid
+    - The key is new
+  - type: reading
+    title: Summary
+    path: sections/section-040/module-03/course-05-summary.md
+  - type: reading
+    title: Mutual Authentication In Practice
+    path: sections/section-040/module-04/course.md
+  - type: reading
+    title: The SPIRE Components
+    path: sections/section-040/module-04/course-01-the-spire-components.md
+  - type: reading
+    title: Require Authentication In A Policy
+    path: sections/section-040/module-04/course-02-require-authentication-in-a-policy.md
+  - type: reading
+    title: Observe And Verify
+    path: sections/section-040/module-04/course-03-observe-and-verify.md
+  - type: reading
+    title: Limits And Troubleshooting
+    path: sections/section-040/module-04/course-04-limits-and-troubleshooting.md
+  - type: reading
+    title: Question
+    path: sections/section-040/module-04/labs/lab-01/question.md
+  - type: lab
+    title: Require Mutual Authentication For A Service (Lab)
+    path: sections/section-040/module-04/labs/lab-01
+    difficulty: intermediate
+    estimated_duration: 25m
+    topic: mutual-auth-practice
+    task_kind: build
+    tags:
+    - spiffe
+    - spire
+    - mutual-authentication
+    - policy
+    learning_goals:
+    - The rule requires authentication
+    - The policy selects scout and shuttle
+    - shuttle reaches scout
+    - drifter is denied
+  - type: reading
+    title: Summary
+    path: sections/section-040/module-04/course-05-summary.md
   - type: reading
     title: Question
     path: sections/section-040/capstone/labs/lab-01/question.md
@@ -657,6 +851,84 @@ modules:
   - type: reading
     title: Summary
     path: sections/section-050/module-01/course-04-summary.md
+  - type: reading
+    title: Sidecarless Architecture In Practice
+    path: sections/section-050/module-02/course.md
+  - type: reading
+    title: What Runs Where
+    path: sections/section-050/module-02/course-01-what-runs-where.md
+  - type: reading
+    title: Cost And Footprint
+    path: sections/section-050/module-02/course-02-cost-and-footprint.md
+  - type: reading
+    title: Upgrades And Failure Scope
+    path: sections/section-050/module-02/course-03-upgrades-and-failure-scope.md
+  - type: reading
+    title: Security Boundaries And Trade-offs
+    path: sections/section-050/module-02/course-04-security-boundaries-and-trade-offs.md
+  - type: reading
+    title: Question
+    path: sections/section-050/module-02/labs/lab-01/question.md
+  - type: lab
+    title: Prove The Cluster Runs Without Sidecars (Lab)
+    path: sections/section-050/module-02/labs/lab-01
+    difficulty: intermediate
+    estimated_duration: 25m
+    topic: sidecarless-practice
+    task_kind: investigate
+    tags:
+    - sidecarless
+    - envoy
+    - footprint
+    - upgrades
+    - security
+    learning_goals:
+    - The agent pods are counted
+    - The Envoy pods are counted
+    - The container count is recorded
+    - The sidecar webhooks are counted
+  - type: reading
+    title: Summary
+    path: sections/section-050/module-02/course-05-summary.md
+  - type: reading
+    title: Choose And Migrate A Mesh Architecture
+    path: sections/section-050/module-03/course.md
+  - type: reading
+    title: Decision Factors
+    path: sections/section-050/module-03/course-01-decision-factors.md
+  - type: reading
+    title: Inventory And Feature Mapping
+    path: sections/section-050/module-03/course-02-inventory-and-feature-mapping.md
+  - type: reading
+    title: Migrate One Namespace At A Time
+    path: sections/section-050/module-03/course-03-migrate-one-namespace-at-a-time.md
+  - type: reading
+    title: Verify And Roll Back
+    path: sections/section-050/module-03/course-04-verify-and-roll-back.md
+  - type: reading
+    title: Question
+    path: sections/section-050/module-03/labs/lab-01/question.md
+  - type: lab
+    title: Inventory A Cluster Before A Sidecar Migration (Lab)
+    path: sections/section-050/module-03/labs/lab-01
+    difficulty: intermediate
+    estimated_duration: 25m
+    topic: mesh-migration
+    task_kind: investigate
+    tags:
+    - migration
+    - sidecar
+    - sidecarless
+    - inventory
+    - rollback
+    learning_goals:
+    - The injected namespaces are recorded
+    - The sidecar pods are counted
+    - The Layer 7 policies are counted
+    - The node proxy readiness is recorded
+  - type: reading
+    title: Summary
+    path: sections/section-050/module-03/course-05-summary.md
   - type: reading
     title: Question
     path: sections/section-050/capstone/labs/lab-01/question.md

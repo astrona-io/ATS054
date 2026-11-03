@@ -1,0 +1,65 @@
+# yaml-language-server: $schema=https://cli.astrona.io/schema/lab-config.schema.json
+#
+# Inventory A Cluster Before A Sidecar Migration (LAB). Graded against the live cluster. UNTESTED.
+apiVersion: astrona.io/v1
+metadata:
+  name: ats-054-lab-050-03
+  docs:
+    prerequisites: prerequisites.md
+    question: question.md
+    solution: solution.md
+
+runtime:
+  type: kind
+  kind:
+    image: kindest/node:v1.35.0@sha256:452d707d4862f52530247495d180205e029056831160e22870e37e3f6c1ac31f
+    nodes:
+      workers: 1
+    networking:
+      disableDefaultCNI: true
+      podSubnet: 10.244.0.0/16
+    preloadImages:
+      - ghcr.io/stefanprodan/podinfo:6.15.0
+      - mccutchen/go-httpbin:2.25.0
+      - curlimages/curl:8.22.0
+
+bootstrap:
+  init:
+    - name: seed-cluster
+      description: Install Cilium and create the Starfleet workloads
+      type: file
+      source: bootstrap/01-seed-cluster.sh
+
+# Applied only by `astrona test`: the reference solution.
+testing:
+  init:
+    - name: apply-solution
+      description: Apply the reference solution
+      type: file
+      source: solution/apply.sh
+
+validation:
+  scripts:
+    - name: injected-namespaces-recorded
+      description: "The key injected-namespaces lists the namespaces with the injection label"
+      type: file
+      source: validation/validate-injected-namespaces-recorded.sh
+      hint: "List namespaces with the label sidecar.example.io/inject=true."
+    - name: sidecar-pods-recorded
+      description: "The key sidecar-pods counts the pods that have a container named proxy"
+      type: file
+      source: validation/validate-sidecar-pods-recorded.sh
+      hint: "List the container names of the pods in starfleet and outpost."
+    - name: l7-policies-recorded
+      description: "The key l7-policies counts the CiliumNetworkPolicy objects with an HTTP rule"
+      type: file
+      source: validation/validate-l7-policies-recorded.sh
+      hint: "List the CiliumNetworkPolicy objects of starfleet and outpost and look for rules.http."
+    - name: envoy-ready-recorded
+      description: "The key envoy-ready is yes when every cilium-envoy pod is ready"
+      type: file
+      source: validation/validate-envoy-ready-recorded.sh
+      hint: "Compare numberReady with desiredNumberScheduled of the DaemonSet cilium-envoy."
+
+teardown:
+  keepCluster: false

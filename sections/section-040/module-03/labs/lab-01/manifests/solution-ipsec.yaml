@@ -1,0 +1,9 @@
+# Rotated key: SPI 2 and a new 20-byte key as 40 hex characters.
+apiVersion: v1
+kind: Secret
+metadata:
+  name: cilium-ipsec-keys
+  namespace: kube-system
+type: Opaque
+stringData:
+  keys: "2+ rfc4106(gcm(aes)) fedcba9876543210fedcba9876543210fedcba98 128"

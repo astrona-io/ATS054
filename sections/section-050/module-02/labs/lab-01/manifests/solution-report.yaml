@@ -1,0 +1,12 @@
+# Values the reference solution writes for a two-node cluster. The script
+# solution/apply.sh reads them from the cluster instead.
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: architecture-report
+  namespace: starfleet
+data:
+  agent-pods: "2"
+  envoy-pods: "2"
+  max-containers: "1"
+  sidecar-webhooks: "0"

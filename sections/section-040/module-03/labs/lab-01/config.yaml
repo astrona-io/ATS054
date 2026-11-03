@@ -1,0 +1,65 @@
+# yaml-language-server: $schema=https://cli.astrona.io/schema/lab-config.schema.json
+#
+# Rotate The IPsec Key Secret (LAB). Graded against the live cluster. UNTESTED.
+apiVersion: astrona.io/v1
+metadata:
+  name: ats-054-lab-040-03
+  docs:
+    prerequisites: prerequisites.md
+    question: question.md
+    solution: solution.md
+
+runtime:
+  type: kind
+  kind:
+    image: kindest/node:v1.35.0@sha256:452d707d4862f52530247495d180205e029056831160e22870e37e3f6c1ac31f
+    nodes:
+      workers: 1
+    networking:
+      disableDefaultCNI: true
+      podSubnet: 10.244.0.0/16
+    preloadImages:
+      - ghcr.io/stefanprodan/podinfo:6.15.0
+      - mccutchen/go-httpbin:2.25.0
+      - curlimages/curl:8.22.0
+
+bootstrap:
+  init:
+    - name: seed-cluster
+      description: Install Cilium and create the Starfleet workloads
+      type: file
+      source: bootstrap/01-seed-cluster.sh
+
+# Applied only by `astrona test`: the reference solution.
+testing:
+  init:
+    - name: apply-solution
+      description: Apply the reference solution
+      type: file
+      source: solution/apply.sh
+
+validation:
+  scripts:
+    - name: secret-has-one-key-line
+      description: "The Secret has the key keys with one key line of four fields"
+      type: file
+      source: validation/validate-secret-has-one-key-line.sh
+      hint: "The value of the key keys has four fields: SPI, algorithm, key and ICV size, on one line."
+    - name: spi-is-two
+      description: "The SPI of the key is 2"
+      type: file
+      source: validation/validate-spi-is-two.sh
+      hint: "Rotation raises the SPI by one. The old key had SPI 1."
+    - name: algorithm-and-size-valid
+      description: "The algorithm is rfc4106(gcm(aes)), the key is 40 hex characters and the ICV size is 128"
+      type: file
+      source: validation/validate-algorithm-and-size-valid.sh
+      hint: "Use a key of 20 random bytes written as 40 hex characters, for example from xxd -p."
+    - name: key-changed
+      description: "The key differs from the old key"
+      type: file
+      source: validation/validate-key-changed.sh
+      hint: "Generate a new random key. Do not reuse the key of SPI 1."
+
+teardown:
+  keepCluster: false

@@ -15,22 +15,22 @@ banks:
   - section-020
 - id: ats054-030
   path: sections/section-030/quiz.yaml
-  question_count: 8
+  question_count: 28
   covered_sections:
   - section-030
 - id: ats054-040
   path: sections/section-040/quiz.yaml
-  question_count: 8
+  question_count: 38
   covered_sections:
   - section-040
 - id: ats054-050
   path: sections/section-050/quiz.yaml
-  question_count: 8
+  question_count: 28
   covered_sections:
   - section-050
 - id: ats054-final
   path: sections/final-domain-quiz.yaml
-  question_count: 29
+  question_count: 43
   covered_sections:
   - section-010
   - section-020

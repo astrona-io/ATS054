@@ -1,0 +1,65 @@
+# yaml-language-server: $schema=https://cli.astrona.io/schema/lab-config.schema.json
+#
+# Migrate An Ingress To A Gateway And An HTTPRoute (LAB). Graded against the live cluster. UNTESTED.
+apiVersion: astrona.io/v1
+metadata:
+  name: ats-054-lab-030-02
+  docs:
+    prerequisites: prerequisites.md
+    question: question.md
+    solution: solution.md
+
+runtime:
+  type: kind
+  kind:
+    image: kindest/node:v1.35.0@sha256:452d707d4862f52530247495d180205e029056831160e22870e37e3f6c1ac31f
+    nodes:
+      workers: 1
+    networking:
+      disableDefaultCNI: true
+      podSubnet: 10.244.0.0/16
+    preloadImages:
+      - ghcr.io/stefanprodan/podinfo:6.15.0
+      - mccutchen/go-httpbin:2.25.0
+      - curlimages/curl:8.22.0
+
+bootstrap:
+  init:
+    - name: seed-cluster
+      description: Install Cilium and create the Starfleet workloads
+      type: file
+      source: bootstrap/01-seed-cluster.sh
+
+# Applied only by `astrona test`: the reference solution.
+testing:
+  init:
+    - name: apply-solution
+      description: Apply the reference solution
+      type: file
+      source: solution/apply.sh
+
+validation:
+  scripts:
+    - name: route-accepted
+      description: "An HTTPRoute in starfleet is accepted by a Gateway"
+      type: file
+      source: validation/validate-route-accepted.sh
+      hint: "Create a Gateway with gatewayClassName cilium and an HTTPRoute that refers to it in parentRefs."
+    - name: gateway-default-scout
+      description: "A request for / through the Gateway reaches scout"
+      type: file
+      source: validation/validate-gateway-default-scout.sh
+      hint: "Port the path / with the type PathPrefix to the backend scout."
+    - name: gateway-probe-prefix
+      description: "A request for /probe through the Gateway is served by probe and not by scout"
+      type: file
+      source: validation/validate-gateway-probe-prefix.sh
+      hint: "Add a rule for the path prefix /probe that sends traffic to the backend probe. The probe backend answers /probe with its own 404 page, which proves that the request did not reach scout."
+    - name: ingress-removed
+      description: "The old Ingress fleet is deleted"
+      type: file
+      source: validation/validate-ingress-removed.sh
+      hint: "After you test the Gateway, delete the Ingress with kubectl delete."
+
+teardown:
+  keepCluster: false

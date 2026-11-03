@@ -1,0 +1,12 @@
+# Values the reference solution writes. The script solution/apply.sh reads
+# them from the cluster instead of using this file.
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: encryption-report
+  namespace: starfleet
+data:
+  interface: "cilium_wg0"
+  port: "51871"
+  peers: "1"
+  node-encryption: "Disabled"

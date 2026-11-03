@@ -308,6 +308,56 @@ sections:
       status: draft
       runtime_verification: pending
     summary: sections/section-030/module-01/course-04-summary.md
+  - id: module-02
+    title: Migrate From Ingress To Gateway API
+    objectives:
+    - Translate hosts, paths, backends and TLS from Ingress to Gateway API.
+    - Replace common annotations with fields and filters.
+    - Use and review a conversion tool.
+    - Plan a cutover with a rollback.
+    playground: true
+    module_lab: true
+    sources:
+    - reading: sections/section-030/module-02/course-01-map-ingress-fields-to-gateway-api.md
+      adapted_from: 
+    - reading: sections/section-030/module-02/course-02-replace-annotations-with-fields-and-filters.md
+      adapted_from: 
+    - reading: sections/section-030/module-02/course-03-convert-with-ingress2gateway.md
+      adapted_from: 
+    - reading: sections/section-030/module-02/course-04-plan-a-cutover-with-a-rollback.md
+      adapted_from: 
+    labs:
+    - id: lab-01
+      path: sections/section-030/module-02/labs/lab-01
+      objective: Migrate An Ingress To A Gateway And An HTTPRoute
+      status: draft
+      runtime_verification: pending
+    summary: sections/section-030/module-02/course-05-summary.md
+  - id: module-03
+    title: Gateway API Channels, Conformance And Extensions
+    objectives:
+    - Tell the standard channel from the experimental channel and read the installed version.
+    - Name the support levels and say what conformance proves.
+    - Use ExtensionRef, parametersRef and policies as extension points.
+    - Plan an upgrade of the Gateway API CRDs.
+    playground: true
+    module_lab: true
+    sources:
+    - reading: sections/section-030/module-03/course-01-release-channels-and-versions.md
+      adapted_from: 
+    - reading: sections/section-030/module-03/course-02-support-levels-and-conformance.md
+      adapted_from: 
+    - reading: sections/section-030/module-03/course-03-extension-points.md
+      adapted_from: 
+    - reading: sections/section-030/module-03/course-04-upgrade-and-compatibility.md
+      adapted_from: 
+    labs:
+    - id: lab-01
+      path: sections/section-030/module-03/labs/lab-01
+      objective: Inventory The Gateway API Of A Cluster
+      status: draft
+      runtime_verification: pending
+    summary: sections/section-030/module-03/course-05-summary.md
 - id: section-040
   title: Encrypting Traffic in Transit with Cilium
   curriculum_item: Encrypting Traffic in Transit with Cilium
@@ -343,6 +393,81 @@ sections:
       status: draft
       runtime_verification: pending
     summary: sections/section-040/module-01/course-04-summary.md
+  - id: module-02
+    title: Operate WireGuard Encryption
+    objectives:
+    - Read the agent status and node annotations to confirm WireGuard.
+    - Explain node encryption and strict mode.
+    - Name the UDP port and the MTU effect.
+    - Follow an ordered path to find a missing peer.
+    playground: true
+    module_lab: true
+    sources:
+    - reading: sections/section-040/module-02/course-01-verify-that-wireguard-is-active.md
+      adapted_from: 
+    - reading: sections/section-040/module-02/course-02-node-encryption-and-strict-mode.md
+      adapted_from: 
+    - reading: sections/section-040/module-02/course-03-ports-mtu-and-overhead.md
+      adapted_from: 
+    - reading: sections/section-040/module-02/course-04-troubleshoot-wireguard.md
+      adapted_from: 
+    labs:
+    - id: lab-01
+      path: sections/section-040/module-02/labs/lab-01
+      objective: Record The WireGuard Settings Of A Cluster
+      status: draft
+      runtime_verification: pending
+    summary: sections/section-040/module-02/course-05-summary.md
+  - id: module-03
+    title: Operate IPsec Encryption
+    objectives:
+    - Say what the kernel holds when IPsec runs.
+    - Write a valid key line and create the Secret.
+    - Rotate a key without dropping traffic.
+    - Read the IPsec status and choose between IPsec and WireGuard.
+    playground: true
+    module_lab: true
+    sources:
+    - reading: sections/section-040/module-03/course-01-how-cilium-uses-ipsec.md
+      adapted_from: 
+    - reading: sections/section-040/module-03/course-02-the-key-secret.md
+      adapted_from: 
+    - reading: sections/section-040/module-03/course-03-rotate-the-keys.md
+      adapted_from: 
+    - reading: sections/section-040/module-03/course-04-read-the-state-and-choose-a-mode.md
+      adapted_from: 
+    labs:
+    - id: lab-01
+      path: sections/section-040/module-03/labs/lab-01
+      objective: Rotate The IPsec Key Secret
+      status: draft
+      runtime_verification: pending
+    summary: sections/section-040/module-03/course-05-summary.md
+  - id: module-04
+    title: Mutual Authentication In Practice
+    objectives:
+    - Name the SPIRE parts and the identity of a workload.
+    - Write a policy rule that requires authentication.
+    - Read the authentication state of an agent.
+    - Say what mutual authentication does not do.
+    playground: true
+    module_lab: true
+    sources:
+    - reading: sections/section-040/module-04/course-01-the-spire-components.md
+      adapted_from: 
+    - reading: sections/section-040/module-04/course-02-require-authentication-in-a-policy.md
+      adapted_from: 
+    - reading: sections/section-040/module-04/course-03-observe-and-verify.md
+      adapted_from: 
+    - reading: sections/section-040/module-04/course-04-limits-and-troubleshooting.md
+      adapted_from: 
+    labs:
+    - id: lab-01
+      path: sections/section-040/module-04/labs/lab-01
+      objective: Require Mutual Authentication For A Service
+      status: draft
+      runtime_verification: pending
+    summary: sections/section-040/module-04/course-05-summary.md
 - id: section-050
   title: Sidecar-based versus Sidecarless Architectures
   curriculum_item: Sidecar-based versus Sidecarless Architectures
@@ -377,3 +502,53 @@ sections:
       status: draft
       runtime_verification: pending
     summary: sections/section-050/module-01/course-04-summary.md
+  - id: module-02
+    title: Sidecarless Architecture In Practice
+    objectives:
+    - List the Cilium components and where each runs.
+    - Compare the footprint of a sidecar per pod with a proxy per node.
+    - Explain what an upgrade or a failure of the node proxy affects.
+    - State the security trade-offs of a shared proxy.
+    playground: true
+    module_lab: true
+    sources:
+    - reading: sections/section-050/module-02/course-01-what-runs-where.md
+      adapted_from: 
+    - reading: sections/section-050/module-02/course-02-cost-and-footprint.md
+      adapted_from: 
+    - reading: sections/section-050/module-02/course-03-upgrades-and-failure-scope.md
+      adapted_from: 
+    - reading: sections/section-050/module-02/course-04-security-boundaries-and-trade-offs.md
+      adapted_from: 
+    labs:
+    - id: lab-01
+      path: sections/section-050/module-02/labs/lab-01
+      objective: Prove The Cluster Runs Without Sidecars
+      status: draft
+      runtime_verification: pending
+    summary: sections/section-050/module-02/course-05-summary.md
+  - id: module-03
+    title: Choose And Migrate A Mesh Architecture
+    objectives:
+    - Choose between sidecar and sidecarless designs for a workload with stated reasons.
+    - Build an inventory of injection, sidecar pods and Layer 7 policies.
+    - Map features of a sidecar mesh to Cilium features.
+    - Migrate one namespace with a check and a rollback for each step.
+    playground: true
+    module_lab: true
+    sources:
+    - reading: sections/section-050/module-03/course-01-decision-factors.md
+      adapted_from: 
+    - reading: sections/section-050/module-03/course-02-inventory-and-feature-mapping.md
+      adapted_from: 
+    - reading: sections/section-050/module-03/course-03-migrate-one-namespace-at-a-time.md
+      adapted_from: 
+    - reading: sections/section-050/module-03/course-04-verify-and-roll-back.md
+      adapted_from: 
+    labs:
+    - id: lab-01
+      path: sections/section-050/module-03/labs/lab-01
+      objective: Inventory A Cluster Before A Sidecar Migration
+      status: draft
+      runtime_verification: pending
+    summary: sections/section-050/module-03/course-05-summary.md

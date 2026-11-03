@@ -1,0 +1,8 @@
+# Starting state: a note for the learner. No policy exists yet.
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: lab-note
+  namespace: starfleet
+data:
+  task: "Require mutual authentication for the traffic from shuttle to scout"

@@ -1,0 +1,12 @@
+# Values the reference solution writes. The script solution/apply.sh reads
+# them from the cluster instead.
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: migration-inventory
+  namespace: starfleet
+data:
+  injected-namespaces: "outpost"
+  sidecar-pods: "1"
+  l7-policies: "1"
+  envoy-ready: "yes"

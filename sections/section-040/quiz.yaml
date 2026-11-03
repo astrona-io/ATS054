@@ -195,3 +195,665 @@ questions:
     correct_option: a
     explanation: "Correct. The agents run the handshake before they allow the flow."
 
+  - id: ats054-040-m02-q01
+    type: single_choice
+    difficulty: beginner
+    learning_objective: Read the status
+    source_readings:
+    - sections/section-040/module-02/course-01-verify-that-wireguard-is-active.md
+    prompt: Where does an agent show that WireGuard is active?
+    options:
+    - id: a
+      text: The Encryption line of `cilium-dbg status`
+      explanation: Correct. The status line shows the mode, device, port and peers.
+    - id: b
+      text: The pod log of `scout`
+      explanation: Incorrect. The status line shows the mode, device, port and peers.
+    - id: c
+      text: The Service list
+      explanation: Incorrect. The status line shows the mode, device, port and peers.
+    - id: d
+      text: The Ingress
+      explanation: Incorrect. The status line shows the mode, device, port and peers.
+    correct_option: a
+    explanation: Correct. The status line shows the mode, device, port and peers.
+  - id: ats054-040-m02-q02
+    type: single_choice
+    difficulty: beginner
+    learning_objective: Count the peers
+    source_readings:
+    - sections/section-040/module-02/course-01-verify-that-wireguard-is-active.md
+    prompt: How many peers does each agent show in a cluster with two nodes?
+    options:
+    - id: a
+      text: '0'
+      explanation: 'Incorrect. Each agent has one peer: the other node.'
+    - id: b
+      text: '1'
+      explanation: 'Correct. Each agent has one peer: the other node.'
+    - id: c
+      text: '2'
+      explanation: 'Incorrect. Each agent has one peer: the other node.'
+    - id: d
+      text: '3'
+      explanation: 'Incorrect. Each agent has one peer: the other node.'
+    correct_option: b
+    explanation: 'Correct. Each agent has one peer: the other node.'
+  - id: ats054-040-m02-q03
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: Prove the traffic
+    source_readings:
+    - sections/section-040/module-02/course-01-verify-that-wireguard-is-active.md
+    prompt: What proves that cross-node traffic uses the WireGuard device?
+    options:
+    - id: a
+      text: A 200 response
+      explanation: Incorrect. Unencrypted traffic also gives a 200, so read the counters.
+    - id: b
+      text: The counters of `cilium_wg0` grow
+      explanation: Correct. Unencrypted traffic also gives a 200, so read the counters.
+    - id: c
+      text: The pod is Ready
+      explanation: Incorrect. Unencrypted traffic also gives a 200, so read the counters.
+    - id: d
+      text: The node is Ready
+      explanation: Incorrect. Unencrypted traffic also gives a 200, so read the counters.
+    correct_option: b
+    explanation: Correct. Unencrypted traffic also gives a 200, so read the counters.
+  - id: ats054-040-m02-q04
+    type: single_choice
+    difficulty: beginner
+    learning_objective: Know the gap
+    source_readings:
+    - sections/section-040/module-02/course-02-node-encryption-and-strict-mode.md
+    prompt: What does the default setting NOT encrypt?
+    options:
+    - id: a
+      text: Traffic that starts at a node
+      explanation: Correct. Node-originated traffic needs node encryption.
+    - id: b
+      text: Traffic between pods on different nodes
+      explanation: Incorrect. Node-originated traffic needs node encryption.
+    - id: c
+      text: Requests to scout
+      explanation: Incorrect. Node-originated traffic needs node encryption.
+    - id: d
+      text: Traffic on UDP
+      explanation: Incorrect. Node-originated traffic needs node encryption.
+    correct_option: a
+    explanation: Correct. Node-originated traffic needs node encryption.
+  - id: ats054-040-m02-q05
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: Choose strict mode
+    source_readings:
+    - sections/section-040/module-02/course-02-node-encryption-and-strict-mode.md
+    prompt: What does strict mode do?
+    options:
+    - id: a
+      text: Drops traffic that should be encrypted but is not
+      explanation: Correct. It drops the packet instead of sending it in the clear.
+    - id: b
+      text: Encrypts the control plane
+      explanation: Incorrect. It drops the packet instead of sending it in the clear.
+    - id: c
+      text: Disables Hubble
+      explanation: Incorrect. It drops the packet instead of sending it in the clear.
+    - id: d
+      text: Changes the pod CIDR
+      explanation: Incorrect. It drops the packet instead of sending it in the clear.
+    correct_option: a
+    explanation: Correct. It drops the packet instead of sending it in the clear.
+  - id: ats054-040-m02-q06
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: Roll out safely
+    source_readings:
+    - sections/section-040/module-02/course-02-node-encryption-and-strict-mode.md
+    prompt: How should you first enable strict mode?
+    options:
+    - id: a
+      text: In a copy of the cluster, watching drops
+      explanation: Correct. Traffic fails while a peer is not ready, so test first.
+    - id: b
+      text: In production at once
+      explanation: Incorrect. Traffic fails while a peer is not ready, so test first.
+    - id: c
+      text: On one pod only
+      explanation: Incorrect. Traffic fails while a peer is not ready, so test first.
+    - id: d
+      text: Without a CIDR
+      explanation: Incorrect. Traffic fails while a peer is not ready, so test first.
+    correct_option: a
+    explanation: Correct. Traffic fails while a peer is not ready, so test first.
+  - id: ats054-040-m02-q07
+    type: single_choice
+    difficulty: beginner
+    learning_objective: Name the port
+    source_readings:
+    - sections/section-040/module-02/course-03-ports-mtu-and-overhead.md
+    prompt: Which UDP port does WireGuard use by default in Cilium?
+    options:
+    - id: a
+      text: '51871'
+      explanation: 'Correct. The status line shows Port: 51871.'
+    - id: b
+      text: '443'
+      explanation: 'Incorrect. The status line shows Port: 51871.'
+    - id: c
+      text: '6443'
+      explanation: 'Incorrect. The status line shows Port: 51871.'
+    - id: d
+      text: '8472'
+      explanation: 'Incorrect. The status line shows Port: 51871.'
+    correct_option: a
+    explanation: 'Correct. The status line shows Port: 51871.'
+  - id: ats054-040-m02-q08
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: Account for overhead
+    source_readings:
+    - sections/section-040/module-02/course-03-ports-mtu-and-overhead.md
+    prompt: What is the WireGuard overhead over IPv4?
+    options:
+    - id: a
+      text: 60 bytes
+      explanation: Correct. The MTU of the pods is lowered by the overhead.
+    - id: b
+      text: 8 bytes
+      explanation: Incorrect. The MTU of the pods is lowered by the overhead.
+    - id: c
+      text: 200 bytes
+      explanation: Incorrect. The MTU of the pods is lowered by the overhead.
+    - id: d
+      text: 0 bytes
+      explanation: Incorrect. The MTU of the pods is lowered by the overhead.
+    correct_option: a
+    explanation: Correct. The MTU of the pods is lowered by the overhead.
+  - id: ats054-040-m02-q09
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: Order the checks
+    source_readings:
+    - sections/section-040/module-02/course-04-troubleshoot-wireguard.md
+    prompt: Which check comes first when encryption does not work?
+    options:
+    - id: a
+      text: Whether the setting is applied in every agent
+      explanation: Correct. A ConfigMap value does not apply until the agent restarts.
+    - id: b
+      text: The MTU
+      explanation: Incorrect. A ConfigMap value does not apply until the agent restarts.
+    - id: c
+      text: Hubble flows
+      explanation: Incorrect. A ConfigMap value does not apply until the agent restarts.
+    - id: d
+      text: The Service type
+      explanation: Incorrect. A ConfigMap value does not apply until the agent restarts.
+    correct_option: a
+    explanation: Correct. A ConfigMap value does not apply until the agent restarts.
+  - id: ats054-040-m02-q10
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: Find a missing peer
+    source_readings:
+    - sections/section-040/module-02/course-04-troubleshoot-wireguard.md
+    prompt: A peer shows no recent handshake. What do you check next?
+    options:
+    - id: a
+      text: Whether UDP 51871 is allowed both ways
+      explanation: Correct. A blocked port stops the handshake.
+    - id: b
+      text: The Ingress class
+      explanation: Incorrect. A blocked port stops the handshake.
+    - id: c
+      text: The pod labels
+      explanation: Incorrect. A blocked port stops the handshake.
+    - id: d
+      text: The Helm chart name
+      explanation: Incorrect. A blocked port stops the handshake.
+    correct_option: a
+    explanation: Correct. A blocked port stops the handshake.
+
+  - id: ats054-040-m03-q01
+    type: single_choice
+    difficulty: beginner
+    learning_objective: Name the tables
+    source_readings:
+    - sections/section-040/module-03/course-01-how-cilium-uses-ipsec.md
+    prompt: Which two kernel tables hold IPsec state?
+    options:
+    - id: a
+      text: States and policies
+      explanation: Correct. XFRM has states (keys, SPIs) and policies.
+    - id: b
+      text: Routes and rules
+      explanation: Incorrect. XFRM has states (keys, SPIs) and policies.
+    - id: c
+      text: Pods and nodes
+      explanation: Incorrect. XFRM has states (keys, SPIs) and policies.
+    - id: d
+      text: Maps and links
+      explanation: Incorrect. XFRM has states (keys, SPIs) and policies.
+    correct_option: a
+    explanation: Correct. XFRM has states (keys, SPIs) and policies.
+  - id: ats054-040-m03-q02
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: Find the key
+    source_readings:
+    - sections/section-040/module-03/course-01-how-cilium-uses-ipsec.md
+    prompt: Where does the agent read the IPsec key from?
+    options:
+    - id: a
+      text: A Kubernetes Secret
+      explanation: Correct. The Secret cilium-ipsec-keys holds it.
+    - id: b
+      text: A ConfigMap
+      explanation: Incorrect. The Secret cilium-ipsec-keys holds it.
+    - id: c
+      text: Hubble
+      explanation: Incorrect. The Secret cilium-ipsec-keys holds it.
+    - id: d
+      text: The node label
+      explanation: Incorrect. The Secret cilium-ipsec-keys holds it.
+    correct_option: a
+    explanation: Correct. The Secret cilium-ipsec-keys holds it.
+  - id: ats054-040-m03-q03
+    type: single_choice
+    difficulty: beginner
+    learning_objective: Count the fields
+    source_readings:
+    - sections/section-040/module-03/course-02-the-key-secret.md
+    prompt: How many fields does the key line have?
+    options:
+    - id: a
+      text: Four
+      explanation: Correct. SPI, algorithm, key and ICV size.
+    - id: b
+      text: Two
+      explanation: Incorrect. SPI, algorithm, key and ICV size.
+    - id: c
+      text: Six
+      explanation: Incorrect. SPI, algorithm, key and ICV size.
+    - id: d
+      text: One
+      explanation: Incorrect. SPI, algorithm, key and ICV size.
+    correct_option: a
+    explanation: Correct. SPI, algorithm, key and ICV size.
+  - id: ats054-040-m03-q04
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: Size the key
+    source_readings:
+    - sections/section-040/module-03/course-02-the-key-secret.md
+    prompt: How long is the hex key for rfc4106(gcm(aes)) with AES-128?
+    options:
+    - id: a
+      text: 40 characters
+      explanation: Correct. 20 bytes written as 40 hex characters.
+    - id: b
+      text: 16 characters
+      explanation: Incorrect. 20 bytes written as 40 hex characters.
+    - id: c
+      text: 64 characters
+      explanation: Incorrect. 20 bytes written as 40 hex characters.
+    - id: d
+      text: 128 characters
+      explanation: Incorrect. 20 bytes written as 40 hex characters.
+    correct_option: a
+    explanation: Correct. 20 bytes written as 40 hex characters.
+  - id: ats054-040-m03-q05
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: Protect it
+    source_readings:
+    - sections/section-040/module-03/course-02-the-key-secret.md
+    prompt: Who can decrypt the traffic if they read the Secret?
+    options:
+    - id: a
+      text: Anyone who has the key
+      explanation: Correct. Limit access with RBAC and encrypt Secrets at rest.
+    - id: b
+      text: Only Cilium
+      explanation: Incorrect. Limit access with RBAC and encrypt Secrets at rest.
+    - id: c
+      text: No one
+      explanation: Incorrect. Limit access with RBAC and encrypt Secrets at rest.
+    - id: d
+      text: Only the node
+      explanation: Incorrect. Limit access with RBAC and encrypt Secrets at rest.
+    correct_option: a
+    explanation: Correct. Limit access with RBAC and encrypt Secrets at rest.
+  - id: ats054-040-m03-q06
+    type: single_choice
+    difficulty: beginner
+    learning_objective: Rotate the SPI
+    source_readings:
+    - sections/section-040/module-03/course-03-rotate-the-keys.md
+    prompt: What do you change in the key line to rotate a key?
+    options:
+    - id: a
+      text: The SPI and the key
+      explanation: Correct. A new key needs the next SPI.
+    - id: b
+      text: Only the ICV
+      explanation: Incorrect. A new key needs the next SPI.
+    - id: c
+      text: The Secret name
+      explanation: Incorrect. A new key needs the next SPI.
+    - id: d
+      text: The namespace
+      explanation: Incorrect. A new key needs the next SPI.
+    correct_option: a
+    explanation: Correct. A new key needs the next SPI.
+  - id: ats054-040-m03-q07
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: Wrap the SPI
+    source_readings:
+    - sections/section-040/module-03/course-03-rotate-the-keys.md
+    prompt: What happens after SPI 15?
+    options:
+    - id: a
+      text: It wraps around
+      explanation: Correct. The SPI is a number from 1 to 15 and wraps.
+    - id: b
+      text: It stops
+      explanation: Incorrect. The SPI is a number from 1 to 15 and wraps.
+    - id: c
+      text: It becomes 0
+      explanation: Incorrect. The SPI is a number from 1 to 15 and wraps.
+    - id: d
+      text: It doubles
+      explanation: Incorrect. The SPI is a number from 1 to 15 and wraps.
+    correct_option: a
+    explanation: Correct. The SPI is a number from 1 to 15 and wraps.
+  - id: ats054-040-m03-q08
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: Allow the protocol
+    source_readings:
+    - sections/section-040/module-03/course-04-read-the-state-and-choose-a-mode.md
+    prompt: Which traffic must a firewall allow between nodes for IPsec?
+    options:
+    - id: a
+      text: IP protocol 50 (ESP)
+      explanation: Correct. ESP is its own IP protocol.
+    - id: b
+      text: Only TCP 443
+      explanation: Incorrect. ESP is its own IP protocol.
+    - id: c
+      text: Only UDP 53
+      explanation: Incorrect. ESP is its own IP protocol.
+    - id: d
+      text: ICMP
+      explanation: Incorrect. ESP is its own IP protocol.
+    correct_option: a
+    explanation: Correct. ESP is its own IP protocol.
+  - id: ats054-040-m03-q09
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: Choose a mode
+    source_readings:
+    - sections/section-040/module-03/course-04-read-the-state-and-choose-a-mode.md
+    prompt: When do you choose IPsec over WireGuard?
+    options:
+    - id: a
+      text: When a rule requires IPsec
+      explanation: Correct. Otherwise WireGuard has less to operate.
+    - id: b
+      text: Always
+      explanation: Incorrect. Otherwise WireGuard has less to operate.
+    - id: c
+      text: When you have one node
+      explanation: Incorrect. Otherwise WireGuard has less to operate.
+    - id: d
+      text: Never
+      explanation: Incorrect. Otherwise WireGuard has less to operate.
+    correct_option: a
+    explanation: Correct. Otherwise WireGuard has less to operate.
+  - id: ats054-040-m03-q10
+    type: single_choice
+    difficulty: advanced
+    learning_objective: Read the state
+    source_readings:
+    - sections/section-040/module-03/course-04-read-the-state-and-choose-a-mode.md
+    prompt: Which command lists the keys in use by SPI on an agent?
+    options:
+    - id: a
+      text: "`cilium-dbg encrypt status`"
+      explanation: Correct. encrypt status shows keys and error counters.
+    - id: b
+      text: "`cilium-dbg service list`"
+      explanation: Incorrect. encrypt status shows keys and error counters.
+    - id: c
+      text: "`hubble status`"
+      explanation: Incorrect. encrypt status shows keys and error counters.
+    - id: d
+      text: "`kubectl top`"
+      explanation: Incorrect. encrypt status shows keys and error counters.
+    correct_option: a
+    explanation: Correct. encrypt status shows keys and error counters.
+
+  - id: ats054-040-m04-q01
+    type: single_choice
+    difficulty: beginner
+    learning_objective: Name the authority
+    source_readings:
+    - sections/section-040/module-04/course-01-the-spire-components.md
+    prompt: What does the SPIRE server do?
+    options:
+    - id: a
+      text: Signs the identity documents of a trust domain
+      explanation: Correct. It is the authority that signs SVIDs.
+    - id: b
+      text: Routes packets
+      explanation: Incorrect. It is the authority that signs SVIDs.
+    - id: c
+      text: Stores logs
+      explanation: Incorrect. It is the authority that signs SVIDs.
+    - id: d
+      text: Runs the pods
+      explanation: Incorrect. It is the authority that signs SVIDs.
+    correct_option: a
+    explanation: Correct. It is the authority that signs SVIDs.
+  - id: ats054-040-m04-q02
+    type: single_choice
+    difficulty: beginner
+    learning_objective: Name the identity
+    source_readings:
+    - sections/section-040/module-04/course-01-the-spire-components.md
+    prompt: What is a SPIFFE ID?
+    options:
+    - id: a
+      text: A URI that names a workload
+      explanation: Correct. It starts with the trust domain.
+    - id: b
+      text: A pod IP
+      explanation: Incorrect. It starts with the trust domain.
+    - id: c
+      text: A node label
+      explanation: Incorrect. It starts with the trust domain.
+    - id: d
+      text: A Service port
+      explanation: Incorrect. It starts with the trust domain.
+    correct_option: a
+    explanation: Correct. It starts with the trust domain.
+  - id: ats054-040-m04-q03
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: Find the agents
+    source_readings:
+    - sections/section-040/module-04/course-01-the-spire-components.md
+    prompt: Where does a SPIRE agent run?
+    options:
+    - id: a
+      text: On every node
+      explanation: Correct. A DaemonSet runs one per node.
+    - id: b
+      text: Only on the control plane
+      explanation: Incorrect. A DaemonSet runs one per node.
+    - id: c
+      text: In the application pod
+      explanation: Incorrect. A DaemonSet runs one per node.
+    - id: d
+      text: Outside the cluster
+      explanation: Incorrect. A DaemonSet runs one per node.
+    correct_option: a
+    explanation: Correct. A DaemonSet runs one per node.
+  - id: ats054-040-m04-q04
+    type: single_choice
+    difficulty: beginner
+    learning_objective: Write the field
+    source_readings:
+    - sections/section-040/module-04/course-02-require-authentication-in-a-policy.md
+    prompt: Which field makes a rule require authentication?
+    options:
+    - id: a
+      text: "`authentication.mode: required`"
+      explanation: Correct. The field is part of the ingress or egress rule.
+    - id: b
+      text: "`auth: true`"
+      explanation: Incorrect. The field is part of the ingress or egress rule.
+    - id: c
+      text: "`toFQDNs`"
+      explanation: Incorrect. The field is part of the ingress or egress rule.
+    - id: d
+      text: "`mutual: on`"
+      explanation: Incorrect. The field is part of the ingress or egress rule.
+    correct_option: a
+    explanation: Correct. The field is part of the ingress or egress rule.
+  - id: ats054-040-m04-q05
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: Predict the first packet
+    source_readings:
+    - sections/section-040/module-04/course-02-require-authentication-in-a-policy.md
+    prompt: What happens to the first packet when no entry exists?
+    options:
+    - id: a
+      text: It is dropped while the handshake runs
+      explanation: Correct. The agent then authenticates and stores an entry.
+    - id: b
+      text: It is encrypted
+      explanation: Incorrect. The agent then authenticates and stores an entry.
+    - id: c
+      text: It is sent to Hubble only
+      explanation: Incorrect. The agent then authenticates and stores an entry.
+    - id: d
+      text: It goes to SPIRE
+      explanation: Incorrect. The agent then authenticates and stores an entry.
+    correct_option: a
+    explanation: Correct. The agent then authenticates and stores an entry.
+  - id: ats054-040-m04-q06
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: Read the table
+    source_readings:
+    - sections/section-040/module-04/course-03-observe-and-verify.md
+    prompt: Which command lists authenticated pairs on an agent?
+    options:
+    - id: a
+      text: "`cilium-dbg bpf auth list`"
+      explanation: Correct. The table is a BPF map.
+    - id: b
+      text: "`cilium-dbg service list`"
+      explanation: Incorrect. The table is a BPF map.
+    - id: c
+      text: "`hubble status`"
+      explanation: Incorrect. The table is a BPF map.
+    - id: d
+      text: "`kubectl top`"
+      explanation: Incorrect. The table is a BPF map.
+    correct_option: a
+    explanation: Correct. The table is a BPF map.
+  - id: ats054-040-m04-q07
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: Find entries
+    source_readings:
+    - sections/section-040/module-04/course-03-observe-and-verify.md
+    prompt: Where do you list the registration entries of SPIRE?
+    options:
+    - id: a
+      text: "`spire-server entry show`"
+      explanation: Correct. The operator creates the entries in the server.
+    - id: b
+      text: "`cilium-dbg policy get`"
+      explanation: Incorrect. The operator creates the entries in the server.
+    - id: c
+      text: "`kubectl get node`"
+      explanation: Incorrect. The operator creates the entries in the server.
+    - id: d
+      text: "`helm list`"
+      explanation: Incorrect. The operator creates the entries in the server.
+    correct_option: a
+    explanation: Correct. The operator creates the entries in the server.
+  - id: ats054-040-m04-q08
+    type: single_choice
+    difficulty: beginner
+    learning_objective: Know the limit
+    source_readings:
+    - sections/section-040/module-04/course-04-limits-and-troubleshooting.md
+    prompt: Does mutual authentication encrypt the data of a connection?
+    options:
+    - id: a
+      text: 'No'
+      explanation: Correct. Use WireGuard or IPsec for encryption.
+    - id: b
+      text: Yes, always
+      explanation: Incorrect. Use WireGuard or IPsec for encryption.
+    - id: c
+      text: Only for HTTP
+      explanation: Incorrect. Use WireGuard or IPsec for encryption.
+    - id: d
+      text: Only on one node
+      explanation: Incorrect. Use WireGuard or IPsec for encryption.
+    correct_option: a
+    explanation: Correct. Use WireGuard or IPsec for encryption.
+  - id: ats054-040-m04-q09
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: Name the dependency
+    source_readings:
+    - sections/section-040/module-04/course-04-limits-and-troubleshooting.md
+    prompt: What happens to new pairs when the SPIRE server is down?
+    options:
+    - id: a
+      text: They cannot be authenticated and traffic that needs it is dropped
+      explanation: Correct. The feature depends on SPIRE.
+    - id: b
+      text: They are allowed
+      explanation: Incorrect. The feature depends on SPIRE.
+    - id: c
+      text: They are encrypted
+      explanation: Incorrect. The feature depends on SPIRE.
+    - id: d
+      text: They use IPsec
+      explanation: Incorrect. The feature depends on SPIRE.
+    correct_option: a
+    explanation: Correct. The feature depends on SPIRE.
+  - id: ats054-040-m04-q10
+    type: single_choice
+    difficulty: advanced
+    learning_objective: Plan storage
+    source_readings:
+    - sections/section-040/module-04/course-04-limits-and-troubleshooting.md
+    prompt: Why not use an emptyDir for the SPIRE server in production?
+    options:
+    - id: a
+      text: The server loses its keys when the pod restarts
+      explanation: Correct. Persistent storage is needed for production.
+    - id: b
+      text: It is too fast
+      explanation: Incorrect. Persistent storage is needed for production.
+    - id: c
+      text: It disables Hubble
+      explanation: Incorrect. Persistent storage is needed for production.
+    - id: d
+      text: It changes the CIDR
+      explanation: Incorrect. Persistent storage is needed for production.
+    correct_option: a
+    explanation: Correct. Persistent storage is needed for production.

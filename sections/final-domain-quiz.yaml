@@ -726,3 +726,330 @@ questions:
     correct_option: b
     explanation: Correct. Cilium reads HTTP only in Envoy, and a Layer 7 rule sends
       traffic there.
+
+  - id: ats054-final-s030-m02-q01
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: Map the default backend
+    source_readings:
+    - sections/section-030/module-02/course-01-map-ingress-fields-to-gateway-api.md
+    prompt: How do you express an Ingress defaultBackend?
+    options:
+    - id: a
+      text: A rule with no matches
+      explanation: Correct. A rule without matches takes every request that no other
+        rule matches.
+    - id: b
+      text: A second Gateway
+      explanation: Incorrect. A rule without matches takes every request that no other
+        rule matches.
+    - id: c
+      text: An annotation
+      explanation: Incorrect. A rule without matches takes every request that no other
+        rule matches.
+    - id: d
+      text: A ReferenceGrant
+      explanation: Incorrect. A rule without matches takes every request that no other
+        rule matches.
+    correct_option: a
+    explanation: Correct. A rule without matches takes every request that no other rule
+      matches.
+
+  - id: ats054-final-s030-m02-q02
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: Validate a conversion
+    source_readings:
+    - sections/section-030/module-02/course-03-convert-with-ingress2gateway.md
+    prompt: How do you check that converted objects work?
+    options:
+    - id: a
+      text: Read the status and compare responses
+      explanation: Correct. Status and real requests prove it.
+    - id: b
+      text: Compare file sizes
+      explanation: Incorrect. Status and real requests prove it.
+    - id: c
+      text: Restart Cilium
+      explanation: Incorrect. Status and real requests prove it.
+    - id: d
+      text: Delete the Ingress first
+      explanation: Incorrect. Status and real requests prove it.
+    correct_option: a
+    explanation: Correct. Status and real requests prove it.
+
+  - id: ats054-final-s030-m03-q01
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: Predict pruning
+    source_readings:
+    - sections/section-030/module-03/course-01-release-channels-and-versions.md
+    prompt: A route uses a field that the installed CRD does not have. What happens?
+    options:
+    - id: a
+      text: The API server may accept it and drop the field
+      explanation: Correct. Unknown fields are pruned silently.
+    - id: b
+      text: The cluster crashes
+      explanation: Incorrect. Unknown fields are pruned silently.
+    - id: c
+      text: The field works anyway
+      explanation: Incorrect. Unknown fields are pruned silently.
+    - id: d
+      text: Cilium installs the CRD
+      explanation: Incorrect. Unknown fields are pruned silently.
+    correct_option: a
+    explanation: Correct. Unknown fields are pruned silently.
+
+  - id: ats054-final-s030-m03-q02
+    type: single_choice
+    difficulty: beginner
+    learning_objective: Name an extension point
+    source_readings:
+    - sections/section-030/module-03/course-03-extension-points.md
+    prompt: Which filter type points at an implementation-defined object?
+    options:
+    - id: a
+      text: "`ExtensionRef`"
+      explanation: Correct. ExtensionRef refers to an extension object.
+    - id: b
+      text: "`RequestMirror`"
+      explanation: Incorrect. ExtensionRef refers to an extension object.
+    - id: c
+      text: "`URLRewrite`"
+      explanation: Incorrect. ExtensionRef refers to an extension object.
+    - id: d
+      text: "`RequestRedirect`"
+      explanation: Incorrect. ExtensionRef refers to an extension object.
+    correct_option: a
+    explanation: Correct. ExtensionRef refers to an extension object.
+
+  - id: ats054-final-s040-m02-q01
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: Prove the traffic
+    source_readings:
+    - sections/section-040/module-02/course-01-verify-that-wireguard-is-active.md
+    prompt: What proves that cross-node traffic uses the WireGuard device?
+    options:
+    - id: a
+      text: A 200 response
+      explanation: Incorrect. Unencrypted traffic also gives a 200, so read the counters.
+    - id: b
+      text: The counters of `cilium_wg0` grow
+      explanation: Correct. Unencrypted traffic also gives a 200, so read the counters.
+    - id: c
+      text: The pod is Ready
+      explanation: Incorrect. Unencrypted traffic also gives a 200, so read the counters.
+    - id: d
+      text: The node is Ready
+      explanation: Incorrect. Unencrypted traffic also gives a 200, so read the counters.
+    correct_option: b
+    explanation: Correct. Unencrypted traffic also gives a 200, so read the counters.
+
+  - id: ats054-final-s040-m02-q02
+    type: single_choice
+    difficulty: beginner
+    learning_objective: Name the port
+    source_readings:
+    - sections/section-040/module-02/course-03-ports-mtu-and-overhead.md
+    prompt: Which UDP port does WireGuard use by default in Cilium?
+    options:
+    - id: a
+      text: '51871'
+      explanation: 'Correct. The status line shows Port: 51871.'
+    - id: b
+      text: '443'
+      explanation: 'Incorrect. The status line shows Port: 51871.'
+    - id: c
+      text: '6443'
+      explanation: 'Incorrect. The status line shows Port: 51871.'
+    - id: d
+      text: '8472'
+      explanation: 'Incorrect. The status line shows Port: 51871.'
+    correct_option: a
+    explanation: 'Correct. The status line shows Port: 51871.'
+
+  - id: ats054-final-s040-m03-q01
+    type: single_choice
+    difficulty: beginner
+    learning_objective: Count the fields
+    source_readings:
+    - sections/section-040/module-03/course-02-the-key-secret.md
+    prompt: How many fields does the key line have?
+    options:
+    - id: a
+      text: Four
+      explanation: Correct. SPI, algorithm, key and ICV size.
+    - id: b
+      text: Two
+      explanation: Incorrect. SPI, algorithm, key and ICV size.
+    - id: c
+      text: Six
+      explanation: Incorrect. SPI, algorithm, key and ICV size.
+    - id: d
+      text: One
+      explanation: Incorrect. SPI, algorithm, key and ICV size.
+    correct_option: a
+    explanation: Correct. SPI, algorithm, key and ICV size.
+
+  - id: ats054-final-s040-m03-q02
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: Wrap the SPI
+    source_readings:
+    - sections/section-040/module-03/course-03-rotate-the-keys.md
+    prompt: What happens after SPI 15?
+    options:
+    - id: a
+      text: It wraps around
+      explanation: Correct. The SPI is a number from 1 to 15 and wraps.
+    - id: b
+      text: It stops
+      explanation: Incorrect. The SPI is a number from 1 to 15 and wraps.
+    - id: c
+      text: It becomes 0
+      explanation: Incorrect. The SPI is a number from 1 to 15 and wraps.
+    - id: d
+      text: It doubles
+      explanation: Incorrect. The SPI is a number from 1 to 15 and wraps.
+    correct_option: a
+    explanation: Correct. The SPI is a number from 1 to 15 and wraps.
+
+  - id: ats054-final-s040-m04-q01
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: Find the agents
+    source_readings:
+    - sections/section-040/module-04/course-01-the-spire-components.md
+    prompt: Where does a SPIRE agent run?
+    options:
+    - id: a
+      text: On every node
+      explanation: Correct. A DaemonSet runs one per node.
+    - id: b
+      text: Only on the control plane
+      explanation: Incorrect. A DaemonSet runs one per node.
+    - id: c
+      text: In the application pod
+      explanation: Incorrect. A DaemonSet runs one per node.
+    - id: d
+      text: Outside the cluster
+      explanation: Incorrect. A DaemonSet runs one per node.
+    correct_option: a
+    explanation: Correct. A DaemonSet runs one per node.
+
+  - id: ats054-final-s040-m04-q02
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: Find entries
+    source_readings:
+    - sections/section-040/module-04/course-03-observe-and-verify.md
+    prompt: Where do you list the registration entries of SPIRE?
+    options:
+    - id: a
+      text: "`spire-server entry show`"
+      explanation: Correct. The operator creates the entries in the server.
+    - id: b
+      text: "`cilium-dbg policy get`"
+      explanation: Incorrect. The operator creates the entries in the server.
+    - id: c
+      text: "`kubectl get node`"
+      explanation: Incorrect. The operator creates the entries in the server.
+    - id: d
+      text: "`helm list`"
+      explanation: Incorrect. The operator creates the entries in the server.
+    correct_option: a
+    explanation: Correct. The operator creates the entries in the server.
+
+  - id: ats054-final-s050-m02-q01
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: Check for sidecars
+    source_readings:
+    - sections/section-050/module-02/course-01-what-runs-where.md
+    prompt: What would show a sidecar mesh injector in the cluster?
+    options:
+    - id: a
+      text: A mutating webhook with a mesh name
+      explanation: Correct. The injector is a mutating webhook.
+    - id: b
+      text: A DaemonSet named cilium
+      explanation: Incorrect. The injector is a mutating webhook.
+    - id: c
+      text: A Service of type ClusterIP
+      explanation: Incorrect. The injector is a mutating webhook.
+    - id: d
+      text: A ConfigMap
+      explanation: Incorrect. The injector is a mutating webhook.
+    correct_option: a
+    explanation: Correct. The injector is a mutating webhook.
+
+  - id: ats054-final-s050-m02-q02
+    type: single_choice
+    difficulty: beginner
+    learning_objective: Know who upgrades
+    source_readings:
+    - sections/section-050/module-02/course-03-upgrades-and-failure-scope.md
+    prompt: Who owns the upgrade of the node proxy?
+    options:
+    - id: a
+      text: The platform team
+      explanation: Correct. It is a DaemonSet in kube-system.
+    - id: b
+      text: Each application team
+      explanation: Incorrect. It is a DaemonSet in kube-system.
+    - id: c
+      text: The end users
+      explanation: Incorrect. It is a DaemonSet in kube-system.
+    - id: d
+      text: No one
+      explanation: Incorrect. It is a DaemonSet in kube-system.
+    correct_option: a
+    explanation: Correct. It is a DaemonSet in kube-system.
+
+  - id: ats054-final-s050-m03-q01
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: Avoid overlap
+    source_readings:
+    - sections/section-050/module-03/course-01-decision-factors.md
+    prompt: Why avoid two meshes that enforce overlapping rules?
+    options:
+    - id: a
+      text: Failures are hard to place
+      explanation: Correct. A request passes two sets of policies.
+    - id: b
+      text: It is not allowed
+      explanation: Incorrect. A request passes two sets of policies.
+    - id: c
+      text: It is faster
+      explanation: Incorrect. A request passes two sets of policies.
+    - id: d
+      text: It saves memory
+      explanation: Incorrect. A request passes two sets of policies.
+    correct_option: a
+    explanation: Correct. A request passes two sets of policies.
+
+  - id: ats054-final-s050-m03-q02
+    type: single_choice
+    difficulty: beginner
+    learning_objective: Pick the unit
+    source_readings:
+    - sections/section-050/module-03/course-03-migrate-one-namespace-at-a-time.md
+    prompt: What is a good unit of migration?
+    options:
+    - id: a
+      text: A namespace
+      explanation: Correct. It has an owner and a label.
+    - id: b
+      text: A single packet
+      explanation: Incorrect. It has an owner and a label.
+    - id: c
+      text: A node image
+      explanation: Incorrect. It has an owner and a label.
+    - id: d
+      text: A Secret
+      explanation: Incorrect. It has an owner and a label.
+    correct_option: a
+    explanation: Correct. It has an owner and a label.

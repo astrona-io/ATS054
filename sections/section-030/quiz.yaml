@@ -195,3 +195,454 @@ questions:
     correct_option: d
     explanation: "Correct. Conformance tests and channels describe the limits."
 
+  - id: ats054-030-m02-q01
+    type: single_choice
+    difficulty: beginner
+    learning_objective: Map pathType
+    source_readings:
+    - sections/section-030/module-02/course-01-map-ingress-fields-to-gateway-api.md
+    prompt: Which HTTPRoute path match type corresponds to Ingress pathType Prefix?
+    options:
+    - id: a
+      text: "`Exact`"
+      explanation: Incorrect. Prefix maps to PathPrefix.
+    - id: b
+      text: "`PathPrefix`"
+      explanation: Correct. Prefix maps to PathPrefix.
+    - id: c
+      text: "`RegularExpression`"
+      explanation: Incorrect. Prefix maps to PathPrefix.
+    - id: d
+      text: "`Host`"
+      explanation: Incorrect. Prefix maps to PathPrefix.
+    correct_option: b
+    explanation: Correct. Prefix maps to PathPrefix.
+  - id: ats054-030-m02-q02
+    type: single_choice
+    difficulty: beginner
+    learning_objective: Map the host
+    source_readings:
+    - sections/section-030/module-02/course-01-map-ingress-fields-to-gateway-api.md
+    prompt: Which HTTPRoute field holds the Ingress rule host?
+    options:
+    - id: a
+      text: "`hostnames`"
+      explanation: Correct. hostnames carries the host names.
+    - id: b
+      text: "`parentRefs`"
+      explanation: Incorrect. hostnames carries the host names.
+    - id: c
+      text: "`gatewayClassName`"
+      explanation: Incorrect. hostnames carries the host names.
+    - id: d
+      text: "`sectionName`"
+      explanation: Incorrect. hostnames carries the host names.
+    correct_option: a
+    explanation: Correct. hostnames carries the host names.
+  - id: ats054-030-m02-q03
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: Map the default backend
+    source_readings:
+    - sections/section-030/module-02/course-01-map-ingress-fields-to-gateway-api.md
+    prompt: How do you express an Ingress defaultBackend?
+    options:
+    - id: a
+      text: A rule with no matches
+      explanation: Correct. A rule without matches takes every request that no other
+        rule matches.
+    - id: b
+      text: A second Gateway
+      explanation: Incorrect. A rule without matches takes every request that no other
+        rule matches.
+    - id: c
+      text: An annotation
+      explanation: Incorrect. A rule without matches takes every request that no other
+        rule matches.
+    - id: d
+      text: A ReferenceGrant
+      explanation: Incorrect. A rule without matches takes every request that no other
+        rule matches.
+    correct_option: a
+    explanation: Correct. A rule without matches takes every request that no other rule
+      matches.
+  - id: ats054-030-m02-q04
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: Replace a redirect
+    source_readings:
+    - sections/section-030/module-02/course-02-replace-annotations-with-fields-and-filters.md
+    prompt: How do you replace force-ssl-redirect?
+    options:
+    - id: a
+      text: A RequestRedirect filter with scheme https on a route attached to the HTTP
+        listener
+      explanation: Correct. The redirect becomes a filter.
+    - id: b
+      text: An annotation on the Gateway
+      explanation: Incorrect. The redirect becomes a filter.
+    - id: c
+      text: A larger Service
+      explanation: Incorrect. The redirect becomes a filter.
+    - id: d
+      text: A Secret
+      explanation: Incorrect. The redirect becomes a filter.
+    correct_option: a
+    explanation: Correct. The redirect becomes a filter.
+  - id: ats054-030-m02-q05
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: Handle unknown annotations
+    source_readings:
+    - sections/section-030/module-02/course-02-replace-annotations-with-fields-and-filters.md
+    prompt: What happens to an Ingress annotation copied to a Gateway?
+    options:
+    - id: a
+      text: It is ignored if the controller does not know it.
+      explanation: Correct. Unknown annotations do nothing.
+    - id: b
+      text: It is applied.
+      explanation: Incorrect. Unknown annotations do nothing.
+    - id: c
+      text: It breaks the API server.
+      explanation: Incorrect. Unknown annotations do nothing.
+    - id: d
+      text: It becomes a filter.
+      explanation: Incorrect. Unknown annotations do nothing.
+    correct_option: a
+    explanation: Correct. Unknown annotations do nothing.
+  - id: ats054-030-m02-q06
+    type: single_choice
+    difficulty: beginner
+    learning_objective: Treat output as a draft
+    source_readings:
+    - sections/section-030/module-02/course-03-convert-with-ingress2gateway.md
+    prompt: How should you treat the output of ingress2gateway?
+    options:
+    - id: a
+      text: As final
+      explanation: Incorrect. Review warnings and apply to check the status.
+    - id: b
+      text: As a draft to review, including its warnings
+      explanation: Correct. Review warnings and apply to check the status.
+    - id: c
+      text: As an error
+      explanation: Incorrect. Review warnings and apply to check the status.
+    - id: d
+      text: As a policy
+      explanation: Incorrect. Review warnings and apply to check the status.
+    correct_option: b
+    explanation: Correct. Review warnings and apply to check the status.
+  - id: ats054-030-m02-q07
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: Validate a conversion
+    source_readings:
+    - sections/section-030/module-02/course-03-convert-with-ingress2gateway.md
+    prompt: How do you check that converted objects work?
+    options:
+    - id: a
+      text: Read the status and compare responses
+      explanation: Correct. Status and real requests prove it.
+    - id: b
+      text: Compare file sizes
+      explanation: Incorrect. Status and real requests prove it.
+    - id: c
+      text: Restart Cilium
+      explanation: Incorrect. Status and real requests prove it.
+    - id: d
+      text: Delete the Ingress first
+      explanation: Incorrect. Status and real requests prove it.
+    correct_option: a
+    explanation: Correct. Status and real requests prove it.
+  - id: ats054-030-m02-q08
+    type: single_choice
+    difficulty: beginner
+    learning_objective: Keep the old entry point
+    source_readings:
+    - sections/section-030/module-02/course-04-plan-a-cutover-with-a-rollback.md
+    prompt: Why keep the Ingress after the DNS switch?
+    options:
+    - id: a
+      text: For the rollback
+      explanation: Correct. Pointing DNS back at the Ingress undoes the switch.
+    - id: b
+      text: For billing
+      explanation: Incorrect. Pointing DNS back at the Ingress undoes the switch.
+    - id: c
+      text: Because Gateway needs it
+      explanation: Incorrect. Pointing DNS back at the Ingress undoes the switch.
+    - id: d
+      text: Because Hubble needs it
+      explanation: Incorrect. Pointing DNS back at the Ingress undoes the switch.
+    correct_option: a
+    explanation: Correct. Pointing DNS back at the Ingress undoes the switch.
+  - id: ats054-030-m02-q09
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: Find the two addresses
+    source_readings:
+    - sections/section-030/module-02/course-04-plan-a-cutover-with-a-rollback.md
+    prompt: What are the generated Service names for an Ingress and a Gateway named
+      fleet in dedicated mode?
+    options:
+    - id: a
+      text: "`cilium-ingress-fleet` and `cilium-gateway-fleet`"
+      explanation: Correct. Each generates its own Service with its own address.
+    - id: b
+      text: "`fleet` and `fleet`"
+      explanation: Incorrect. Each generates its own Service with its own address.
+    - id: c
+      text: "`ingress-fleet` and `gateway-fleet`"
+      explanation: Incorrect. Each generates its own Service with its own address.
+    - id: d
+      text: "`cilium-fleet` for both"
+      explanation: Incorrect. Each generates its own Service with its own address.
+    correct_option: a
+    explanation: Correct. Each generates its own Service with its own address.
+  - id: ats054-030-m02-q10
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: Order the cutover
+    source_readings:
+    - sections/section-030/module-02/course-04-plan-a-cutover-with-a-rollback.md
+    prompt: Which step comes first?
+    options:
+    - id: a
+      text: Delete the Ingress
+      explanation: Incorrect. Prepare and test first; delete last.
+    - id: b
+      text: Lower the DNS TTL and test the Gateway
+      explanation: Correct. Prepare and test first; delete last.
+    - id: c
+      text: Remove the GatewayClass
+      explanation: Incorrect. Prepare and test first; delete last.
+    - id: d
+      text: Switch DNS
+      explanation: Incorrect. Prepare and test first; delete last.
+    correct_option: b
+    explanation: Correct. Prepare and test first; delete last.
+
+  - id: ats054-030-m03-q01
+    type: single_choice
+    difficulty: beginner
+    learning_objective: Name the channels
+    source_readings:
+    - sections/section-030/module-03/course-01-release-channels-and-versions.md
+    prompt: Which two release channels does the Gateway API have?
+    options:
+    - id: a
+      text: Stable and nightly
+      explanation: Incorrect. The CRDs ship as a standard and an experimental channel.
+    - id: b
+      text: Standard and experimental
+      explanation: Correct. The CRDs ship as a standard and an experimental channel.
+    - id: c
+      text: Core and extended
+      explanation: Incorrect. The CRDs ship as a standard and an experimental channel.
+    - id: d
+      text: Alpha and GA
+      explanation: Incorrect. The CRDs ship as a standard and an experimental channel.
+    correct_option: b
+    explanation: Correct. The CRDs ship as a standard and an experimental channel.
+  - id: ats054-030-m03-q02
+    type: single_choice
+    difficulty: beginner
+    learning_objective: Find the channel
+    source_readings:
+    - sections/section-030/module-03/course-01-release-channels-and-versions.md
+    prompt: Where can you read the channel of installed CRDs?
+    options:
+    - id: a
+      text: A CRD annotation
+      explanation: Correct. The annotation gateway.networking.k8s.io/channel holds it.
+    - id: b
+      text: The node labels
+      explanation: Incorrect. The annotation gateway.networking.k8s.io/channel holds
+        it.
+    - id: c
+      text: The kubelet log
+      explanation: Incorrect. The annotation gateway.networking.k8s.io/channel holds
+        it.
+    - id: d
+      text: The Service
+      explanation: Incorrect. The annotation gateway.networking.k8s.io/channel holds
+        it.
+    correct_option: a
+    explanation: Correct. The annotation gateway.networking.k8s.io/channel holds it.
+  - id: ats054-030-m03-q03
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: Predict pruning
+    source_readings:
+    - sections/section-030/module-03/course-01-release-channels-and-versions.md
+    prompt: A route uses a field that the installed CRD does not have. What happens?
+    options:
+    - id: a
+      text: The API server may accept it and drop the field
+      explanation: Correct. Unknown fields are pruned silently.
+    - id: b
+      text: The cluster crashes
+      explanation: Incorrect. Unknown fields are pruned silently.
+    - id: c
+      text: The field works anyway
+      explanation: Incorrect. Unknown fields are pruned silently.
+    - id: d
+      text: Cilium installs the CRD
+      explanation: Incorrect. Unknown fields are pruned silently.
+    correct_option: a
+    explanation: Correct. Unknown fields are pruned silently.
+  - id: ats054-030-m03-q04
+    type: single_choice
+    difficulty: beginner
+    learning_objective: List the levels
+    source_readings:
+    - sections/section-030/module-03/course-02-support-levels-and-conformance.md
+    prompt: Which are the three support levels?
+    options:
+    - id: a
+      text: Core, Extended, Implementation-specific
+      explanation: Correct. Core, Extended and implementation-specific.
+    - id: b
+      text: Free, Pro, Enterprise
+      explanation: Incorrect. Core, Extended and implementation-specific.
+    - id: c
+      text: Alpha, Beta, GA
+      explanation: Incorrect. Core, Extended and implementation-specific.
+    - id: d
+      text: Read, Write, Admin
+      explanation: Incorrect. Core, Extended and implementation-specific.
+    correct_option: a
+    explanation: Correct. Core, Extended and implementation-specific.
+  - id: ats054-030-m03-q05
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: Use Core for portability
+    source_readings:
+    - sections/section-030/module-03/course-02-support-levels-and-conformance.md
+    prompt: Which features give the most portable route?
+    options:
+    - id: a
+      text: Core
+      explanation: Correct. Every implementation must support Core.
+    - id: b
+      text: Implementation-specific
+      explanation: Incorrect. Every implementation must support Core.
+    - id: c
+      text: Experimental only
+      explanation: Incorrect. Every implementation must support Core.
+    - id: d
+      text: Annotations
+      explanation: Incorrect. Every implementation must support Core.
+    correct_option: a
+    explanation: Correct. Every implementation must support Core.
+  - id: ats054-030-m03-q06
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: Read the proof
+    source_readings:
+    - sections/section-030/module-03/course-02-support-levels-and-conformance.md
+    prompt: What does a conformance report show?
+    options:
+    - id: a
+      text: Which features a controller version passed
+      explanation: Correct. It lists the profiles and features that passed.
+    - id: b
+      text: Your cluster's cost
+      explanation: Incorrect. It lists the profiles and features that passed.
+    - id: c
+      text: Your policies
+      explanation: Incorrect. It lists the profiles and features that passed.
+    - id: d
+      text: Your DNS records
+      explanation: Incorrect. It lists the profiles and features that passed.
+    correct_option: a
+    explanation: Correct. It lists the profiles and features that passed.
+  - id: ats054-030-m03-q07
+    type: single_choice
+    difficulty: beginner
+    learning_objective: Name an extension point
+    source_readings:
+    - sections/section-030/module-03/course-03-extension-points.md
+    prompt: Which filter type points at an implementation-defined object?
+    options:
+    - id: a
+      text: "`ExtensionRef`"
+      explanation: Correct. ExtensionRef refers to an extension object.
+    - id: b
+      text: "`RequestMirror`"
+      explanation: Incorrect. ExtensionRef refers to an extension object.
+    - id: c
+      text: "`URLRewrite`"
+      explanation: Incorrect. ExtensionRef refers to an extension object.
+    - id: d
+      text: "`RequestRedirect`"
+      explanation: Incorrect. ExtensionRef refers to an extension object.
+    correct_option: a
+    explanation: Correct. ExtensionRef refers to an extension object.
+  - id: ats054-030-m03-q08
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: Check portability
+    source_readings:
+    - sections/section-030/module-03/course-03-extension-points.md
+    prompt: Why keep extension objects separate and labelled?
+    options:
+    - id: a
+      text: They are tied to one controller and must be easy to find
+      explanation: Correct. They need a test on any new controller.
+    - id: b
+      text: Kubernetes requires it
+      explanation: Incorrect. They need a test on any new controller.
+    - id: c
+      text: They cost less
+      explanation: Incorrect. They need a test on any new controller.
+    - id: d
+      text: Envoy needs it
+      explanation: Incorrect. They need a test on any new controller.
+    correct_option: a
+    explanation: Correct. They need a test on any new controller.
+  - id: ats054-030-m03-q09
+    type: single_choice
+    difficulty: beginner
+    learning_objective: Order the install
+    source_readings:
+    - sections/section-030/module-03/course-04-upgrade-and-compatibility.md
+    prompt: What must be installed before Cilium?
+    options:
+    - id: a
+      text: The Gateway API CRDs
+      explanation: Correct. The operator needs the CRDs when it starts.
+    - id: b
+      text: Hubble UI
+      explanation: Incorrect. The operator needs the CRDs when it starts.
+    - id: c
+      text: Prometheus
+      explanation: Incorrect. The operator needs the CRDs when it starts.
+    - id: d
+      text: A load balancer
+      explanation: Incorrect. The operator needs the CRDs when it starts.
+    correct_option: a
+    explanation: Correct. The operator needs the CRDs when it starts.
+  - id: ats054-030-m03-q10
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: Avoid a destructive step
+    source_readings:
+    - sections/section-030/module-03/course-04-upgrade-and-compatibility.md
+    prompt: Why not delete the CRDs to start clean?
+    options:
+    - id: a
+      text: It deletes all objects of that kind
+      explanation: Correct. Deleting a CRD deletes its custom resources.
+    - id: b
+      text: It disables kubectl
+      explanation: Incorrect. Deleting a CRD deletes its custom resources.
+    - id: c
+      text: It resets nodes
+      explanation: Incorrect. Deleting a CRD deletes its custom resources.
+    - id: d
+      text: It changes the channel only
+      explanation: Incorrect. Deleting a CRD deletes its custom resources.
+    correct_option: a
+    explanation: Correct. Deleting a CRD deletes its custom resources.

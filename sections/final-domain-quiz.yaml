@@ -356,3 +356,171 @@ questions:
     correct_option: b
     explanation: "Correct. A label describes placement, not guarantees."
 
+
+  - id: ats054-final-s010-m02-q01
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: Predict which rule Envoy chooses
+    source_readings:
+    - sections/section-010/module-02/course-02-host-and-path-matching.md
+    prompt: One host has an `Exact` rule for `/get` to `probe` and a `Prefix` rule for
+      `/` to `scout`. Where does the request `/get/extra` go?
+    options:
+    - id: a
+      text: To `probe`, because the Exact rule is first in the file.
+      explanation: Incorrect. Exact matches only the same path. The request falls to
+        the Prefix rule for /.
+    - id: b
+      text: To `probe`, because /get is a prefix of /get/extra.
+      explanation: Incorrect. Exact matches only the same path. The request falls to
+        the Prefix rule for /.
+    - id: c
+      text: To `scout`, because the Exact rule does not match and the catch-all does.
+      explanation: Correct. Exact matches only the same path. The request falls to the
+        Prefix rule for /.
+    - id: d
+      text: It returns a 404 from Envoy, because two rules overlap.
+      explanation: Incorrect. Exact matches only the same path. The request falls to
+        the Prefix rule for /.
+    correct_option: c
+    explanation: Correct. Exact matches only the same path. The request falls to the
+      Prefix rule for /.
+
+  - id: ats054-final-s010-m02-q02
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: Test HTTPS to a node port
+    source_readings:
+    - sections/section-010/module-02/course-03-tls-termination-with-a-secret.md
+    prompt: You test an HTTPS Ingress for `scout.example.com` with `curl -k https://NODE_IP:NODE_PORT/`
+      and the handshake fails. What is the most likely cause and fix?
+    options:
+    - id: a
+      text: The certificate is self-signed. Remove the `-k` flag.
+      explanation: Incorrect. Envoy chooses the certificate by SNI. curl sends no SNI
+        for an IP address.
+    - id: b
+      text: The client sent no SNI because it connected to an IP address. Use `--resolve
+        scout.example.com:NODE_PORT:NODE_IP` and the host name in the URL.
+      explanation: Correct. Envoy chooses the certificate by SNI. curl sends no SNI
+        for an IP address.
+    - id: c
+      text: 'The Ingress needs `pathType: Exact`.'
+      explanation: Incorrect. Envoy chooses the certificate by SNI. curl sends no SNI
+        for an IP address.
+    - id: d
+      text: The node port is the HTTP port. Switch to the Service port 80.
+      explanation: Incorrect. Envoy chooses the certificate by SNI. curl sends no SNI
+        for an IP address.
+    correct_option: b
+    explanation: Correct. Envoy chooses the certificate by SNI. curl sends no SNI for
+      an IP address.
+
+  - id: ats054-final-s010-m03-q01
+    type: single_choice
+    difficulty: beginner
+    learning_objective: Limit routes by namespace
+    source_readings:
+    - sections/section-010/module-03/course-01-listeners-and-attachment.md
+    prompt: Which `allowedRoutes.namespaces.from` value lets only routes from the namespace
+      of the Gateway attach?
+    options:
+    - id: a
+      text: "`All`"
+      explanation: Incorrect. Same allows routes from the namespace of the Gateway.
+        All and Selector allow others.
+    - id: b
+      text: "`Selector`"
+      explanation: Incorrect. Same allows routes from the namespace of the Gateway.
+        All and Selector allow others.
+    - id: c
+      text: "`Same`"
+      explanation: Correct. Same allows routes from the namespace of the Gateway. All
+        and Selector allow others.
+    - id: d
+      text: "`Local`"
+      explanation: Incorrect. Same allows routes from the namespace of the Gateway.
+        All and Selector allow others.
+    correct_option: c
+    explanation: Correct. Same allows routes from the namespace of the Gateway. All
+      and Selector allow others.
+
+  - id: ats054-final-s010-m03-q02
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: Choose passthrough
+    source_readings:
+    - sections/section-010/module-03/course-03-tls-passthrough-and-route-kinds.md
+    prompt: A backend must keep its private key and see the client certificate. Which
+      listener setup fits?
+    options:
+    - id: a
+      text: "`HTTPS` listener with `Terminate`"
+      explanation: Incorrect. Passthrough forwards the encrypted stream, routed by SNI
+        with a TLSRoute.
+    - id: b
+      text: "`TLS` listener with `Passthrough` and a `TLSRoute`"
+      explanation: Correct. Passthrough forwards the encrypted stream, routed by SNI
+        with a TLSRoute.
+    - id: c
+      text: "`HTTP` listener with an `HTTPRoute`"
+      explanation: Incorrect. Passthrough forwards the encrypted stream, routed by SNI
+        with a TLSRoute.
+    - id: d
+      text: "`UDP` listener with a `GRPCRoute`"
+      explanation: Incorrect. Passthrough forwards the encrypted stream, routed by SNI
+        with a TLSRoute.
+    correct_option: b
+    explanation: Correct. Passthrough forwards the encrypted stream, routed by SNI with
+      a TLSRoute.
+
+  - id: ats054-final-s010-m04-q01
+    type: single_choice
+    difficulty: beginner
+    learning_objective: Read a default rule
+    source_readings:
+    - sections/section-010/module-04/course-01-request-matching-and-rule-precedence.md
+    prompt: What does a rule without `matches` do?
+    options:
+    - id: a
+      text: It matches nothing.
+      explanation: Incorrect. A rule without matches is the same as a prefix match on
+        /.
+    - id: b
+      text: It matches every request like a PathPrefix on /.
+      explanation: Correct. A rule without matches is the same as a prefix match on
+        /.
+    - id: c
+      text: It is rejected by the Gateway.
+      explanation: Incorrect. A rule without matches is the same as a prefix match on
+        /.
+    - id: d
+      text: It matches only GET requests.
+      explanation: Incorrect. A rule without matches is the same as a prefix match on
+        /.
+    correct_option: b
+    explanation: Correct. A rule without matches is the same as a prefix match on /.
+
+  - id: ats054-final-s010-m04-q02
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: Use ReplacePrefixMatch
+    source_readings:
+    - sections/section-010/module-04/course-03-url-rewrite-and-request-mirroring.md
+    prompt: A rule matches PathPrefix /probe with ReplacePrefixMatch /. What does the
+      backend receive for /probe/get?
+    options:
+    - id: a
+      text: "/probe/get"
+      explanation: Incorrect. The matched prefix is replaced, the rest of the path stays.
+    - id: b
+      text: "/get"
+      explanation: Correct. The matched prefix is replaced, the rest of the path stays.
+    - id: c
+      text: "/"
+      explanation: Incorrect. The matched prefix is replaced, the rest of the path stays.
+    - id: d
+      text: "/probe"
+      explanation: Incorrect. The matched prefix is replaced, the rest of the path stays.
+    correct_option: b
+    explanation: Correct. The matched prefix is replaced, the rest of the path stays.

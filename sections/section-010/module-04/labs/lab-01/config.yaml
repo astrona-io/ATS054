@@ -1,0 +1,65 @@
+# yaml-language-server: $schema=https://cli.astrona.io/schema/lab-config.schema.json
+#
+# Add A Redirect And A Rewrite To An HTTPRoute (LAB). Graded against the live cluster. UNTESTED.
+apiVersion: astrona.io/v1
+metadata:
+  name: ats-054-lab-010-04
+  docs:
+    prerequisites: prerequisites.md
+    question: question.md
+    solution: solution.md
+
+runtime:
+  type: kind
+  kind:
+    image: kindest/node:v1.35.0@sha256:452d707d4862f52530247495d180205e029056831160e22870e37e3f6c1ac31f
+    nodes:
+      workers: 1
+    networking:
+      disableDefaultCNI: true
+      podSubnet: 10.244.0.0/16
+    preloadImages:
+      - ghcr.io/stefanprodan/podinfo:6.15.0
+      - mccutchen/go-httpbin:2.25.0
+      - curlimages/curl:8.22.0
+
+bootstrap:
+  init:
+    - name: seed-cluster
+      description: Install Cilium and create the Starfleet workloads
+      type: file
+      source: bootstrap/01-seed-cluster.sh
+
+# Applied only by `astrona test`: the reference solution.
+testing:
+  init:
+    - name: apply-solution
+      description: Apply the reference solution
+      type: file
+      source: solution/apply.sh
+
+validation:
+  scripts:
+    - name: route-accepted
+      description: "The HTTPRoute fleet is accepted and its references resolve"
+      type: file
+      source: validation/validate-route-accepted.sh
+      hint: "Read status.parents of the route after you apply your change."
+    - name: old-path-redirects
+      description: "A request for /old/page gets a 301 redirect to probe.example.com"
+      type: file
+      source: validation/validate-old-path-redirects.sh
+      hint: "Add a rule that matches the prefix /old with a RequestRedirect filter, hostname probe.example.com and statusCode 301."
+    - name: probe-prefix-rewritten
+      description: "A request for /probe/uuid reaches probe with the path /uuid"
+      type: file
+      source: validation/validate-probe-prefix-rewritten.sh
+      hint: "Match the prefix /probe, add a URLRewrite filter with ReplacePrefixMatch / and send the rule to probe port 80."
+    - name: default-still-scout
+      description: "Other requests still reach scout and the Gateway is unchanged"
+      type: file
+      source: validation/validate-default-still-scout.sh
+      hint: "Keep the rule without matches that sends traffic to scout, and do not edit the Gateway."
+
+teardown:
+  keepCluster: false

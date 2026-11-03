@@ -1,0 +1,22 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: scout
+  namespace: starfleet
+spec:
+  ingressClassName: cilium
+  tls:
+    - hosts:
+        - scout.example.com
+      secretName: scout-tls
+  rules:
+    - host: scout.example.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: scout
+                port:
+                  number: 80

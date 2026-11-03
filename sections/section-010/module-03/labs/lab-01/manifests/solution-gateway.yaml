@@ -1,0 +1,35 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: fleet
+  namespace: starfleet
+spec:
+  gatewayClassName: cilium
+  listeners:
+    - name: https
+      protocol: HTTPS
+      port: 443
+      hostname: scout.example.com
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - name: scout-tls
+      allowedRoutes:
+        namespaces:
+          from: Same
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: scout
+  namespace: starfleet
+spec:
+  parentRefs:
+    - name: fleet
+      sectionName: https
+  hostnames:
+    - scout.example.com
+  rules:
+    - backendRefs:
+        - name: scout
+          port: 80

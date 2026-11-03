@@ -1,0 +1,65 @@
+# yaml-language-server: $schema=https://cli.astrona.io/schema/lab-config.schema.json
+#
+# Fix An HTTPS Listener On A Cilium Gateway (LAB). Graded against the live cluster. UNTESTED.
+apiVersion: astrona.io/v1
+metadata:
+  name: ats-054-lab-010-03
+  docs:
+    prerequisites: prerequisites.md
+    question: question.md
+    solution: solution.md
+
+runtime:
+  type: kind
+  kind:
+    image: kindest/node:v1.35.0@sha256:452d707d4862f52530247495d180205e029056831160e22870e37e3f6c1ac31f
+    nodes:
+      workers: 1
+    networking:
+      disableDefaultCNI: true
+      podSubnet: 10.244.0.0/16
+    preloadImages:
+      - ghcr.io/stefanprodan/podinfo:6.15.0
+      - mccutchen/go-httpbin:2.25.0
+      - curlimages/curl:8.22.0
+
+bootstrap:
+  init:
+    - name: seed-cluster
+      description: Install Cilium and create the Starfleet workloads
+      type: file
+      source: bootstrap/01-seed-cluster.sh
+
+# Applied only by `astrona test`: the reference solution.
+testing:
+  init:
+    - name: apply-solution
+      description: Apply the reference solution
+      type: file
+      source: solution/apply.sh
+
+validation:
+  scripts:
+    - name: certificate-ref-resolved
+      description: "The certificate reference of the https listener resolves"
+      type: file
+      source: validation/validate-certificate-ref-resolved.sh
+      hint: "Read the ResolvedRefs condition of the listener in the Gateway status, then list the Secrets in starfleet."
+    - name: route-accepted
+      description: "The HTTPRoute scout is accepted"
+      type: file
+      source: validation/validate-route-accepted.sh
+      hint: "The route attaches to the listener named https. Read status.parents of the route."
+    - name: https-reaches-scout
+      description: "An HTTPS request for scout.example.com reaches scout"
+      type: file
+      source: validation/validate-https-reaches-scout.sh
+      hint: "Use curl with --resolve and the node port that belongs to Service port 443."
+    - name: listener-kept
+      description: "The listener keeps its port, host name and TLS mode"
+      type: file
+      source: validation/validate-listener-kept.sh
+      hint: "Change only the name in certificateRefs."
+
+teardown:
+  keepCluster: false

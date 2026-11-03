@@ -1,0 +1,24 @@
+# Starting state: an Ingress for scout.example.com that names a TLS Secret
+# which does not exist. The Secret that does exist is scout-tls.
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: scout
+  namespace: starfleet
+spec:
+  ingressClassName: cilium
+  tls:
+    - hosts:
+        - scout.example.com
+      secretName: scout-cert
+  rules:
+    - host: scout.example.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: scout
+                port:
+                  number: 80

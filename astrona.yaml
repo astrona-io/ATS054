@@ -96,6 +96,122 @@ modules:
     title: Summary
     path: sections/section-010/module-01/course-04-summary.md
   - type: reading
+    title: Cilium Ingress In Depth
+    path: sections/section-010/module-02/course.md
+  - type: reading
+    title: Shared And Dedicated Entry Points
+    path: sections/section-010/module-02/course-01-shared-and-dedicated-entry-points.md
+  - type: reading
+    title: Host And Path Matching
+    path: sections/section-010/module-02/course-02-host-and-path-matching.md
+  - type: reading
+    title: TLS Termination With A Secret
+    path: sections/section-010/module-02/course-03-tls-termination-with-a-secret.md
+  - type: reading
+    title: Question
+    path: sections/section-010/module-02/labs/lab-01/question.md
+  - type: lab
+    title: Fix TLS On A Cilium Ingress (Lab)
+    path: sections/section-010/module-02/labs/lab-01
+    difficulty: intermediate
+    estimated_duration: 25m
+    topic: cilium-ingress
+    task_kind: fix
+    tags:
+    - cilium
+    - ingress
+    - tls
+    - secret
+    learning_goals:
+    - The Ingress names a TLS Secret that exists
+    - An HTTPS request for scout.example.com reaches scout
+    - A plain HTTP request is redirected to HTTPS
+    - The Ingress keeps its host, class and backend
+  - type: reading
+    title: Reaching The Entry Point From Outside
+    path: sections/section-010/module-02/course-04-reaching-the-entry-point-from-outside.md
+  - type: reading
+    title: Summary
+    path: sections/section-010/module-02/course-05-summary.md
+  - type: reading
+    title: Gateway Listeners, TLS And Route Types
+    path: sections/section-010/module-03/course.md
+  - type: reading
+    title: Listeners And Attachment
+    path: sections/section-010/module-03/course-01-listeners-and-attachment.md
+  - type: reading
+    title: HTTPS Listeners And Certificates
+    path: sections/section-010/module-03/course-02-https-listeners-and-certificates.md
+  - type: reading
+    title: Question
+    path: sections/section-010/module-03/labs/lab-01/question.md
+  - type: lab
+    title: Fix An HTTPS Listener On A Cilium Gateway (Lab)
+    path: sections/section-010/module-03/labs/lab-01
+    difficulty: intermediate
+    estimated_duration: 25m
+    topic: cilium-gateway
+    task_kind: fix
+    tags:
+    - cilium
+    - gateway-api
+    - gateway
+    - tls
+    - listener
+    learning_goals:
+    - The certificate reference of the https listener resolves
+    - The HTTPRoute scout is accepted
+    - An HTTPS request for scout.example.com reaches scout
+    - The listener keeps its port, host name and TLS mode
+  - type: reading
+    title: TLS Passthrough And Route Kinds
+    path: sections/section-010/module-03/course-03-tls-passthrough-and-route-kinds.md
+  - type: reading
+    title: Reading Listener Status
+    path: sections/section-010/module-03/course-04-reading-listener-status.md
+  - type: reading
+    title: Summary
+    path: sections/section-010/module-03/course-05-summary.md
+  - type: reading
+    title: HTTPRoute Filters And Traffic Management
+    path: sections/section-010/module-04/course.md
+  - type: reading
+    title: Request Matching And Rule Precedence
+    path: sections/section-010/module-04/course-01-request-matching-and-rule-precedence.md
+  - type: reading
+    title: Header Modifiers And Redirects
+    path: sections/section-010/module-04/course-02-header-modifiers-and-redirects.md
+  - type: reading
+    title: URL Rewrite And Request Mirroring
+    path: sections/section-010/module-04/course-03-url-rewrite-and-request-mirroring.md
+  - type: reading
+    title: Question
+    path: sections/section-010/module-04/labs/lab-01/question.md
+  - type: lab
+    title: Add A Redirect And A Rewrite To An HTTPRoute (Lab)
+    path: sections/section-010/module-04/labs/lab-01
+    difficulty: intermediate
+    estimated_duration: 25m
+    topic: cilium-gateway
+    task_kind: build
+    tags:
+    - cilium
+    - gateway-api
+    - httproute
+    - filters
+    - canary
+    learning_goals:
+    - The HTTPRoute is accepted
+    - The old path answers with a redirect
+    - The probe prefix is rewritten before it reaches the backend
+    - The default rule still sends traffic to scout
+  - type: reading
+    title: Weighted Backends For Canary And Blue-Green
+    path: sections/section-010/module-04/course-04-weighted-backends-for-canary-and-blue-green.md
+  - type: reading
+    title: Summary
+    path: sections/section-010/module-04/course-05-summary.md
+  - type: reading
     title: Question
     path: sections/section-010/capstone/labs/lab-01/question.md
   - type: lab

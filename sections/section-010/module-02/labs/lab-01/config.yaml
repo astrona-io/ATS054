@@ -1,0 +1,65 @@
+# yaml-language-server: $schema=https://cli.astrona.io/schema/lab-config.schema.json
+#
+# Fix TLS On A Cilium Ingress (LAB). Graded against the live cluster. UNTESTED.
+apiVersion: astrona.io/v1
+metadata:
+  name: ats-054-lab-010-02
+  docs:
+    prerequisites: prerequisites.md
+    question: question.md
+    solution: solution.md
+
+runtime:
+  type: kind
+  kind:
+    image: kindest/node:v1.35.0@sha256:452d707d4862f52530247495d180205e029056831160e22870e37e3f6c1ac31f
+    nodes:
+      workers: 1
+    networking:
+      disableDefaultCNI: true
+      podSubnet: 10.244.0.0/16
+    preloadImages:
+      - ghcr.io/stefanprodan/podinfo:6.15.0
+      - mccutchen/go-httpbin:2.25.0
+      - curlimages/curl:8.22.0
+
+bootstrap:
+  init:
+    - name: seed-cluster
+      description: Install Cilium and create the Starfleet workloads
+      type: file
+      source: bootstrap/01-seed-cluster.sh
+
+# Applied only by `astrona test`: the reference solution.
+testing:
+  init:
+    - name: apply-solution
+      description: Apply the reference solution
+      type: file
+      source: solution/apply.sh
+
+validation:
+  scripts:
+    - name: tls-secret-exists
+      description: "The Ingress names a TLS Secret that exists"
+      type: file
+      source: validation/validate-tls-secret-exists.sh
+      hint: "List the Secrets in starfleet and copy the exact name into spec.tls[0].secretName."
+    - name: https-reaches-scout
+      description: "An HTTPS request for scout.example.com reaches scout"
+      type: file
+      source: validation/validate-https-reaches-scout.sh
+      hint: "Use curl with --resolve so that the host name is sent in the TLS handshake, and the node port named https."
+    - name: http-redirects
+      description: "A plain HTTP request is redirected to HTTPS"
+      type: file
+      source: validation/validate-http-redirects.sh
+      hint: "The controller redirects HTTP for a host that has a tls entry. Check that the tls hosts list contains scout.example.com."
+    - name: ingress-rule-kept
+      description: "The Ingress keeps its host, its class and its backend"
+      type: file
+      source: validation/validate-ingress-rule-kept.sh
+      hint: "Change only the secretName. Do not replace the rule."
+
+teardown:
+  keepCluster: false

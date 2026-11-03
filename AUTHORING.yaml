@@ -61,6 +61,84 @@ sections:
       status: draft
       runtime_verification: pending
     summary: sections/section-010/module-01/course-04-summary.md
+  - id: module-02
+    title: Cilium Ingress In Depth
+    objectives:
+    - Explain the dedicated and shared load balancer modes and set the mode and the
+      Service type for one Ingress.
+    - Write Exact, Prefix and ImplementationSpecific path rules and predict which
+      one matches.
+    - Terminate TLS with a Secret and test HTTPS with curl --resolve.
+    - Explain the redirect from HTTP to HTTPS, traffic policy, host network mode and
+      the gRPC Service port setting.
+    playground: true
+    module_lab: true
+    sources:
+    - reading: sections/section-010/module-02/course-01-shared-and-dedicated-entry-points.md
+      adapted_from: 
+    - reading: sections/section-010/module-02/course-02-host-and-path-matching.md
+      adapted_from: 
+    - reading: sections/section-010/module-02/course-03-tls-termination-with-a-secret.md
+      adapted_from: 
+    - reading: sections/section-010/module-02/course-04-reaching-the-entry-point-from-outside.md
+      adapted_from: 
+    labs:
+    - id: lab-01
+      path: sections/section-010/module-02/labs/lab-01
+      objective: Fix TLS On A Cilium Ingress
+      status: draft
+      runtime_verification: pending
+    summary: sections/section-010/module-02/course-05-summary.md
+  - id: module-03
+    title: Gateway Listeners, TLS And Route Types
+    objectives:
+    - Write a Gateway with several listeners and restrict the routes that attach by namespace and kind.
+    - Serve HTTPS with tls.mode Terminate and certificateRefs, and share a certificate across namespaces with a ReferenceGrant.
+    - Choose between Terminate and Passthrough and name the route kind each one uses.
+    - Read Accepted, Programmed, ResolvedRefs and attachedRoutes in a Gateway status.
+    playground: true
+    module_lab: true
+    sources:
+    - reading: sections/section-010/module-03/course-01-listeners-and-attachment.md
+      adapted_from: 
+    - reading: sections/section-010/module-03/course-02-https-listeners-and-certificates.md
+      adapted_from: 
+    - reading: sections/section-010/module-03/course-03-tls-passthrough-and-route-kinds.md
+      adapted_from: 
+    - reading: sections/section-010/module-03/course-04-reading-listener-status.md
+      adapted_from: 
+    labs:
+    - id: lab-01
+      path: sections/section-010/module-03/labs/lab-01
+      objective: Fix An HTTPS Listener On A Cilium Gateway
+      status: draft
+      runtime_verification: pending
+    summary: sections/section-010/module-03/course-05-summary.md
+  - id: module-04
+    title: HTTPRoute Filters And Traffic Management
+    objectives:
+    - Match requests by path, header, query parameter and method and predict which rule wins.
+    - Change headers and answer with a redirect using HTTPRoute filters.
+    - Rewrite the path prefix or host and mirror requests to a second backend.
+    - Split traffic by weight for a canary and roll it back.
+    playground: true
+    module_lab: true
+    sources:
+    - reading: sections/section-010/module-04/course-01-request-matching-and-rule-precedence.md
+      adapted_from: 
+    - reading: sections/section-010/module-04/course-02-header-modifiers-and-redirects.md
+      adapted_from: 
+    - reading: sections/section-010/module-04/course-03-url-rewrite-and-request-mirroring.md
+      adapted_from: 
+    - reading: sections/section-010/module-04/course-04-weighted-backends-for-canary-and-blue-green.md
+      adapted_from: 
+    labs:
+    - id: lab-01
+      path: sections/section-010/module-04/labs/lab-01
+      objective: Add A Redirect And A Rewrite To An HTTPRoute
+      status: draft
+      runtime_verification: pending
+    summary: sections/section-010/module-04/course-05-summary.md
 - id: section-020
   title: Service Mesh Use Cases
   curriculum_item: Service Mesh Use Cases

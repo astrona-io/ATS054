@@ -1,11 +1,14 @@
+# yaml-language-server: $schema=https://cli.astrona.io/schema/lab-config.schema.json
+#
+# Remove A Leftover Sidecar Proxy (LAB). Graded against the live cluster. UNTESTED.
 apiVersion: astrona.io/v1
 metadata:
-  name: ats-054-lab-050-01-01
+  name: ats-054-lab-050-01
   docs:
-    prerequisites: docs/prerequisites.md
-    examQuestion: question.md
-    caseStudy: docs/case-study.md
-    guide: solution.md
+    prerequisites: prerequisites.md
+    question: question.md
+    solution: solution.md
+
 runtime:
   type: kind
   kind:
@@ -15,20 +18,48 @@ runtime:
     networking:
       disableDefaultCNI: true
       podSubnet: 10.244.0.0/16
+    preloadImages:
+      - ghcr.io/stefanprodan/podinfo:6.15.0
+      - mccutchen/go-httpbin:2.25.0
+      - curlimages/curl:8.22.0
+
 bootstrap:
   init:
-  - name: seed-private-environment
-    type: file
-    source: bootstrap/setup.sh
-teardown:
-  keepCluster: false
+    - name: seed-cluster
+      description: Install Cilium and create the Starfleet workloads
+      type: file
+      source: bootstrap/01-seed-cluster.sh
+
+# Applied only by `astrona test`: the reference solution.
 testing:
   init:
-  - name: reference-result
-    type: file
-    source: solution/apply.sh
+    - name: apply-solution
+      description: Apply the reference solution
+      type: file
+      source: solution/apply.sh
+
 validation:
-  script:
-    name: verify-fields-and-live-evidence
-    type: file
-    source: validate.sh
+  scripts:
+    - name: legacy-proxy-removed
+      description: "The Deployment probe has no mesh proxy container"
+      type: file
+      source: validation/validate-legacy-proxy-removed.sh
+      hint: "List the containers of the Deployment. The container legacy-proxy is a leftover of the old sidecar mesh. Remove it from the pod template."
+    - name: probe-pods-single-container
+      description: "Every probe pod is Ready and has one container"
+      type: file
+      source: validation/validate-probe-pods-single-container.sh
+      hint: "Wait for the rollout to finish. An old pod with two containers can still exist while the rollout runs."
+    - name: l7-still-enforced
+      description: "The Layer 7 rule is enforced by the node proxy"
+      type: file
+      source: validation/validate-l7-still-enforced.sh
+      hint: "Keep the policy probe-l7. GET /get from shuttle returns 200, POST returns 403, and drifter gets no reply."
+    - name: node-proxy-on-every-node
+      description: "cilium-envoy runs and is ready on every node"
+      type: file
+      source: validation/validate-node-proxy-on-every-node.sh
+      hint: "Do not delete or scale the DaemonSet cilium-envoy. It does the Layer 7 work."
+
+teardown:
+  keepCluster: false

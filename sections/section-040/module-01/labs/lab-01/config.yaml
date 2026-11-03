@@ -1,11 +1,14 @@
+# yaml-language-server: $schema=https://cli.astrona.io/schema/lab-config.schema.json
+#
+# Turn On WireGuard Encryption (LAB). Graded against the live cluster. UNTESTED.
 apiVersion: astrona.io/v1
 metadata:
-  name: ats-054-lab-040-01-01
+  name: ats-054-lab-040-01
   docs:
-    prerequisites: docs/prerequisites.md
-    examQuestion: question.md
-    caseStudy: docs/case-study.md
-    guide: solution.md
+    prerequisites: prerequisites.md
+    question: question.md
+    solution: solution.md
+
 runtime:
   type: kind
   kind:
@@ -15,20 +18,43 @@ runtime:
     networking:
       disableDefaultCNI: true
       podSubnet: 10.244.0.0/16
+    preloadImages:
+      - ghcr.io/stefanprodan/podinfo:6.15.0
+      - mccutchen/go-httpbin:2.25.0
+      - curlimages/curl:8.22.0
+
 bootstrap:
   init:
-  - name: seed-private-environment
-    type: file
-    source: bootstrap/setup.sh
-teardown:
-  keepCluster: false
+    - name: seed-cluster
+      description: Install Cilium and create the Starfleet workloads
+      type: file
+      source: bootstrap/01-seed-cluster.sh
+
+# Applied only by `astrona test`: the reference solution.
 testing:
   init:
-  - name: reference-result
-    type: file
-    source: solution/apply.sh
+    - name: apply-solution
+      description: Apply the reference solution
+      type: file
+      source: solution/apply.sh
+
 validation:
-  script:
-    name: verify-fields-and-live-evidence
-    type: file
-    source: validate.sh
+  scripts:
+    - name: wireguard-configured
+      description: "The Cilium ConfigMap enables WireGuard"
+      type: file
+      source: validation/validate-wireguard-configured.sh
+      hint: "Set enable-wireguard to \"true\" in the ConfigMap cilium-config in kube-system."
+    - name: agents-report-wireguard
+      description: "Every Cilium agent reports WireGuard encryption"
+      type: file
+      source: validation/validate-agents-report-wireguard.sh
+      hint: "The agents read the ConfigMap at start. Restart the DaemonSet cilium and wait for it to roll out."
+    - name: pod-traffic-works
+      description: "Pods on both nodes still reach scout and probe"
+      type: file
+      source: validation/validate-pod-traffic-works.sh
+      hint: "Encryption is transparent. If requests fail, check that the rollout finished."
+
+teardown:
+  keepCluster: false

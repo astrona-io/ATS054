@@ -1,12 +1,8 @@
 #!/usr/bin/env bash
+# Applies the reference solution. Run only by `astrona test`.
 set -euo pipefail
-if [[ "$(kubectl config current-context)" != "kind-astro-ats-054-lab-040-01-01" ]]; then
-  printf 'Refusing to operate on another Kubernetes context\n' >&2
-  exit 1
-fi
-lab_directory="$(cd "$(dirname "$0")/.." && pwd)"
-solution_directory="$lab_directory/solution"
-node_name="astro-ats-054-lab-040-01-01-control-plane"
-worker_name="astro-ats-054-lab-040-01-01-worker"
-
-python3 "$solution_directory/record.py"
+kubectl -n kube-system patch configmap cilium-config --type merge -p '{"data":{"enable-wireguard":"true"}}'
+kubectl -n kube-system rollout restart daemonset/cilium
+kubectl -n kube-system rollout status daemonset/cilium --timeout=300s
+sleep 15
+echo "[solution] Applied."

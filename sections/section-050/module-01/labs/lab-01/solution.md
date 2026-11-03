@@ -1,80 +1,47 @@
----
-draft: true
-exam_objectives:
-- Sidecar-based versus Sidecarless Architectures
----
-# Observe A Shared L7 Proxy Boundary Solution
+# Solution
 
-Use a host shell with the private kubeconfig for this independent kind environment. A kubeconfig identifies the cluster and credentials used by kubectl, the Kubernetes command-line tool.
+Solve this lab on `terminal`. Each step ends with `astrona submit`. The `--keep` flag keeps the lab running.
+
+Start the lab if it is not running:
 
 ```sh
-export KUBECONFIG="$(astrona kubeconfig ats-054-lab-050-01-01)"
-test "$(kubectl config current-context)" = "kind-astro-ats-054-lab-050-01-01" || exit 1
-node_name="astro-ats-054-lab-050-01-01-control-plane"
-worker_name="astro-ats-054-lab-050-01-01-worker"
+astrona run --git ssh://git@github.com/astrona-io/ATS054.git -c sections/section-050/module-01/labs/lab-01
 ```
 
-Keep this connection selected. Host-level commands name only this environment's node containers. They do not operate on the host operating system.
-
-## Inspect And Explain
-
-Cilium manages the private two-node cluster. Hubble Relay and the BGP control plane are enabled. The probe and two clients are healthy; no learner policy or evidence report exists. This baseline uses kube-proxy and tunnelling.
-
-Inspect the current objects before changing them:
+## Step 1: Read the current state
 
 ```sh
-kubectl -n starfleet get pods -o wide
-kubectl get nodes -o wide
+kubectl -n starfleet get deployment probe -o jsonpath='{.spec.template.spec.containers[*].name}{"\n"}'
+kubectl -n starfleet get ciliumnetworkpolicy probe-l7
 ```
 
-Apply Cilium L7 policy and verify two path verdicts. The probe has one application container and no sidecar; proxy enforcement belongs to Cilium.
+The Deployment lists two containers. The container `legacy-proxy` is the second.
 
-Save this as `ciliumnetworkpolicy-allow-shuttle.yaml`:
+## Step 2: Remove the leftover container
 
-```yaml
-apiVersion: cilium.io/v2
-kind: CiliumNetworkPolicy
-metadata:
-  name: allow-shuttle
-  namespace: starfleet
-spec:
-  endpointSelector:
-    matchLabels:
-      app: probe
-  ingress:
-  - fromEndpoints:
-    - matchLabels:
-        k8s:io.kubernetes.pod.namespace: starfleet
-    toPorts:
-    - ports:
-      - port: '8080'
-        protocol: TCP
-      rules:
-        http:
-        - method: GET
-          path: /public
-```
-
-Apply the scoped correction:
+Remove the second container from the pod template with a JSON patch:
 
 ```sh
-kubectl apply -f ciliumnetworkpolicy-allow-shuttle.yaml
+kubectl -n starfleet patch deployment probe --type json -p '[{"op":"remove","path":"/spec/template/spec/containers/1"}]'
 ```
 
-## Verify The Result
-
-Observe the actual result. A denied request returns a nonzero status when the denial works, so run it separately from a shell sequence that stops on error. Status convergence and a successful request establish different parts of the result.
+Check the position first. The index `1` is the second container. If the order differs on your cluster, use the index of `legacy-proxy`. Then wait for the rollout and submit:
 
 ```sh
-kubectl -n starfleet exec shuttle -- python -c 'import urllib.request; print(urllib.request.urlopen('"'"'http://probe:8080/public'"'"',timeout=4).read().decode())'
-kubectl -n starfleet exec shuttle -- python -c 'import urllib.request; print(urllib.request.urlopen('"'"'http://probe:8080/private'"'"',timeout=4).read().decode())'
+kubectl -n starfleet rollout status deployment/probe --timeout=180s
+astrona submit --git ssh://git@github.com/astrona-io/ATS054.git -c sections/section-050/module-01/labs/lab-01 --keep
 ```
 
-Enforce a service HTTP path boundary. The commands above deliberately target one environment. Keep its remaining components available so an unrelated failure cannot stand in for the required denial or correction. No example command output is presented as evidence of a completed run. A matching field alone does not establish that a process used it or that a controller reconciled it.
+## Step 3: Test by hand
 
-After recording your result, remove the independent lab with `astrona destroy ats-054-lab-050-01-01`.
+```sh
+kubectl -n starfleet get pods -l app=probe -o custom-columns=NAME:.metadata.name,CONTAINERS:.spec.containers[*].name
+kubectl -n starfleet exec deploy/shuttle -- curl -s -m 5 -o /dev/null -w '%{http_code}\n' http://probe.starfleet.svc/get
+kubectl -n starfleet exec deploy/shuttle -- curl -s -m 5 -o /dev/null -w '%{http_code}\n' -X POST http://probe.starfleet.svc/post
+```
 
-## Common pitfalls
+The pod lists one container. The first request returns `200` and the second returns `403`.
 
-> [!WARNING]
-> Confirm the private context and exact node names before a change. Check the stated scope and live result. Do not change unrelated components to hide the original fault.
+## Why this is the answer
+
+The Layer 7 rule is enforced by the Envoy proxy of Cilium on the node, so the application pod needs no proxy container. The leftover container only used memory and it blocked nothing. A change to the pod template makes the Deployment create a new pod and remove the old one, and the policy follows the new pod because it selects pods by label.

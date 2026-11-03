@@ -12,12 +12,16 @@ The [official objectives](https://training.linuxfoundation.org/certification/cil
 | 040 | Encrypting Traffic in Transit with Cilium | 1 |
 | 050 | Sidecar-based versus Sidecarless Architectures | 1 |
 
-| Section / module | Module | Teaching files |
-| --- | --- | --- |
-| 010 / 01 | Cilium Ingress And Gateway Request Paths | Cilium Ingress And Gateway Request Paths |
-| 020 / 01 | Service Mesh Use Cases And Responsibility Boundaries | Service Mesh Use Cases And Responsibility Boundaries |
-| 030 / 01 | Gateway API Roles, Attachment And Delegation | Gateway API Roles, Attachment And Delegation |
-| 040 / 01 | Transparent Encryption And Its Traffic Boundaries | Transparent Encryption And Its Traffic Boundaries |
-| 050 / 01 | Sidecar And Shared-Proxy Architecture Tradeoffs | Sidecar And Shared-Proxy Architecture Tradeoffs |
+## Hands-On Coverage
 
-AUTHORING.yaml records measurable goals and adaptation sources. Every objective retains its section ID. All technical readings remain draft. Question banks are separate from the reading manifest and follow their declared summaries. No labs, playgrounds or runtime validation are included.
+The course has 5 ungraded playgrounds, 5 module labs and 5 section capstones. Each section ends with a knowledge check, and a final domain quiz follows the last section. Labs are UNTESTED: they were checked with `astrona validate` and `bash -n` only, and live execution is pending.
+
+| Section / module | Module | Module lab | Capstone |
+| --- | --- | --- | --- |
+| 010 / 01 | Route External Traffic With Cilium Ingress And Gateway API | Fix And Extend A Cilium Gateway Route | Publish Two Services With Cilium Ingress And Gateway API |
+| 020 / 01 | Service Mesh Use Cases With Cilium | Apply Layer 7 Access Control With CiliumNetworkPolicy | Repair Layer 7 Policies Without A Sidecar |
+| 030 / 01 | Gateway API Compared With Ingress | Delegate Gateway Access By Namespace Label | Share A Backend Across Namespaces With A Gateway |
+| 040 / 01 | Encrypting Traffic In Transit With Cilium | Turn On WireGuard Encryption | Add Node-To-Node Encryption To WireGuard |
+| 050 / 01 | Sidecar And Sidecarless Mesh Architectures | Remove A Leftover Sidecar Proxy | Migrate Two Services From Sidecars To The Node Proxy |
+
+AUTHORING.yaml records measurable goals. Every objective keeps its section ID. All technical readings remain draft.

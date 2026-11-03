@@ -5,13 +5,21 @@ exam_objectives:
 ---
 # Know How to use Ingress or Gateway API for Ingress Routing
 
-This section covers know How to use Ingress or Gateway API for Ingress Routing. It develops cilium Ingress And Gateway Request Paths through mechanisms, examples, prerequisites and failure reasoning.
-
-Read the module goals, teaching and closing summary in order. YAML checks are indexed separately and appear after designated summaries. Larger domains include an intermediate checkpoint before the final review.
+This section teaches how to publish services from a Cilium cluster. It covers the Cilium Ingress controller, the Gateway API resources that Cilium implements, how a request travels from a listener through a route to a backend, and how to match, split and debug routes.
 
 ## Learning Outcomes
 
-- Trace external requests through listener, route and backend.
-- Distinguish controller selection from route acceptance.
-- Explain Cilium proxy participation and feature prerequisites.
-- Evaluate TLS termination separately from backend encryption.
+- Describe how the Cilium Ingress controller turns an Ingress into a proxy and a Service.
+- Name the Gateway API resources and the role that owns each one.
+- Trace a request through the listener, the route and the backend.
+- Match requests by host, path and header, split traffic by weight, and read route status to find a fault.
+
+## Learning Path
+
+The section has one module, **Route External Traffic With Cilium Ingress And Gateway API**, with these parts in order:
+
+1. The Cilium Ingress Controller
+2. Gateway API Resources In Cilium
+3. Matching, Splitting And Debugging Routes
+
+The module has an ungraded playground, a graded lab (**Fix And Extend A Cilium Gateway Route**) and a summary. The section closes with a capstone lab (**Publish Two Services With Cilium Ingress And Gateway API**) and a knowledge check. The labs are untested and checked statically only.

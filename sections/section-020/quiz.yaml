@@ -1,0 +1,197 @@
+# Knowledge check for section 020. Listed in astrona.yaml as a `type: quiz` entry after the capstone lab.
+schema_version: 1
+kind: question_bank
+id: ats054-020
+course_id: ATS054
+exam_code: CCA
+status: draft
+provenance: Original practice material written for this course; not official exam questions.
+scope:
+  type: section
+  id: section-020
+  title: "Service Mesh Use Cases"
+questions:
+  - id: ats054-020-q01
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Group mesh use cases into traffic management, security and observability"
+    source_readings:
+      - sections/section-020/module-01/course-01-what-a-service-mesh-does.md
+    prompt: "A team wants to see the HTTP status code and latency of each request between two services. Which group of service mesh use cases is this?"
+    options:
+      - id: a
+        text: "Observability."
+        explanation: "Correct. Observability answers what happened to a request."
+      - id: b
+        text: "Traffic management."
+        explanation: "Traffic management decides where a request goes."
+      - id: c
+        text: "Security."
+        explanation: "Security decides who may send a request."
+      - id: d
+        text: "Service discovery."
+        explanation: "Service discovery finds the address of a Service. It does not record request details."
+    correct_option: a
+    explanation: "Correct. Observability answers what happened to a request."
+
+  - id: ats054-020-q02
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Name the component that applies Layer 7 rules in Cilium"
+    source_readings:
+      - sections/section-020/module-01/course-01-what-a-service-mesh-does.md
+    prompt: "Which component parses HTTP requests and applies Layer 7 rules in Cilium?"
+    options:
+      - id: a
+        text: "The eBPF program on the packet."
+        explanation: "eBPF enforces Layer 3 and Layer 4 rules and sends a connection to Envoy when a Layer 7 rule needs it."
+      - id: b
+        text: "kube-proxy."
+        explanation: "Kube-proxy balances Services. It does not parse HTTP."
+      - id: c
+        text: "The Envoy proxy in the `cilium-envoy` DaemonSet."
+        explanation: "Correct. Envoy runs on each node and understands HTTP."
+      - id: d
+        text: "A sidecar container in each pod."
+        explanation: "Cilium does not inject a sidecar into pods."
+    correct_option: c
+    explanation: "Correct. Envoy runs on each node and understands HTTP."
+
+  - id: ats054-020-q03
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Choose the cheapest component that delivers a use case"
+    source_readings:
+      - sections/section-020/module-01/course-01-what-a-service-mesh-does.md
+    prompt: "A rule must allow pods with the label `app=shuttle` to connect to TCP port 8080 of `probe` and nothing else. Which component enforces it?"
+    options:
+      - id: a
+        text: "Envoy on the node."
+        explanation: "Envoy is used only when a rule needs HTTP details."
+      - id: b
+        text: "eBPF in the kernel, with no Envoy involved."
+        explanation: "Correct. A Layer 3 and Layer 4 rule stays in the kernel."
+      - id: c
+        text: "Hubble Relay."
+        explanation: "Hubble observes flows and does not enforce rules."
+      - id: d
+        text: "The Cilium operator."
+        explanation: "The operator manages cluster-wide objects and does not enforce traffic rules."
+    correct_option: b
+    explanation: "Correct. A Layer 3 and Layer 4 rule stays in the kernel."
+
+  - id: ats054-020-q04
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Write an HTTP rule that allows one method and path"
+    source_readings:
+      - sections/section-020/module-01/course-02-layer-7-access-control-with-ciliumnetworkpolicy.md
+    prompt: "Which fragment of a `CiliumNetworkPolicy` allows only `GET /get`?"
+    options:
+      - id: a
+        text: "`ingressDeny` with `method: POST`."
+        explanation: "This is a deny rule and does not describe an allow list for GET."
+      - id: b
+        text: "`endpointSelector` with `path: /get`."
+        explanation: "The endpoint selector chooses pods, not requests."
+      - id: c
+        text: "`fromCIDR` with `/get`."
+        explanation: "This field takes an address range."
+      - id: d
+        text: "`toPorts` with `rules.http` containing `method: GET` and `path: \"/get\"`."
+        explanation: "Correct. The HTTP rules sit under `toPorts`."
+    correct_option: d
+    explanation: "Correct. The HTTP rules sit under `toPorts`."
+
+  - id: ats054-020-q05
+    type: single_choice
+    difficulty: advanced
+    learning_objective: "Use the pod port in a policy"
+    source_readings:
+      - sections/section-020/module-01/course-02-layer-7-access-control-with-ciliumnetworkpolicy.md
+    prompt: "The Service `probe` exposes port 80 and its pod listens on 8080. A policy lists `port: \"80\"`. What does a client see?"
+    options:
+      - id: a
+        text: "HTTP 200, because the Service port is used."
+        explanation: "Policy applies after the Service is translated to the pod port."
+      - id: b
+        text: "No reply. The policy applies to the pod port, so traffic to 8080 is not allowed and the kernel drops it."
+        explanation: "Correct. The client sees a timeout."
+      - id: c
+        text: "HTTP 403 from Envoy."
+        explanation: "Envoy answers 403 only for allowed connections with a denied request."
+      - id: d
+        text: "HTTP 404 from the pod."
+        explanation: "The connection never reaches the pod."
+    correct_option: b
+    explanation: "Correct. The client sees a timeout."
+
+  - id: ats054-020-q06
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Distinguish the outcomes of a denied request"
+    source_readings:
+      - sections/section-020/module-01/course-02-layer-7-access-control-with-ciliumnetworkpolicy.md
+    prompt: "A client is allowed to connect to `probe` but sends `GET /uuid` while the rule allows only `/get`. What does it receive?"
+    options:
+      - id: a
+        text: "No reply."
+        explanation: "No reply means a Layer 3 or Layer 4 drop in the kernel."
+      - id: b
+        text: "HTTP 404 from the pod."
+        explanation: "The request never reaches the pod."
+      - id: c
+        text: "HTTP 403 from Envoy."
+        explanation: "Correct. The connection is allowed, and Envoy denies the request."
+      - id: d
+        text: "HTTP 200."
+        explanation: "The rule does not allow this path."
+    correct_option: c
+    explanation: "Correct. The connection is allowed, and Envoy denies the request."
+
+  - id: ats054-020-q07
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Read Hubble flow verdicts"
+    source_readings:
+      - sections/section-020/module-01/course-03-observing-service-traffic-with-hubble.md
+    prompt: "Which Hubble command shows only the flows that Cilium dropped in the namespace `starfleet`?"
+    options:
+      - id: a
+        text: "`hubble observe --namespace starfleet --verdict DROPPED`"
+        explanation: "Correct. The filters combine."
+      - id: b
+        text: "`hubble observe --protocol http --verdict FORWARDED`"
+        explanation: "This shows forwarded HTTP flows."
+      - id: c
+        text: "`hubble status`"
+        explanation: "This shows the state of Hubble, not flows."
+      - id: d
+        text: "`kubectl get ciliumnetworkpolicy`"
+        explanation: "This lists policies, not flows."
+    correct_option: a
+    explanation: "Correct. The filters combine."
+
+  - id: ats054-020-q08
+    type: single_choice
+    difficulty: advanced
+    learning_objective: "Explain when Hubble sees HTTP details"
+    source_readings:
+      - sections/section-020/module-01/course-03-observing-service-traffic-with-hubble.md
+    prompt: "Hubble shows Layer 4 flows for `scout`, but no HTTP fields. Why?"
+    options:
+      - id: a
+        text: "Hubble Relay is not running."
+        explanation: "Without Relay the cluster-wide view fails, but the agent still shows flows."
+      - id: b
+        text: "HTTP is encrypted by default."
+        explanation: "Cilium does not encrypt HTTP by default."
+      - id: c
+        text: "Hubble cannot show HTTP."
+        explanation: "Hubble shows HTTP for traffic that Envoy handles."
+      - id: d
+        text: "No Layer 7 rule selects that traffic, so Envoy does not handle it and records no HTTP details."
+        explanation: "Correct. HTTP details come from Envoy."
+    correct_option: d
+    explanation: "Correct. HTTP details come from Envoy."
+

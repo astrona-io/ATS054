@@ -1,11 +1,14 @@
+# yaml-language-server: $schema=https://cli.astrona.io/schema/lab-config.schema.json
+#
+# Delegate Gateway Access By Namespace Label (LAB). Graded against the live cluster. UNTESTED.
 apiVersion: astrona.io/v1
 metadata:
-  name: ats-054-lab-030-01-01
+  name: ats-054-lab-030-01
   docs:
-    prerequisites: docs/prerequisites.md
-    examQuestion: question.md
-    caseStudy: docs/case-study.md
-    guide: solution.md
+    prerequisites: prerequisites.md
+    question: question.md
+    solution: solution.md
+
 runtime:
   type: kind
   kind:
@@ -15,20 +18,48 @@ runtime:
     networking:
       disableDefaultCNI: true
       podSubnet: 10.244.0.0/16
+    preloadImages:
+      - ghcr.io/stefanprodan/podinfo:6.15.0
+      - mccutchen/go-httpbin:2.25.0
+      - curlimages/curl:8.22.0
+
 bootstrap:
   init:
-  - name: seed-private-environment
-    type: file
-    source: bootstrap/setup.sh
-teardown:
-  keepCluster: false
+    - name: seed-cluster
+      description: Install Cilium and create the Starfleet workloads
+      type: file
+      source: bootstrap/01-seed-cluster.sh
+
+# Applied only by `astrona test`: the reference solution.
 testing:
   init:
-  - name: reference-result
-    type: file
-    source: solution/apply.sh
+    - name: apply-solution
+      description: Apply the reference solution
+      type: file
+      source: solution/apply.sh
+
 validation:
-  script:
-    name: verify-fields-and-live-evidence
-    type: file
-    source: validate.sh
+  scripts:
+    - name: starfleet-route-accepted
+      description: "The HTTPRoute scout in starfleet is accepted by edge-gw"
+      type: file
+      source: validation/validate-starfleet-route-accepted.sh
+      hint: "Change the listener of the Gateway to allow routes from namespaces with the label access=gateway, and label starfleet."
+    - name: scout-reachable-through-gateway
+      description: "scout.example.com reaches scout through the Gateway"
+      type: file
+      source: validation/validate-scout-reachable-through-gateway.sh
+      hint: "After the route is accepted, a request with Host scout.example.com to the Gateway node port must return the scout reply."
+    - name: outpost-route-not-accepted
+      description: "The HTTPRoute in outpost is still not accepted"
+      type: file
+      source: validation/validate-outpost-route-not-accepted.sh
+      hint: "Do not label outpost and do not use from: All."
+    - name: selector-in-use
+      description: "The listener uses a label selector on access=gateway"
+      type: file
+      source: validation/validate-selector-in-use.sh
+      hint: "Use allowedRoutes.namespaces.from: Selector with matchLabels access: gateway."
+
+teardown:
+  keepCluster: false

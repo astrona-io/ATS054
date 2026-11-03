@@ -1,85 +1,76 @@
----
-draft: true
-exam_objectives:
-- Understand the Benefits of Gateway API over Ingress
----
-# Separate Internal Service Ownership From Gateway Delegation Solution
+# Solution
 
-Use a host shell with the private kubeconfig for this independent kind environment. A kubeconfig identifies the cluster and credentials used by kubectl, the Kubernetes command-line tool.
+Solve this lab on `terminal`. Each step ends with `astrona submit`. The `--keep` flag keeps the lab running.
+
+Start the lab if it is not running:
 
 ```sh
-export KUBECONFIG="$(astrona kubeconfig ats-054-lab-030-01-01)"
-test "$(kubectl config current-context)" = "kind-astro-ats-054-lab-030-01-01" || exit 1
-node_name="astro-ats-054-lab-030-01-01-control-plane"
-worker_name="astro-ats-054-lab-030-01-01-worker"
+astrona run --git ssh://git@github.com/astrona-io/ATS054.git -c sections/section-030/module-01/labs/lab-01
 ```
 
-Keep this connection selected. Host-level commands name only this environment's node containers. They do not operate on the host operating system.
-
-## Inspect And Explain
-
-Cilium manages the private two-node cluster. Hubble Relay and the BGP control plane are enabled. The probe and two clients are healthy; no learner policy or evidence report exists. This baseline uses kube-proxy and tunnelling.
-
-Inspect the current objects before changing them:
+## Step 1: Read why the route is rejected
 
 ```sh
-kubectl -n starfleet get pods -o wide
-kubectl get nodes -o wide
+kubectl -n starfleet get httproute scout -o jsonpath='{range .status.parents[*].conditions[*]}{.type}={.status} {.reason}{"\n"}{end}'
+kubectl -n edge get gateway edge-gw -o jsonpath='{.spec.listeners[0]}{"\n"}'
 ```
 
-Inspect the probe Service selector and prove it reaches healthy endpoints. Gateway route attachment and delegated cross-namespace references remain a distinct production concern.
+The `Accepted` condition is `False` with the reason `NotAllowedByListeners`. The listener has no `allowedRoutes`, so the default `from: Same` accepts only the namespace `edge`.
 
-Record observations in `starfleet/evidence`, whose `report.json` contains the stated report. The verifier reads the live API again; invented values do not pass.
+## Step 2: Allow namespaces with a label
 
+Save this as `gateway-edge.yaml`:
 
-Save this as `record.py`:
-
-```python
-import json,subprocess,time,sys,tempfile,os
-
-def call(*args):
- r=subprocess.run(list(args),text=True,capture_output=True,timeout=20)
- assert r.returncode==0, 'Observation command failed: '+args[0]
- return r.stdout.strip()
-def obj(kind,name,ns='starfleet'):
- return json.loads(call('kubectl',*(['-n',ns] if ns else []),'get',kind,name,'-o','json'))
-def api(path):
- script='import urllib.request; print(urllib.request.urlopen('+repr('http://prometheus:9090'+path)+',timeout=8).read().decode())'
- return json.loads(call('kubectl','-n','starfleet','exec','shuttle','--','python','-c',script))
-def save(data):
- resource={'apiVersion':'v1','kind':'ConfigMap','metadata':{'name':'evidence','namespace':'starfleet'},'data':{'report.json':json.dumps(data,sort_keys=True)}}
- with tempfile.NamedTemporaryFile(mode='w',suffix='.json',delete=False) as f:json.dump(resource,f);path=f.name
- try:call('kubectl','apply','-f',path)
- finally:os.unlink(path)
-
-assert call('kubectl','config','current-context') == 'kind-astro-ats-054-lab-030-01-01'
-service=obj('service','probe');slices=json.loads(call('kubectl','-n','starfleet','get','endpointslices','-l','kubernetes.io/service-name=probe','-o','json'))['items']
-assert any(e.get('conditions',{}).get('ready') for s in slices for e in s['endpoints'])
-response=call('kubectl','-n','starfleet','exec','shuttle','--','python','-c',"import urllib.request; print(urllib.request.urlopen('http://probe:8080/',timeout=4).read().decode())")
-report={'selector':service['spec']['selector'],'ports':service['spec']['ports'],'response':response}
-save(report)
+```yaml
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: edge-gw
+  namespace: edge
+spec:
+  gatewayClassName: cilium
+  listeners:
+    - name: web
+      protocol: HTTP
+      port: 80
+      allowedRoutes:
+        namespaces:
+          from: Selector
+          selector:
+            matchLabels:
+              access: gateway
 ```
 
-Apply the scoped correction:
+Apply it:
 
 ```sh
-python3 record.py
+kubectl apply -f gateway-edge.yaml
 ```
 
-## Verify The Result
-
-Observe the actual result. A denied request returns a nonzero status when the denial works, so run it separately from a shell sequence that stops on error. Status convergence and a successful request establish different parts of the result.
+## Step 3: Label the namespace of the route
 
 ```sh
-kubectl -n starfleet get configmaps
-kubectl -n starfleet get deployment probe -o yaml
+kubectl label namespace starfleet access=gateway
 ```
 
-Verify internal Service ownership and realised endpoints. The commands above deliberately target one environment. Keep its remaining components available so an unrelated failure cannot stand in for the required denial or correction. No example command output is presented as evidence of a completed run. A matching field alone does not establish that a process used it or that a controller reconciled it.
+Then submit:
 
-After recording your result, remove the independent lab with `astrona destroy ats-054-lab-030-01-01`.
+```sh
+astrona submit --git ssh://git@github.com/astrona-io/ATS054.git -c sections/section-030/module-01/labs/lab-01 --keep
+```
 
-## Common pitfalls
+## Step 4: Test by hand
 
-> [!WARNING]
-> Confirm the private context and exact node names before a change. Check the stated scope and live result. Do not change unrelated components to hide the original fault.
+```sh
+kubectl -n starfleet get httproute scout -o jsonpath='{.status.parents[*].conditions[?(@.type=="Accepted")].status}{"\n"}'
+kubectl -n outpost get httproute outpost-probe -o jsonpath='{.status.parents[*].conditions[?(@.type=="Accepted")].status}{"\n"}'
+NODE_IP=$(kubectl get node -l '!node-role.kubernetes.io/control-plane' -o jsonpath='{.items[0].status.addresses[?(@.type=="InternalIP")].address}')
+NODE_PORT=$(kubectl -n edge get service cilium-gateway-edge-gw -o jsonpath='{.spec.ports[0].nodePort}')
+kubectl -n starfleet exec deploy/shuttle -- curl -s -m 5 -H 'Host: scout.example.com' "http://$NODE_IP:$NODE_PORT/"
+```
+
+The first command prints `True`. The second prints `False`, because `outpost` has no label `access=gateway`. The request returns the reply of `scout`.
+
+## Why this is the answer
+
+The `allowedRoutes` field on the listener is the control of the Gateway owner. With `from: Selector`, the owner of the namespace labels decides which teams may attach, and no application team edits the Gateway. `from: All` would also accept the route in `outpost`.

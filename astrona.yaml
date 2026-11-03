@@ -1,9 +1,25 @@
+# Course manifest for ATS054 - Service Mesh (Cilium Certified Associate).
+#
+# One entry per section under `modules:`. Each section lists its README, the
+# module landing page (course.md), the parts (course-0N-*.md), the lab right
+# after the part it practises (question.md reading plus the `type: lab`
+# entry), the module summary, the section capstone and the knowledge check.
+# Playgrounds are not listed: the landing page's playground marker shows them.
+# solution.md is never listed.
+#
+# Every `path:` is relative to this file.
+
 training:
   id: ATS054
   title: 'CCA: Service Mesh'
-  description: 'Detailed reading material and reusable YAML knowledge checks for CCA:
-    Service Mesh. Technical content remains draft. Private playgrounds and draft independent
-    labs are included.'
+  description: 'Training material covering the Cilium Certified Associate (CCA) Service
+    Mesh domain: Ingress and Gateway API routing with Cilium, service mesh use cases
+    such as Layer 7 access control and observation, the benefits of the Gateway API
+    over Ingress, encryption in transit with WireGuard and IPsec plus mutual authentication,
+    and sidecar versus sidecarless architectures. Each module pairs a layered reader
+    with an ungraded playground and a graded lab, and each section closes with an
+    integration capstone and a knowledge check. Labs are untested and checked statically
+    only.'
   certification:
     name: Cilium Certified Associate
     code: CCA
@@ -35,213 +51,364 @@ modules:
     path: sections/intro/course-03-how-this-course-is-made.md
 - id: module-010
   title: Know How to use Ingress or Gateway API for Ingress Routing
-  description: Developed reading and reasoning for Know How to use Ingress or Gateway
-    API for Ingress Routing.
-  maturity: alpha
+  description: 'Makes the reader able to publish services from a Cilium cluster with
+    the Cilium Ingress controller and the Gateway API controller: which resources
+    exist, how a request travels from the listener through a route to a backend, and
+    how to match, split and debug routes.'
   content:
   - type: reading
-    title: Know How to use Ingress or Gateway API for Ingress Routing
+    title: Section Overview
     path: sections/section-010/README.md
   - type: reading
-    title: Cilium Ingress And Gateway Request Paths
+    title: Route External Traffic With Cilium Ingress And Gateway API
     path: sections/section-010/module-01/course.md
   - type: reading
-    title: Cilium Ingress And Gateway Request Paths
-    path: sections/section-010/module-01/course-01-cilium-ingress-and-gateway-request-paths.md
+    title: The Cilium Ingress Controller
+    path: sections/section-010/module-01/course-01-the-cilium-ingress-controller.md
   - type: reading
-    title: Locate Cilium Service Exposure Boundaries — Task
+    title: Gateway API Resources In Cilium
+    path: sections/section-010/module-01/course-02-gateway-api-resources-in-cilium.md
+  - type: reading
+    title: Matching, Splitting And Debugging Routes
+    path: sections/section-010/module-01/course-03-matching-splitting-and-debugging-routes.md
+  - type: reading
+    title: Question
     path: sections/section-010/module-01/labs/lab-01/question.md
   - type: lab
-    title: Locate Cilium Service Exposure Boundaries
+    title: Fix And Extend A Cilium Gateway Route (Lab)
     path: sections/section-010/module-01/labs/lab-01
     difficulty: intermediate
     estimated_duration: 25m
-    topic: cilium-diagnostics
+    topic: cilium-ingress
     task_kind: build
-    learning_goals:
-    - Verify internal Service ownership and realised endpoints.
     tags:
-    - cca
-    - cilium-diagnostics
-  - type: reading
-    title: Locate Cilium Service Exposure Boundaries — Solution
-    path: sections/section-010/module-01/labs/lab-01/solution.md
-  - type: reading
-    title: 'Guided Practice: Locate Cilium Service Exposure Boundaries'
-    path: sections/section-010/module-01/course-02-guided-practice.md
+    - cilium
+    - ingress
+    - gateway-api
+    - httproute
+    - gatewayclass
+    learning_goals:
+    - The HTTPRoute fleet is accepted and its references resolve
+    - Requests for fleet.example.com reach scout
+    - 'Requests with the header x-fleet: probe reach probe'
+    - The Gateway still allows routes only from its own namespace
   - type: reading
     title: Summary
-    path: sections/section-010/module-01/course-03-summary.md
+    path: sections/section-010/module-01/course-04-summary.md
+  - type: reading
+    title: Question
+    path: sections/section-010/capstone/labs/lab-01/question.md
+  - type: lab
+    title: Publish Two Services With Cilium Ingress And Gateway API (Capstone)
+    path: sections/section-010/capstone/labs/lab-01
+    difficulty: advanced
+    estimated_duration: 30m
+    topic: cilium-ingress
+    task_kind: build
+    tags:
+    - cilium
+    - ingress
+    - gateway-api
+    - httproute
+    - gatewayclass
+    learning_goals:
+    - The scout Ingress is owned by Cilium and serves scout.example.com
+    - The probe HTTPRoute is accepted by the edge Gateway
+    - probe.example.com reaches probe through the edge Gateway
+    - The Gateway keeps its namespace selector and the Ingress keeps its rule
+  - type: quiz
+    title: 'Knowledge Check: Know How to use Ingress or Gateway API for Ingress Routing'
+    path: sections/section-010/quiz.yaml
+    pass_score: 70
 - id: module-020
   title: Service Mesh Use Cases
-  description: Developed reading and reasoning for Service Mesh Use Cases.
-  maturity: alpha
+  description: Makes the reader able to name the service mesh use cases, say which
+    Cilium component delivers each one, apply Layer 7 access control without a sidecar,
+    and read the result in Hubble.
   content:
   - type: reading
-    title: Service Mesh Use Cases
+    title: Section Overview
     path: sections/section-020/README.md
   - type: reading
-    title: Service Mesh Use Cases And Responsibility Boundaries
+    title: Service Mesh Use Cases With Cilium
     path: sections/section-020/module-01/course.md
   - type: reading
-    title: Service Mesh Use Cases And Responsibility Boundaries
-    path: sections/section-020/module-01/course-01-service-mesh-use-cases-and-responsibility-boundaries.md
+    title: What A Service Mesh Does
+    path: sections/section-020/module-01/course-01-what-a-service-mesh-does.md
   - type: reading
-    title: Apply Mesh Style L7 Access Control — Task
+    title: Layer 7 Access Control With CiliumNetworkPolicy
+    path: sections/section-020/module-01/course-02-layer-7-access-control-with-ciliumnetworkpolicy.md
+  - type: reading
+    title: Question
     path: sections/section-020/module-01/labs/lab-01/question.md
   - type: lab
-    title: Apply Mesh Style L7 Access Control
+    title: Apply Layer 7 Access Control With CiliumNetworkPolicy (Lab)
     path: sections/section-020/module-01/labs/lab-01
     difficulty: intermediate
     estimated_duration: 25m
-    topic: cilium-service-policy
+    topic: service-mesh-policy
     task_kind: build
-    learning_goals:
-    - Enforce a service HTTP path boundary.
     tags:
-    - cca
-    - cilium-service-policy
+    - cilium
+    - service-mesh
+    - ciliumnetworkpolicy
+    - envoy
+    - hubble
+    - layer-7
+    learning_goals:
+    - A CiliumNetworkPolicy with HTTP rules protects probe
+    - shuttle can send GET /get to probe
+    - shuttle cannot send GET /uuid or POST /post to probe
+    - drifter cannot reach probe but still reaches scout
   - type: reading
-    title: Apply Mesh Style L7 Access Control — Solution
-    path: sections/section-020/module-01/labs/lab-01/solution.md
-  - type: reading
-    title: 'Guided Practice: Apply Mesh Style L7 Access Control'
-    path: sections/section-020/module-01/course-02-guided-practice.md
+    title: Observing Service Traffic With Hubble
+    path: sections/section-020/module-01/course-03-observing-service-traffic-with-hubble.md
   - type: reading
     title: Summary
-    path: sections/section-020/module-01/course-03-summary.md
+    path: sections/section-020/module-01/course-04-summary.md
+  - type: reading
+    title: Question
+    path: sections/section-020/capstone/labs/lab-01/question.md
+  - type: lab
+    title: Repair Layer 7 Policies Without A Sidecar (Capstone)
+    path: sections/section-020/capstone/labs/lab-01
+    difficulty: advanced
+    estimated_duration: 30m
+    topic: service-mesh-policy
+    task_kind: build
+    tags:
+    - cilium
+    - service-mesh
+    - ciliumnetworkpolicy
+    - envoy
+    - hubble
+    - layer-7
+    learning_goals:
+    - shuttle and drifter can send GET / to scout
+    - POST to scout is answered with 403
+    - probe accepts GET /get from shuttle only
+    - The two existing policies are edited, not replaced by an open policy
+  - type: quiz
+    title: 'Knowledge Check: Service Mesh Use Cases'
+    path: sections/section-020/quiz.yaml
+    pass_score: 70
 - id: module-030
   title: Understand the Benefits of Gateway API over Ingress
-  description: Developed reading and reasoning for Understand the Benefits of Gateway
-    API over Ingress.
-  maturity: alpha
+  description: Makes the reader able to explain what the Ingress API cannot express,
+    how the Gateway API splits roles between providers, operators and developers,
+    and how delegation by namespace works.
   content:
   - type: reading
-    title: Understand the Benefits of Gateway API over Ingress
+    title: Section Overview
     path: sections/section-030/README.md
   - type: reading
-    title: Gateway API Roles, Attachment And Delegation
+    title: Gateway API Compared With Ingress
     path: sections/section-030/module-01/course.md
   - type: reading
-    title: Gateway API Roles, Attachment And Delegation
-    path: sections/section-030/module-01/course-01-gateway-api-roles-attachment-and-delegation.md
+    title: The Limits Of Ingress
+    path: sections/section-030/module-01/course-01-the-limits-of-ingress.md
   - type: reading
-    title: Separate Internal Service Ownership From Gateway Delegation — Task
+    title: Gateway API Roles And Delegation
+    path: sections/section-030/module-01/course-02-gateway-api-roles-and-delegation.md
+  - type: reading
+    title: Question
     path: sections/section-030/module-01/labs/lab-01/question.md
   - type: lab
-    title: Separate Internal Service Ownership From Gateway Delegation
+    title: Delegate Gateway Access By Namespace Label (Lab)
     path: sections/section-030/module-01/labs/lab-01
     difficulty: intermediate
     estimated_duration: 25m
-    topic: cilium-diagnostics
+    topic: gateway-api
     task_kind: build
-    learning_goals:
-    - Verify internal Service ownership and realised endpoints.
     tags:
-    - cca
-    - cilium-diagnostics
+    - gateway-api
+    - ingress
+    - allowedroutes
+    - referencegrant
+    - httproute
+    - delegation
+    learning_goals:
+    - The HTTPRoute scout in starfleet is accepted by edge-gw
+    - scout.example.com reaches scout through the Gateway
+    - The HTTPRoute in outpost is still not accepted
+    - The listener uses a label selector on access=gateway
   - type: reading
-    title: Separate Internal Service Ownership From Gateway Delegation — Solution
-    path: sections/section-030/module-01/labs/lab-01/solution.md
-  - type: reading
-    title: 'Guided Practice: Separate Internal Service Ownership From Gateway Delegation'
-    path: sections/section-030/module-01/course-02-guided-practice.md
+    title: Expressiveness And Portability
+    path: sections/section-030/module-01/course-03-expressiveness-and-portability.md
   - type: reading
     title: Summary
-    path: sections/section-030/module-01/course-03-summary.md
+    path: sections/section-030/module-01/course-04-summary.md
+  - type: reading
+    title: Question
+    path: sections/section-030/capstone/labs/lab-01/question.md
+  - type: lab
+    title: Share A Backend Across Namespaces With A Gateway (Capstone)
+    path: sections/section-030/capstone/labs/lab-01
+    difficulty: advanced
+    estimated_duration: 30m
+    topic: gateway-api
+    task_kind: build
+    tags:
+    - gateway-api
+    - ingress
+    - allowedroutes
+    - referencegrant
+    - httproute
+    - delegation
+    learning_goals:
+    - The HTTPRoute probe in outpost is accepted and its backend resolves
+    - probe.example.com reaches probe through the edge Gateway
+    - A ReferenceGrant in starfleet allows only HTTPRoutes from outpost to reach the
+      Service probe
+    - The Gateway keeps its selector on access=gateway
+  - type: quiz
+    title: 'Knowledge Check: Understand the Benefits of Gateway API over Ingress'
+    path: sections/section-030/quiz.yaml
+    pass_score: 70
 - id: module-040
   title: Encrypting Traffic in Transit with Cilium
-  description: Developed reading and reasoning for Encrypting Traffic in Transit with
-    Cilium.
-  maturity: alpha
+  description: Makes the reader able to turn on and check WireGuard and IPsec transparent
+    encryption, name what each covers and what it leaves open, and separate encryption
+    from mutual authentication.
   content:
   - type: reading
-    title: Encrypting Traffic in Transit with Cilium
+    title: Section Overview
     path: sections/section-040/README.md
   - type: reading
-    title: Transparent Encryption And Its Traffic Boundaries
+    title: Encrypting Traffic In Transit With Cilium
     path: sections/section-040/module-01/course.md
   - type: reading
-    title: Transparent Encryption And Its Traffic Boundaries
-    path: sections/section-040/module-01/course-01-transparent-encryption-and-its-traffic-boundaries.md
+    title: Transparent Encryption With WireGuard
+    path: sections/section-040/module-01/course-01-transparent-encryption-with-wireguard.md
   - type: reading
-    title: Check The Encryption Baseline — Task
+    title: Question
     path: sections/section-040/module-01/labs/lab-01/question.md
   - type: lab
-    title: Check The Encryption Baseline
+    title: Turn On WireGuard Encryption (Lab)
     path: sections/section-040/module-01/labs/lab-01
     difficulty: intermediate
     estimated_duration: 25m
-    topic: cilium-diagnostics
+    topic: cilium-encryption
     task_kind: build
-    learning_goals:
-    - Establish whether transparent encryption is enabled.
     tags:
-    - cca
-    - cilium-diagnostics
-  - type: reading
-    title: Check The Encryption Baseline — Solution
-    path: sections/section-040/module-01/labs/lab-01/solution.md
-  - type: reading
-    title: Enable Cross Node WireGuard Encryption — Task
-    path: sections/section-040/module-01/labs/lab-02/question.md
-  - type: lab
-    title: Enable Cross Node WireGuard Encryption
-    path: sections/section-040/module-01/labs/lab-02
-    difficulty: intermediate
-    estimated_duration: 25m
-    topic: wireguard
-    task_kind: build
-    learning_goals:
-    - Enable WireGuard and verify agent encryption state and cross-node requests.
-    tags:
-    - cca
+    - cilium
     - wireguard
+    - ipsec
+    - encryption
+    - spiffe
+    - spire
+    - mutual-authentication
+    learning_goals:
+    - The Cilium ConfigMap enables WireGuard
+    - Every Cilium agent reports WireGuard encryption
+    - Pods on both nodes still reach scout and probe
   - type: reading
-    title: Enable Cross Node WireGuard Encryption — Solution
-    path: sections/section-040/module-01/labs/lab-02/solution.md
+    title: IPsec And Choosing An Encryption Mode
+    path: sections/section-040/module-01/course-02-ipsec-and-choosing-an-encryption-mode.md
   - type: reading
-    title: 'Guided Practice: Check The Encryption Baseline'
-    path: sections/section-040/module-01/course-02-guided-practice.md
+    title: Mutual Authentication With SPIFFE And SPIRE
+    path: sections/section-040/module-01/course-03-mutual-authentication-with-spiffe-and-spire.md
   - type: reading
     title: Summary
-    path: sections/section-040/module-01/course-03-summary.md
+    path: sections/section-040/module-01/course-04-summary.md
+  - type: reading
+    title: Question
+    path: sections/section-040/capstone/labs/lab-01/question.md
+  - type: lab
+    title: Add Node-To-Node Encryption To WireGuard (Capstone)
+    path: sections/section-040/capstone/labs/lab-01
+    difficulty: advanced
+    estimated_duration: 30m
+    topic: cilium-encryption
+    task_kind: build
+    tags:
+    - cilium
+    - wireguard
+    - ipsec
+    - encryption
+    - spiffe
+    - spire
+    - mutual-authentication
+    learning_goals:
+    - The ConfigMap enables node-to-node encryption
+    - Every Cilium agent still reports WireGuard
+    - The Helm release stores nodeEncryption and keeps WireGuard
+    - Pods still reach scout and probe
+  - type: quiz
+    title: 'Knowledge Check: Encrypting Traffic in Transit with Cilium'
+    path: sections/section-040/quiz.yaml
+    pass_score: 70
 - id: module-050
   title: Sidecar-based versus Sidecarless Architectures
-  description: Developed reading and reasoning for Sidecar-based versus Sidecarless
-    Architectures.
-  maturity: alpha
+  description: Makes the reader able to compare sidecar, Cilium sidecarless and ambient
+    designs on resource use, upgrades, failure scope and security boundary, and to
+    see in a cluster where Cilium puts each piece.
   content:
   - type: reading
-    title: Sidecar-based versus Sidecarless Architectures
+    title: Section Overview
     path: sections/section-050/README.md
   - type: reading
-    title: Sidecar And Shared-Proxy Architecture Tradeoffs
+    title: Sidecar And Sidecarless Mesh Architectures
     path: sections/section-050/module-01/course.md
   - type: reading
-    title: Sidecar And Shared-Proxy Architecture Tradeoffs
-    path: sections/section-050/module-01/course-01-sidecar-and-shared-proxy-architecture-tradeoffs.md
+    title: How A Sidecar Mesh Works
+    path: sections/section-050/module-01/course-01-how-a-sidecar-mesh-works.md
   - type: reading
-    title: Observe A Shared L7 Proxy Boundary — Task
+    title: Cilium Sidecarless Architecture
+    path: sections/section-050/module-01/course-02-cilium-sidecarless-architecture.md
+  - type: reading
+    title: Question
     path: sections/section-050/module-01/labs/lab-01/question.md
   - type: lab
-    title: Observe A Shared L7 Proxy Boundary
+    title: Remove A Leftover Sidecar Proxy (Lab)
     path: sections/section-050/module-01/labs/lab-01
     difficulty: intermediate
-    estimated_duration: 25m
-    topic: cilium-service-policy
+    estimated_duration: 20m
+    topic: mesh-architecture
     task_kind: build
-    learning_goals:
-    - Enforce a service HTTP path boundary.
     tags:
-    - cca
-    - cilium-service-policy
+    - cilium
+    - service-mesh
+    - sidecar
+    - sidecarless
+    - ambient
+    - envoy
+    - ebpf
+    learning_goals:
+    - The Deployment probe has no mesh proxy container
+    - Every probe pod is Ready and has one container
+    - The Layer 7 rule is enforced by the node proxy
+    - cilium-envoy runs and is ready on every node
   - type: reading
-    title: Observe A Shared L7 Proxy Boundary — Solution
-    path: sections/section-050/module-01/labs/lab-01/solution.md
-  - type: reading
-    title: 'Guided Practice: Observe A Shared L7 Proxy Boundary'
-    path: sections/section-050/module-01/course-02-guided-practice.md
+    title: Comparing Sidecar, Sidecarless And Ambient Designs
+    path: sections/section-050/module-01/course-03-comparing-sidecar-sidecarless-and-ambient.md
   - type: reading
     title: Summary
-    path: sections/section-050/module-01/course-03-summary.md
+    path: sections/section-050/module-01/course-04-summary.md
+  - type: reading
+    title: Question
+    path: sections/section-050/capstone/labs/lab-01/question.md
+  - type: lab
+    title: Migrate Two Services From Sidecars To The Node Proxy (Capstone)
+    path: sections/section-050/capstone/labs/lab-01
+    difficulty: advanced
+    estimated_duration: 30m
+    topic: mesh-architecture
+    task_kind: build
+    tags:
+    - cilium
+    - service-mesh
+    - sidecar
+    - sidecarless
+    - ambient
+    - envoy
+    - ebpf
+    learning_goals:
+    - The Deployments scout and probe have no mesh proxy container
+    - scout accepts GET from shuttle only
+    - probe accepts GET /get from shuttle only
+    - cilium-envoy is ready on every node and the pods are Ready
+  - type: quiz
+    title: 'Knowledge Check: Sidecar-based versus Sidecarless Architectures'
+    path: sections/section-050/quiz.yaml
+    pass_score: 70

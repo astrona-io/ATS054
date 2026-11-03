@@ -2,12 +2,52 @@ schema_version: 1
 course_id: ATS054
 status: draft
 banks:
-- id: ats054-domain-review
-  path: assessments/domain-review.yaml
+- id: ats054-010
+  path: sections/section-010/quiz.yaml
+  question_count: 8
+  placement:
+    position: after
+    reading: sections/section-010/capstone/labs/lab-01/question.md
+  covered_sections:
+  - section-010
+- id: ats054-020
+  path: sections/section-020/quiz.yaml
+  question_count: 8
+  placement:
+    position: after
+    reading: sections/section-020/capstone/labs/lab-01/question.md
+  covered_sections:
+  - section-020
+- id: ats054-030
+  path: sections/section-030/quiz.yaml
+  question_count: 8
+  placement:
+    position: after
+    reading: sections/section-030/capstone/labs/lab-01/question.md
+  covered_sections:
+  - section-030
+- id: ats054-040
+  path: sections/section-040/quiz.yaml
+  question_count: 8
+  placement:
+    position: after
+    reading: sections/section-040/capstone/labs/lab-01/question.md
+  covered_sections:
+  - section-040
+- id: ats054-050
+  path: sections/section-050/quiz.yaml
+  question_count: 8
+  placement:
+    position: after
+    reading: sections/section-050/capstone/labs/lab-01/question.md
+  covered_sections:
+  - section-050
+- id: ats054-final
+  path: sections/final-domain-quiz.yaml
   question_count: 15
   placement:
     position: after
-    reading: sections/section-050/module-01/course-02-summary.md
+    reading: sections/section-050/capstone/labs/lab-01/question.md
   covered_sections:
   - section-010
   - section-020

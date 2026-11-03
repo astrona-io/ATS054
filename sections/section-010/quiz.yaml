@@ -1,0 +1,197 @@
+# Knowledge check for section 010. Listed in astrona.yaml as a `type: quiz` entry after the capstone lab.
+schema_version: 1
+kind: question_bank
+id: ats054-010
+course_id: ATS054
+exam_code: CCA
+status: draft
+provenance: Original practice material written for this course; not official exam questions.
+scope:
+  type: section
+  id: section-010
+  title: "Know How to use Ingress or Gateway API for Ingress Routing"
+questions:
+  - id: ats054-010-q01
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Enable the Cilium Ingress controller and name its prerequisites"
+    source_readings:
+      - sections/section-010/module-01/course-01-the-cilium-ingress-controller.md
+    prompt: "A cluster runs Cilium with kube-proxy still handling Services. You set `ingressController.enabled=true` and create an Ingress with `ingressClassName: cilium`. Nothing is served. Which prerequisite is missing?"
+    options:
+      - id: a
+        text: "The Gateway API CRDs must be installed."
+        explanation: "The Ingress controller does not use the Gateway API CRDs."
+      - id: b
+        text: "Kube-proxy replacement: `kubeProxyReplacement=true` must be set."
+        explanation: "Correct. The Cilium Ingress controller needs kube-proxy replacement and the L7 proxy."
+      - id: c
+        text: "An external load balancer controller must be installed."
+        explanation: "The controller creates the Service, but a missing load balancer does not stop Envoy from serving on the node port."
+      - id: d
+        text: "The Ingress must be in `kube-system`."
+        explanation: "Ingress resources can be in any namespace."
+    correct_option: b
+    explanation: "Correct. The Cilium Ingress controller needs kube-proxy replacement and the L7 proxy."
+
+  - id: ats054-010-q02
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Explain which component creates the Service for an Ingress"
+    source_readings:
+      - sections/section-010/module-01/course-01-the-cilium-ingress-controller.md
+    prompt: "You apply an Ingress named `scout` in `starfleet` in dedicated mode. A Service `cilium-ingress-scout` appears. What created it?"
+    options:
+      - id: a
+        text: "The kube-controller-manager."
+        explanation: "It creates Endpoints for Services, not Services for Ingress resources."
+      - id: b
+        text: "Envoy on the node."
+        explanation: "Envoy receives configuration and forwards requests. It does not create Kubernetes objects."
+      - id: c
+        text: "The Cilium operator, in response to the Ingress."
+        explanation: "Correct. The operator creates the Service and the `CiliumEnvoyConfig` for each Ingress."
+      - id: d
+        text: "The shuttle pod."
+        explanation: "Client pods do not create Services."
+    correct_option: c
+    explanation: "Correct. The operator creates the Service and the `CiliumEnvoyConfig` for each Ingress."
+
+  - id: ats054-010-q03
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Describe dedicated and shared load balancer mode"
+    source_readings:
+      - sections/section-010/module-01/course-01-the-cilium-ingress-controller.md
+    prompt: "Two Ingress resources use overlapping path prefixes and conflict when Cilium serves both on one address. Which setting avoids the conflict?"
+    options:
+      - id: a
+        text: "`ingressController.loadbalancerMode=dedicated`, or the annotation `ingress.cilium.io/loadbalancer-mode: dedicated` on one Ingress."
+        explanation: "Correct. Each Ingress then has its own Service, address and routing table."
+      - id: b
+        text: "`ingressController.loadbalancerMode=shared`."
+        explanation: "Shared mode puts all Ingress resources on one Service, which is where conflicts occur."
+      - id: c
+        text: "Set `kubeProxyReplacement=false`."
+        explanation: "This disables a prerequisite and does not separate the Ingress resources."
+      - id: d
+        text: "Delete the IngressClass."
+        explanation: "Without the class, Cilium ignores the Ingress resources."
+    correct_option: a
+    explanation: "Correct. Each Ingress then has its own Service, address and routing table."
+
+  - id: ats054-010-q04
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Name the Gateway API resources and the owner of each"
+    source_readings:
+      - sections/section-010/module-01/course-02-gateway-api-resources-in-cilium.md
+    prompt: "Which resource defines the listener port and the namespaces that may attach routes?"
+    options:
+      - id: a
+        text: "The `HTTPRoute`."
+        explanation: "The route holds matching rules and backends, and it attaches to a Gateway."
+      - id: b
+        text: "The `GatewayClass`."
+        explanation: "The class names the controller. It holds no listeners."
+      - id: c
+        text: "The `IngressClass`."
+        explanation: "It belongs to the Ingress API."
+      - id: d
+        text: "The `Gateway`, through `listeners` and `allowedRoutes`."
+        explanation: "Correct. The platform team owns it."
+    correct_option: d
+    explanation: "Correct. The platform team owns it."
+
+  - id: ats054-010-q05
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Install the prerequisites for the Cilium Gateway API controller"
+    source_readings:
+      - sections/section-010/module-01/course-02-gateway-api-resources-in-cilium.md
+    prompt: "You enable `gatewayAPI.enabled=true` on a running cluster, but a Gateway of class `cilium` is never programmed. The CRDs were installed after the operator started. What do you do?"
+    options:
+      - id: a
+        text: "Create a second GatewayClass named `cilium-2`."
+        explanation: "The class is not the problem."
+      - id: b
+        text: "Restart `deployment/cilium-operator` and `daemonset/cilium` so they register the CRD watches."
+        explanation: "Correct. The operator registers its watches at start, so the CRDs must exist then."
+      - id: c
+        text: "Set `ingressController.enabled=true`."
+        explanation: "This enables a different controller."
+      - id: d
+        text: "Delete the Gateway CRDs."
+        explanation: "The controller needs them."
+    correct_option: b
+    explanation: "Correct. The operator registers its watches at start, so the CRDs must exist then."
+
+  - id: ats054-010-q06
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Read HTTPRoute status conditions"
+    source_readings:
+      - sections/section-010/module-01/course-03-matching-splitting-and-debugging-routes.md
+    prompt: "An HTTPRoute shows `Accepted=False` with the reason `NotAllowedByListeners`. What is wrong?"
+    options:
+      - id: a
+        text: "The backend Service does not exist."
+        explanation: "That gives `ResolvedRefs=False` with `BackendNotFound`."
+      - id: b
+        text: "The weight of a backend is zero."
+        explanation: "Weights do not affect attachment."
+      - id: c
+        text: "The listener of the Gateway does not allow routes from the namespace of the route."
+        explanation: "Correct. The `allowedRoutes` field of the listener decides."
+      - id: d
+        text: "The `Host` header of the request is wrong."
+        explanation: "A wrong header gives a `404` at request time. It does not change the status of the route."
+    correct_option: c
+    explanation: "Correct. The `allowedRoutes` field of the listener decides."
+
+  - id: ats054-010-q07
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Split traffic with backend weights"
+    source_readings:
+      - sections/section-010/module-01/course-03-matching-splitting-and-debugging-routes.md
+    prompt: "Two backendRefs have `weight: 3` and `weight: 1`. What share of requests does the second backend receive?"
+    options:
+      - id: a
+        text: "About 25 percent."
+        explanation: "Correct. The share is the weight divided by the sum of the weights, 1 of 4."
+      - id: b
+        text: "1 percent."
+        explanation: "Weights are relative, not percentages."
+      - id: c
+        text: "33 percent."
+        explanation: "This would be weights of 2 and 1."
+      - id: d
+        text: "50 percent."
+        explanation: "This needs equal weights."
+    correct_option: a
+    explanation: "Correct. The share is the weight divided by the sum of the weights, 1 of 4."
+
+  - id: ats054-010-q08
+    type: single_choice
+    difficulty: advanced
+    learning_objective: "Reach a Gateway on a cluster without a load balancer"
+    source_readings:
+      - sections/section-010/module-01/course-02-gateway-api-resources-in-cilium.md
+    prompt: "On a kind cluster the Gateway `fleet` shows no external address. How does a client pod reach it?"
+    options:
+      - id: a
+        text: "Send the request to the cluster IP of the GatewayClass."
+        explanation: "A GatewayClass has no IP address."
+      - id: b
+        text: "Send the request to the Service `scout` directly with the header `Host`."
+        explanation: "This bypasses the Gateway."
+      - id: c
+        text: "Wait until the Gateway shows an address. It is always assigned."
+        explanation: "Without a load balancer implementation, the address stays pending."
+      - id: d
+        text: "Send the request to the node IP address and the node port of the Service `cilium-gateway-fleet`."
+        explanation: "Correct. The generated Service has a node port on every node even when no load balancer assigns an address."
+    correct_option: d
+    explanation: "Correct. The generated Service has a node port on every node even when no load balancer assigns an address."
+

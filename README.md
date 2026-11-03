@@ -2,17 +2,17 @@
 
 Cilium Certified Associate (CCA): Service Mesh, worth 16% of the official curriculum. This course belongs to ATP011.
 
-Developed reading explains mechanisms, responsible components, examples and limits. Every section has an introduction and every module closes with a summary. Reusable YAML checks contain 5–15 questions per bank. Technical content remains draft. No labs or playgrounds are included.
+Each section has one module with three reading parts, a summary, an ungraded playground and a graded lab. Each section closes with a capstone lab and a knowledge check, and a final domain quiz covers all five sections. Technical content remains draft. The labs are UNTESTED: they were checked statically only.
 
 ## Course Outline
 
-| Section / module | Module | Teaching files |
+| Section | Objective | Module |
 | --- | --- | --- |
-| 010 / 01 | Cilium Ingress And Gateway Request Paths | Cilium Ingress And Gateway Request Paths |
-| 020 / 01 | Service Mesh Use Cases And Responsibility Boundaries | Service Mesh Use Cases And Responsibility Boundaries |
-| 030 / 01 | Gateway API Roles, Attachment And Delegation | Gateway API Roles, Attachment And Delegation |
-| 040 / 01 | Transparent Encryption And Its Traffic Boundaries | Transparent Encryption And Its Traffic Boundaries |
-| 050 / 01 | Sidecar And Shared-Proxy Architecture Tradeoffs | Sidecar And Shared-Proxy Architecture Tradeoffs |
+| 010 | Know How to use Ingress or Gateway API for Ingress Routing | Route External Traffic With Cilium Ingress And Gateway API |
+| 020 | Service Mesh Use Cases | Service Mesh Use Cases With Cilium |
+| 030 | Understand the Benefits of Gateway API over Ingress | Gateway API Compared With Ingress |
+| 040 | Encrypting Traffic in Transit with Cilium | Encrypting Traffic In Transit With Cilium |
+| 050 | Sidecar-based versus Sidecarless Architectures | Sidecar And Sidecarless Mesh Architectures |
 
 ## Author Review
 

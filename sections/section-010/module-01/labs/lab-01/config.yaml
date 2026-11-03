@@ -1,11 +1,14 @@
+# yaml-language-server: $schema=https://cli.astrona.io/schema/lab-config.schema.json
+#
+# Fix And Extend A Cilium Gateway Route (LAB). Graded against the live cluster. UNTESTED.
 apiVersion: astrona.io/v1
 metadata:
-  name: ats-054-lab-010-01-01
+  name: ats-054-lab-010-01
   docs:
-    prerequisites: docs/prerequisites.md
-    examQuestion: question.md
-    caseStudy: docs/case-study.md
-    guide: solution.md
+    prerequisites: prerequisites.md
+    question: question.md
+    solution: solution.md
+
 runtime:
   type: kind
   kind:
@@ -15,20 +18,48 @@ runtime:
     networking:
       disableDefaultCNI: true
       podSubnet: 10.244.0.0/16
+    preloadImages:
+      - ghcr.io/stefanprodan/podinfo:6.15.0
+      - mccutchen/go-httpbin:2.25.0
+      - curlimages/curl:8.22.0
+
 bootstrap:
   init:
-  - name: seed-private-environment
-    type: file
-    source: bootstrap/setup.sh
-teardown:
-  keepCluster: false
+    - name: seed-cluster
+      description: Install Cilium and create the Starfleet workloads
+      type: file
+      source: bootstrap/01-seed-cluster.sh
+
+# Applied only by `astrona test`: the reference solution.
 testing:
   init:
-  - name: reference-result
-    type: file
-    source: solution/apply.sh
+    - name: apply-solution
+      description: Apply the reference solution
+      type: file
+      source: solution/apply.sh
+
 validation:
-  script:
-    name: verify-fields-and-live-evidence
-    type: file
-    source: validate.sh
+  scripts:
+    - name: route-accepted
+      description: "The HTTPRoute fleet is accepted and its references resolve"
+      type: file
+      source: validation/validate-route-accepted.sh
+      hint: "Read status.parents of the HTTPRoute. The parentRef must name the existing Gateway."
+    - name: default-routes-to-scout
+      description: "Requests for fleet.example.com reach scout"
+      type: file
+      source: validation/validate-default-routes-to-scout.sh
+      hint: "The backend port must be the port of the Service scout, which is 80."
+    - name: header-routes-to-probe
+      description: "Requests with the header x-fleet: probe reach probe"
+      type: file
+      source: validation/validate-header-routes-to-probe.sh
+      hint: "Add a first rule with a headers match on x-fleet with value probe and the backend probe on port 80."
+    - name: gateway-unchanged
+      description: "The Gateway still allows routes only from its own namespace"
+      type: file
+      source: validation/validate-gateway-unchanged.sh
+      hint: "Fix the route, not the Gateway. Do not change allowedRoutes."
+
+teardown:
+  keepCluster: false

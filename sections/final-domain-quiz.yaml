@@ -1,0 +1,358 @@
+# Final domain knowledge check across all five sections.
+schema_version: 1
+kind: question_bank
+id: ats054-final
+course_id: ATS054
+exam_code: CCA
+status: draft
+provenance: Original practice material written for this course; not official exam questions.
+scope:
+  type: domain
+  id: service-mesh
+  title: "Service Mesh"
+questions:
+  - id: ats054-final-s010-q01
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Choose the correct controller owner for an Ingress"
+    source_readings:
+      - sections/section-010/module-01/course-01-the-cilium-ingress-controller.md
+    prompt: "An Ingress has no `ingressClassName` and Cilium is not the default Ingress controller. What does Cilium do with it?"
+    options:
+      - id: a
+        text: "It serves it in shared mode."
+        explanation: "The mode matters only for resources Cilium owns."
+      - id: b
+        text: "It rejects the Ingress at admission."
+        explanation: "Cilium does not reject it. It is ignored."
+      - id: c
+        text: "It ignores the Ingress."
+        explanation: "Correct. Cilium acts only on Ingress resources that select its class, unless it is the default controller."
+      - id: d
+        text: "It converts it to an HTTPRoute."
+        explanation: "Cilium does not convert resources."
+    correct_option: c
+    explanation: "Correct. Cilium acts only on Ingress resources that select its class, unless it is the default controller."
+
+  - id: ats054-final-s010-q02
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Delegate namespace access on a Gateway"
+    source_readings:
+      - sections/section-010/module-01/course-02-gateway-api-resources-in-cilium.md
+    prompt: "The platform team wants only namespaces labelled `access=gateway` to attach routes to a Gateway. Which setting do they use?"
+    options:
+      - id: a
+        text: "`from: Same`."
+        explanation: "This allows only the namespace of the Gateway."
+      - id: b
+        text: "`allowedRoutes.namespaces.from: Selector` with a label selector on the listener."
+        explanation: "Correct."
+      - id: c
+        text: "`parentRefs` on the Gateway."
+        explanation: "The `parentRefs` field is on the route."
+      - id: d
+        text: "A label on the GatewayClass."
+        explanation: "The class does not select namespaces."
+    correct_option: b
+    explanation: "Correct."
+
+  - id: ats054-final-s010-q03
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Order rules by specificity in an HTTPRoute"
+    source_readings:
+      - sections/section-010/module-01/course-03-matching-splitting-and-debugging-routes.md
+    prompt: "A route has a rule with a header match and a rule with only `PathPrefix: /`. A request carries the header. Which backend receives it?"
+    options:
+      - id: a
+        text: "The backend of the header rule, because the more specific match wins."
+        explanation: "Correct."
+      - id: b
+        text: "The backend of the path rule, because it is listed last."
+        explanation: "List order does not override specificity."
+      - id: c
+        text: "Both backends, split evenly."
+        explanation: "A request goes to one rule."
+      - id: d
+        text: "Neither, because the rules conflict."
+        explanation: "The Gateway API defines precedence for this case."
+    correct_option: a
+    explanation: "Correct."
+
+  - id: ats054-final-s020-q01
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Describe where each use case is handled"
+    source_readings:
+      - sections/section-020/module-01/course-01-what-a-service-mesh-does.md
+    prompt: "Where does Cilium handle encryption of traffic between nodes?"
+    options:
+      - id: a
+        text: "In Envoy as an HTTP filter."
+        explanation: "Envoy handles Layer 7."
+      - id: b
+        text: "In Hubble Relay."
+        explanation: "Relay collects flows."
+      - id: c
+        text: "In each application container."
+        explanation: "Cilium encrypts without application changes."
+      - id: d
+        text: "In the Linux kernel with WireGuard or IPsec."
+        explanation: "Correct. Encryption is a Layer 3 function of the kernel."
+    correct_option: d
+    explanation: "Correct. Encryption is a Layer 3 function of the kernel."
+
+  - id: ats054-final-s020-q02
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Predict allow-list behaviour of HTTP rules"
+    source_readings:
+      - sections/section-020/module-01/course-02-layer-7-access-control-with-ciliumnetworkpolicy.md
+    prompt: "An HTTP rule has only `method: GET`. Which requests does it allow?"
+    options:
+      - id: a
+        text: "GET on every path."
+        explanation: "Correct. An entry with only a method matches every path."
+      - id: b
+        text: "GET on `/` only."
+        explanation: "A missing path does not default to `/`."
+      - id: c
+        text: "Every method on every path."
+        explanation: "The method is restricted."
+      - id: d
+        text: "Nothing, because a path is required."
+        explanation: "The path field is optional."
+    correct_option: a
+    explanation: "Correct. An entry with only a method matches every path."
+
+  - id: ats054-final-s020-q03
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Use flows as proof of policy"
+    source_readings:
+      - sections/section-020/module-01/course-03-observing-service-traffic-with-hubble.md
+    prompt: "How do you prove that `drifter` cannot reach `probe`?"
+    options:
+      - id: a
+        text: "Read the policy text."
+        explanation: "The policy text shows intent, not behaviour."
+      - id: b
+        text: "Find a `DROPPED` flow with `drifter` as source and `probe` as destination."
+        explanation: "Correct. The flow shows the verdict."
+      - id: c
+        text: "Check that `drifter` is running."
+        explanation: "A running pod can still be blocked."
+      - id: d
+        text: "Count the Hubble Relay pods."
+        explanation: "The number of pods says nothing about a verdict."
+    correct_option: b
+    explanation: "Correct. The flow shows the verdict."
+
+  - id: ats054-final-s030-q01
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Choose the cheaper resource for a simple case"
+    source_readings:
+      - sections/section-030/module-01/course-03-expressiveness-and-portability.md
+    prompt: "One team publishes one host with one path and needs no header matching. Which choice is reasonable?"
+    options:
+      - id: a
+        text: "A TCPRoute."
+        explanation: "A TCPRoute is for non-HTTP traffic."
+      - id: b
+        text: "Only a ReferenceGrant."
+        explanation: "A grant does not route traffic."
+      - id: c
+        text: "An Ingress, because it is shorter and every controller supports it."
+        explanation: "Correct. The Gateway API pays off with split roles and richer matching."
+      - id: d
+        text: "An Ingress is not possible with Cilium."
+        explanation: "Cilium has an Ingress controller."
+    correct_option: c
+    explanation: "Correct. The Gateway API pays off with split roles and richer matching."
+
+  - id: ats054-final-s030-q02
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Tell the two route conditions apart"
+    source_readings:
+      - sections/section-030/module-01/course-02-gateway-api-roles-and-delegation.md
+    prompt: "A route has `Accepted=True` and `ResolvedRefs=False`. What does this mean?"
+    options:
+      - id: a
+        text: "The route attached to the Gateway, but a backend reference does not resolve."
+        explanation: "Correct. The conditions are separate checks."
+      - id: b
+        text: "The route is rejected by the Gateway."
+        explanation: "Rejection shows as `Accepted=False`."
+      - id: c
+        text: "The Gateway has no address."
+        explanation: "Addresses show on the Gateway."
+      - id: d
+        text: "The route works for all backends."
+        explanation: "A backend does not resolve."
+    correct_option: a
+    explanation: "Correct. The conditions are separate checks."
+
+  - id: ats054-final-s030-q03
+    type: single_choice
+    difficulty: advanced
+    learning_objective: "Pick the right delegation control"
+    source_readings:
+      - sections/section-030/module-01/course-02-gateway-api-roles-and-delegation.md
+    prompt: "The platform team wants to decide which teams may attach routes without editing the Gateway for each team. What do they use?"
+    options:
+      - id: a
+        text: "`from: All`."
+        explanation: "This accepts every namespace."
+      - id: b
+        text: "`from: Selector` on the listener and labels on the namespaces."
+        explanation: "Correct. The label on the namespace becomes the control."
+      - id: c
+        text: "One Gateway per team."
+        explanation: "This multiplies Gateways and does not delegate."
+      - id: d
+        text: "An annotation on each HTTPRoute."
+        explanation: "A route cannot grant itself access."
+    correct_option: b
+    explanation: "Correct. The label on the namespace becomes the control."
+
+  - id: ats054-final-s040-q01
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "State what WireGuard peers hold"
+    source_readings:
+      - sections/section-040/module-01/course-01-transparent-encryption-with-wireguard.md
+    prompt: "How do the agents learn the public key of another node?"
+    options:
+      - id: a
+        text: "An administrator copies keys by hand."
+        explanation: "The agents distribute keys."
+      - id: b
+        text: "Each agent publishes its public key on its Node object, and the others read it."
+        explanation: "Correct. No key is stored in a Secret."
+      - id: c
+        text: "From a Secret named `cilium-ipsec-keys`."
+        explanation: "That Secret is for IPsec."
+      - id: d
+        text: "From the SPIRE server."
+        explanation: "SPIRE issues workload identities."
+    correct_option: b
+    explanation: "Correct. No key is stored in a Secret."
+
+  - id: ats054-final-s040-q02
+    type: single_choice
+    difficulty: advanced
+    learning_objective: "Describe a limit of IPsec"
+    source_readings:
+      - sections/section-040/module-01/course-02-ipsec-and-choosing-an-encryption-mode.md
+    prompt: "Which statement about Cilium IPsec is correct?"
+    options:
+      - id: a
+        text: "It needs kernel 5.6 or later."
+        explanation: "This is the WireGuard requirement."
+      - id: b
+        text: "It encrypts same-node traffic by default."
+        explanation: "Same-node traffic is not encrypted."
+      - id: c
+        text: "It does not support host policies, and each tunnel is decrypted on one CPU core."
+        explanation: "Correct. These limits can decide the mode."
+      - id: d
+        text: "It issues SPIFFE identities."
+        explanation: "SPIRE does this."
+    correct_option: c
+    explanation: "Correct. These limits can decide the mode."
+
+  - id: ats054-final-s040-q03
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Name the trust components"
+    source_readings:
+      - sections/section-040/module-01/course-03-mutual-authentication-with-spiffe-and-spire.md
+    prompt: "Which component issues short-lived workload certificates for mutual authentication?"
+    options:
+      - id: a
+        text: "The SPIRE server."
+        explanation: "Correct. The Cilium agents request them for the pods."
+      - id: b
+        text: "The Hubble Relay."
+        explanation: "Relay aggregates flows."
+      - id: c
+        text: "The Kubernetes API server."
+        explanation: "It does not issue SPIFFE identities."
+      - id: d
+        text: "The WireGuard device."
+        explanation: "It encrypts packets only."
+    correct_option: a
+    explanation: "Correct. The Cilium agents request them for the pods."
+
+  - id: ats054-final-s050-q01
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Describe the ambient split"
+    source_readings:
+      - sections/section-050/module-01/course-03-comparing-sidecar-sidecarless-and-ambient.md
+    prompt: "How does the ambient design split the mesh work?"
+    options:
+      - id: a
+        text: "A proxy in every pod does everything."
+        explanation: "That is the sidecar design."
+      - id: b
+        text: "eBPF does Layer 7 in the kernel."
+        explanation: "Layer 7 needs a proxy that reads requests."
+      - id: c
+        text: "A ztunnel on each node does Layer 4, and an optional waypoint proxy does Layer 7."
+        explanation: "Correct. Layer 7 is added only where a service needs it."
+      - id: d
+        text: "The Cilium agent injects a ztunnel into each pod."
+        explanation: "ztunnel runs on the node, not in pods."
+    correct_option: c
+    explanation: "Correct. Layer 7 is added only where a service needs it."
+
+  - id: ats054-final-s050-q02
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Explain what sidecarless means"
+    source_readings:
+      - sections/section-050/module-01/course-02-cilium-sidecarless-architecture.md
+    prompt: "What does sidecarless mean in the Cilium design?"
+    options:
+      - id: a
+        text: "No mesh proxy container runs inside the application pods."
+        explanation: "Correct. A Layer 7 proxy still exists, on the node."
+      - id: b
+        text: "No proxy exists at all."
+        explanation: "Envoy still handles Layer 7 rules."
+      - id: c
+        text: "Traffic is never encrypted."
+        explanation: "Encryption is a separate setting."
+      - id: d
+        text: "Policies cannot use HTTP rules."
+        explanation: "HTTP rules work through the node proxy."
+    correct_option: a
+    explanation: "Correct. A Layer 7 proxy still exists, on the node."
+
+  - id: ats054-final-s050-q03
+    type: single_choice
+    difficulty: advanced
+    learning_objective: "Treat a design label as a claim to check"
+    source_readings:
+      - sections/section-050/module-01/course-03-comparing-sidecar-sidecarless-and-ambient.md
+    prompt: "A vendor says its mesh is sidecarless. What can you conclude from the label alone?"
+    options:
+      - id: a
+        text: "All traffic is encrypted."
+        explanation: "The label does not say so."
+      - id: b
+        text: "Only where the proxy runs. Encryption, identity and rule strictness must be checked separately."
+        explanation: "Correct. A label describes placement, not guarantees."
+      - id: c
+        text: "Every request is authenticated."
+        explanation: "The label does not say so."
+      - id: d
+        text: "No proxy handles Layer 7."
+        explanation: "A node-level proxy may handle it."
+    correct_option: b
+    explanation: "Correct. A label describes placement, not guarantees."
+

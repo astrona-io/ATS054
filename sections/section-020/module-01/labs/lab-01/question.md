@@ -1,31 +1,13 @@
----
-draft: true
-exam_objectives:
-- Service Mesh Use Cases
----
-# Apply Mesh Style L7 Access Control
+# Question
 
-Enforce a service HTTP path boundary.
+Solve this question on: `terminal`
 
-## Starting state
+The `probe` pod in `starfleet` runs an HTTP test service on port 8080 and is open to every pod in the cluster. The security team wants it restricted at Layer 7.
 
-Cilium manages the private two-node cluster. Hubble Relay and the BGP control plane are enabled. The probe and two clients are healthy; no learner policy or evidence report exists. This baseline uses kube-proxy and tunnelling.
+Create one `CiliumNetworkPolicy` in `starfleet` that selects the pods labelled `app=probe` and meets all of these:
 
-Use a host shell with the private kubeconfig for this independent kind environment. A kubeconfig identifies the cluster and credentials used by kubectl, the Kubernetes command-line tool.
+1. The pods labelled `app=shuttle` in `starfleet` can send `GET /get` and nothing else. `GET /uuid` and `POST /post` must be answered with HTTP `403`.
+2. No other client can reach `probe`. The `drifter` pod in `outpost` must get no reply.
+3. `scout` stays open. Do not create a policy for it. `drifter` must still get HTTP `200` from `http://scout.starfleet.svc/`.
 
-```sh
-export KUBECONFIG="$(astrona kubeconfig ats-054-lab-020-01-01)"
-test "$(kubectl config current-context)" = "kind-astro-ats-054-lab-020-01-01" || exit 1
-node_name="astro-ats-054-lab-020-01-01-control-plane"
-worker_name="astro-ats-054-lab-020-01-01-worker"
-```
-
-Keep this connection selected. Host-level commands name only this environment's node containers. They do not operate on the host operating system.
-
-## Required result
-
-Enforce a path-aware service boundary with Cilium. Compare this network enforcement with application identity and mesh-level retries; the latter are not implemented by this fixture.
-
-## Verify The Result
-
-The grader checks the required object fields and actual observations. Wait for controller convergence before submitting. Preserve the task's namespace, workload names and unrelated components.
+The Service `probe` exposes port 80 and the pod listens on port 8080. You can send test requests with `kubectl exec` from the `shuttle` pod in `starfleet` and the `drifter` pod in `outpost`, which both have `curl`. `kubectl` already points at the cluster.

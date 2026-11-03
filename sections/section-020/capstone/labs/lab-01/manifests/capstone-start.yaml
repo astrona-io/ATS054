@@ -1,0 +1,45 @@
+# Starting state: two CiliumNetworkPolicy objects with mistakes.
+# scout-access allows only POST and only the shuttle pods.
+# probe-access names the Service port 80 instead of the pod port 8080.
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: scout-access
+  namespace: starfleet
+spec:
+  endpointSelector:
+    matchLabels:
+      app: scout
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            app: shuttle
+      toPorts:
+        - ports:
+            - port: "9898"
+              protocol: TCP
+          rules:
+            http:
+              - method: POST
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: probe-access
+  namespace: starfleet
+spec:
+  endpointSelector:
+    matchLabels:
+      app: probe
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            app: shuttle
+      toPorts:
+        - ports:
+            - port: "80"
+              protocol: TCP
+          rules:
+            http:
+              - method: GET
+                path: "/get"

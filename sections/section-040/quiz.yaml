@@ -1,0 +1,197 @@
+# Knowledge check for section 040. Listed in astrona.yaml as a `type: quiz` entry after the capstone lab.
+schema_version: 1
+kind: question_bank
+id: ats054-040
+course_id: ATS054
+exam_code: CCA
+status: draft
+provenance: Original practice material written for this course; not official exam questions.
+scope:
+  type: section
+  id: section-040
+  title: "Encrypting Traffic in Transit with Cilium"
+questions:
+  - id: ats054-040-q01
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Describe the WireGuard device and port"
+    source_readings:
+      - sections/section-040/module-01/course-01-transparent-encryption-with-wireguard.md
+    prompt: "Which network device and UDP port does Cilium WireGuard encryption use?"
+    options:
+      - id: a
+        text: "The device `cilium_vxlan` and UDP port 8472."
+        explanation: "This is the VXLAN tunnel, not encryption."
+      - id: b
+        text: "The device `cilium_wg0` and UDP port 51871."
+        explanation: "Correct. The agents create the device and the kernel sends encrypted packets on that port."
+      - id: c
+        text: "The device `cilium_host` and TCP port 4244."
+        explanation: "Port 4244 is used by Hubble Relay."
+      - id: d
+        text: "The device `wg-cilium` and UDP port 500."
+        explanation: "Port 500 is IKE, which Cilium does not use."
+    correct_option: b
+    explanation: "Correct. The agents create the device and the kernel sends encrypted packets on that port."
+
+  - id: ats054-040-q02
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Name the traffic default encryption does not cover"
+    source_readings:
+      - sections/section-040/module-01/course-01-transparent-encryption-with-wireguard.md
+    prompt: "With WireGuard enabled and no further option, which traffic stays unencrypted?"
+    options:
+      - id: a
+        text: "Traffic between pods on different nodes."
+        explanation: "This is the traffic that is encrypted."
+      - id: b
+        text: "Traffic from a pod to a Service on another node."
+        explanation: "After load balancing it is pod-to-pod across nodes and is encrypted."
+      - id: c
+        text: "Traffic between two pods on the same node."
+        explanation: "Correct. Same-node traffic does not leave the node."
+      - id: d
+        text: "Every request on port 80."
+        explanation: "Encryption does not look at ports."
+    correct_option: c
+    explanation: "Correct. Same-node traffic does not leave the node."
+
+  - id: ats054-040-q03
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Set up node encryption"
+    source_readings:
+      - sections/section-040/module-01/course-01-transparent-encryption-with-wireguard.md
+    prompt: "Which Helm value adds encryption of traffic between the nodes themselves?"
+    options:
+      - id: a
+        text: "`encryption.nodeEncryption=true`."
+        explanation: "Correct. It writes `encrypt-node` to the ConfigMap."
+      - id: b
+        text: "`encryption.type=node`."
+        explanation: "The type is `wireguard` or `ipsec`."
+      - id: c
+        text: "`hubble.tls.enabled=true`."
+        explanation: "This secures Hubble, not node traffic."
+      - id: d
+        text: "`authentication.enabled=true`."
+        explanation: "This turns on mutual authentication."
+    correct_option: a
+    explanation: "Correct. It writes `encrypt-node` to the ConfigMap."
+
+  - id: ats054-040-q04
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Build the IPsec key secret"
+    source_readings:
+      - sections/section-040/module-01/course-02-ipsec-and-choosing-an-encryption-mode.md
+    prompt: "In which Secret and format does Cilium read IPsec keys?"
+    options:
+      - id: a
+        text: "A ConfigMap named `cilium-ipsec` with a PEM file."
+        explanation: "Keys are stored in a Secret, not as PEM."
+      - id: b
+        text: "A Secret `ipsec-keys` in the default namespace."
+        explanation: "The name and namespace differ."
+      - id: c
+        text: "A CiliumNetworkPolicy with a `keys` field."
+        explanation: "Policies do not hold keys."
+      - id: d
+        text: "The Secret `cilium-ipsec-keys` in `kube-system`, with a key identifier, algorithm, hexadecimal key and key size."
+        explanation: "Correct. The key `keys` holds one line such as `3+ rfc4106(gcm(aes)) <hex> 128`."
+    correct_option: d
+    explanation: "Correct. The key `keys` holds one line such as `3+ rfc4106(gcm(aes)) <hex> 128`."
+
+  - id: ats054-040-q05
+    type: single_choice
+    difficulty: advanced
+    learning_objective: "Rotate an IPsec key"
+    source_readings:
+      - sections/section-040/module-01/course-02-ipsec-and-choosing-an-encryption-mode.md
+    prompt: "How do you rotate the IPsec key without stopping traffic?"
+    options:
+      - id: a
+        text: "Delete the Secret and restart the nodes."
+        explanation: "This interrupts traffic."
+      - id: b
+        text: "Patch the Secret with the key identifier increased by one and a new key."
+        explanation: "Correct. Old and new keys exist together during the change."
+      - id: c
+        text: "Edit the key in place and keep the same identifier."
+        explanation: "The identifier tells the agents that a new key exists."
+      - id: d
+        text: "Change the WireGuard port."
+        explanation: "WireGuard is another mode."
+    correct_option: b
+    explanation: "Correct. Old and new keys exist together during the change."
+
+  - id: ats054-040-q06
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Choose between WireGuard and IPsec"
+    source_readings:
+      - sections/section-040/module-01/course-02-ipsec-and-choosing-an-encryption-mode.md
+    prompt: "Which requirement makes IPsec the better choice over WireGuard?"
+    options:
+      - id: a
+        text: "Kernel 5.6 is available on every node."
+        explanation: "This makes WireGuard possible."
+      - id: b
+        text: "The cluster needs host policies."
+        explanation: "IPsec does not support host policies."
+      - id: c
+        text: "A compliance rule that names IPsec."
+        explanation: "Correct. The course names compliance rules, old kernels and cloud requirements as reasons."
+      - id: d
+        text: "The team wants no key handling."
+        explanation: "WireGuard handles keys without a Secret."
+    correct_option: c
+    explanation: "Correct. The course names compliance rules, old kernels and cloud requirements as reasons."
+
+  - id: ats054-040-q07
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Separate encryption from authentication"
+    source_readings:
+      - sections/section-040/module-01/course-03-mutual-authentication-with-spiffe-and-spire.md
+    prompt: "What does mutual authentication prove?"
+    options:
+      - id: a
+        text: "That the packets are unreadable on the wire."
+        explanation: "This is encryption."
+      - id: b
+        text: "That the request path is allowed."
+        explanation: "This is authorization in a policy rule."
+      - id: c
+        text: "That the node kernel is up to date."
+        explanation: "Authentication does not check kernels."
+      - id: d
+        text: "That both workloads hold a valid identity issued by the trust domain."
+        explanation: "Correct. It proves identity and does not hide content."
+    correct_option: d
+    explanation: "Correct. It proves identity and does not hide content."
+
+  - id: ats054-040-q08
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Ask for authentication in a policy"
+    source_readings:
+      - sections/section-040/module-01/course-03-mutual-authentication-with-spiffe-and-spire.md
+    prompt: "How does a CiliumNetworkPolicy ask for mutual authentication on an ingress rule?"
+    options:
+      - id: a
+        text: "With `authentication: mode: \"required\"` in the rule."
+        explanation: "Correct. The agents run the handshake before they allow the flow."
+      - id: b
+        text: "With the annotation `cilium.io/mtls: true` on the pod."
+        explanation: "Policies carry the setting."
+      - id: c
+        text: "With `encryption: required` on the Service."
+        explanation: "Services have no such field."
+      - id: d
+        text: "With a sidecar in every pod."
+        explanation: "Cilium runs the handshake in the agents."
+    correct_option: a
+    explanation: "Correct. The agents run the handshake before they allow the flow."
+

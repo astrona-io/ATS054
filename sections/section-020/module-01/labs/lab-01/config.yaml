@@ -1,11 +1,14 @@
+# yaml-language-server: $schema=https://cli.astrona.io/schema/lab-config.schema.json
+#
+# Apply Layer 7 Access Control With CiliumNetworkPolicy (LAB). Graded against the live cluster. UNTESTED.
 apiVersion: astrona.io/v1
 metadata:
-  name: ats-054-lab-020-01-01
+  name: ats-054-lab-020-01
   docs:
-    prerequisites: docs/prerequisites.md
-    examQuestion: question.md
-    caseStudy: docs/case-study.md
-    guide: solution.md
+    prerequisites: prerequisites.md
+    question: question.md
+    solution: solution.md
+
 runtime:
   type: kind
   kind:
@@ -15,20 +18,48 @@ runtime:
     networking:
       disableDefaultCNI: true
       podSubnet: 10.244.0.0/16
+    preloadImages:
+      - ghcr.io/stefanprodan/podinfo:6.15.0
+      - mccutchen/go-httpbin:2.25.0
+      - curlimages/curl:8.22.0
+
 bootstrap:
   init:
-  - name: seed-private-environment
-    type: file
-    source: bootstrap/setup.sh
-teardown:
-  keepCluster: false
+    - name: seed-cluster
+      description: Install Cilium and create the Starfleet workloads
+      type: file
+      source: bootstrap/01-seed-cluster.sh
+
+# Applied only by `astrona test`: the reference solution.
 testing:
   init:
-  - name: reference-result
-    type: file
-    source: solution/apply.sh
+    - name: apply-solution
+      description: Apply the reference solution
+      type: file
+      source: solution/apply.sh
+
 validation:
-  script:
-    name: verify-fields-and-live-evidence
-    type: file
-    source: validate.sh
+  scripts:
+    - name: probe-policy-has-http-rules
+      description: "A CiliumNetworkPolicy with HTTP rules protects probe"
+      type: file
+      source: validation/validate-probe-policy-has-http-rules.sh
+      hint: "Create a CiliumNetworkPolicy in starfleet that selects app=probe and uses toPorts rules http."
+    - name: shuttle-get-allowed
+      description: "shuttle can send GET /get to probe"
+      type: file
+      source: validation/validate-shuttle-get-allowed.sh
+      hint: "Allow the method GET and the path /get from the pods labelled app=shuttle on port 8080."
+    - name: other-requests-denied
+      description: "shuttle cannot send GET /uuid or POST /post to probe"
+      type: file
+      source: validation/validate-other-requests-denied.sh
+      hint: "Only list the allowed method and path. Envoy answers every other request with 403."
+    - name: drifter-blocked
+      description: "drifter cannot reach probe but still reaches scout"
+      type: file
+      source: validation/validate-drifter-blocked.sh
+      hint: "Use fromEndpoints with the label app=shuttle only, and leave scout without a policy."
+
+teardown:
+  keepCluster: false

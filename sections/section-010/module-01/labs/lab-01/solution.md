@@ -1,85 +1,82 @@
----
-draft: true
-exam_objectives:
-- Know How to use Ingress or Gateway API for Ingress Routing
----
-# Locate Cilium Service Exposure Boundaries Solution
+# Solution
 
-Use a host shell with the private kubeconfig for this independent kind environment. A kubeconfig identifies the cluster and credentials used by kubectl, the Kubernetes command-line tool.
+Solve this lab on `terminal`. Each step ends with `astrona submit`. The `--keep` flag keeps the lab running so you can continue after a failed check.
+
+Start the lab if it is not running:
 
 ```sh
-export KUBECONFIG="$(astrona kubeconfig ats-054-lab-010-01-01)"
-test "$(kubectl config current-context)" = "kind-astro-ats-054-lab-010-01-01" || exit 1
-node_name="astro-ats-054-lab-010-01-01-control-plane"
-worker_name="astro-ats-054-lab-010-01-01-worker"
+astrona run --git ssh://git@github.com/astrona-io/ATS054.git -c sections/section-010/module-01/labs/lab-01
 ```
 
-Keep this connection selected. Host-level commands name only this environment's node containers. They do not operate on the host operating system.
+## Step 1: Read why the route does not work
 
-## Inspect And Explain
-
-Cilium manages the private two-node cluster. Hubble Relay and the BGP control plane are enabled. The probe and two clients are healthy; no learner policy or evidence report exists. This baseline uses kube-proxy and tunnelling.
-
-Inspect the current objects before changing them:
+The status of the route tells you which field is wrong:
 
 ```sh
-kubectl -n starfleet get pods -o wide
-kubectl get nodes -o wide
+kubectl -n starfleet get httproute fleet -o jsonpath='{range .status.parents[*].conditions[*]}{.type}={.status} {.reason}{"\n"}{end}'
+kubectl -n starfleet get gateway
+kubectl -n starfleet get service scout
 ```
 
-Inspect the internal probe Service and Cilium agent configuration. Ingress and Gateway API require additional controllers and exposure infrastructure. This prerequisite exercise validates internal Service forwarding, not an external Gateway.
+The route names a parent Gateway `fleet-gw`, but the Gateway is named `fleet`. The route also sends traffic to port `8080`, but the Service `scout` exposes port `80`. Both fields are in the route, and the Gateway needs no change.
 
-Record observations in `starfleet/evidence`, whose `report.json` contains the stated report. The verifier reads the live API again; invented values do not pass.
+## Step 2: Fix the parent and the port
 
+Save this as `httproute-fleet.yaml`. It fixes both fields and adds the header rule from the second task:
 
-Save this as `record.py`:
-
-```python
-import json,subprocess,time,sys,tempfile,os
-
-def call(*args):
- r=subprocess.run(list(args),text=True,capture_output=True,timeout=20)
- assert r.returncode==0, 'Observation command failed: '+args[0]
- return r.stdout.strip()
-def obj(kind,name,ns='starfleet'):
- return json.loads(call('kubectl',*(['-n',ns] if ns else []),'get',kind,name,'-o','json'))
-def api(path):
- script='import urllib.request; print(urllib.request.urlopen('+repr('http://prometheus:9090'+path)+',timeout=8).read().decode())'
- return json.loads(call('kubectl','-n','starfleet','exec','shuttle','--','python','-c',script))
-def save(data):
- resource={'apiVersion':'v1','kind':'ConfigMap','metadata':{'name':'evidence','namespace':'starfleet'},'data':{'report.json':json.dumps(data,sort_keys=True)}}
- with tempfile.NamedTemporaryFile(mode='w',suffix='.json',delete=False) as f:json.dump(resource,f);path=f.name
- try:call('kubectl','apply','-f',path)
- finally:os.unlink(path)
-
-assert call('kubectl','config','current-context') == 'kind-astro-ats-054-lab-010-01-01'
-service=obj('service','probe');slices=json.loads(call('kubectl','-n','starfleet','get','endpointslices','-l','kubernetes.io/service-name=probe','-o','json'))['items']
-assert any(e.get('conditions',{}).get('ready') for s in slices for e in s['endpoints'])
-response=call('kubectl','-n','starfleet','exec','shuttle','--','python','-c',"import urllib.request; print(urllib.request.urlopen('http://probe:8080/',timeout=4).read().decode())")
-report={'selector':service['spec']['selector'],'ports':service['spec']['ports'],'response':response}
-save(report)
+```yaml
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: fleet
+  namespace: starfleet
+spec:
+  parentRefs:
+    - name: fleet
+  hostnames:
+    - fleet.example.com
+  rules:
+    - matches:
+        - headers:
+            - name: x-fleet
+              value: probe
+      backendRefs:
+        - name: probe
+          port: 80
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - name: scout
+          port: 80
 ```
 
-Apply the scoped correction:
+Apply it:
 
 ```sh
-python3 record.py
+kubectl apply -f httproute-fleet.yaml
 ```
 
-## Verify The Result
-
-Observe the actual result. A denied request returns a nonzero status when the denial works, so run it separately from a shell sequence that stops on error. Status convergence and a successful request establish different parts of the result.
+Then submit:
 
 ```sh
-kubectl -n starfleet get configmaps
-kubectl -n starfleet get deployment probe -o yaml
+astrona submit --git ssh://git@github.com/astrona-io/ATS054.git -c sections/section-010/module-01/labs/lab-01 --keep
 ```
 
-Verify internal Service ownership and realised endpoints. The commands above deliberately target one environment. Keep its remaining components available so an unrelated failure cannot stand in for the required denial or correction. No example command output is presented as evidence of a completed run. A matching field alone does not establish that a process used it or that a controller reconciled it.
+## Step 3: Test by hand
 
-After recording your result, remove the independent lab with `astrona destroy ats-054-lab-010-01-01`.
+Read the node address and node port, then send both kinds of request:
 
-## Common pitfalls
+```sh
+NODE_IP=$(kubectl get node -l '!node-role.kubernetes.io/control-plane' -o jsonpath='{.items[0].status.addresses[?(@.type=="InternalIP")].address}')
+NODE_PORT=$(kubectl -n starfleet get service cilium-gateway-fleet -o jsonpath='{.spec.ports[0].nodePort}')
+kubectl -n starfleet exec deploy/shuttle -- curl -s -m 5 -H 'Host: fleet.example.com' "http://$NODE_IP:$NODE_PORT/"
+kubectl -n starfleet exec deploy/shuttle -- curl -s -m 5 -o /dev/null -w '%{http_code}\n' -H 'Host: fleet.example.com' -H 'x-fleet: probe' "http://$NODE_IP:$NODE_PORT/uuid"
+```
 
-> [!WARNING]
-> Confirm the private context and exact node names before a change. Check the stated scope and live result. Do not change unrelated components to hide the original fault.
+The first request returns the podinfo reply. The second returns `200` from go-httpbin. A request to `/uuid` without the header returns `404` from podinfo.
+
+## Why this is the answer
+
+The `Accepted` condition was `False` because the parent name matched no Gateway. A wrong backend port makes `ResolvedRefs` or the request itself fail. The header rule comes first in the list because the Gateway API prefers the more specific match, and the path rule catches everything else.

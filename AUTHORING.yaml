@@ -1,5 +1,8 @@
+---
 version: 1
-approval: CCA requested 2026-10-11; established reading-only scope
+approval: Maintainer requested playgrounds and graded labs on 2026-10-13. The course
+  was rebuilt with one module per section, a capstone and a quiz for each section,
+  and a final domain quiz.
 course:
   id: ATS054
   certification:
@@ -15,110 +18,184 @@ course:
     - Encrypting Traffic in Transit with Cilium
     - Sidecar-based versus Sidecarless Architectures
 defaults:
-  playground: false
-  module_lab: false
-  capstone: false
-  section_quiz: false
+  playground: true
+  module_lab: true
+  capstone: true
+  section_quiz: true
   final_quiz: true
 assessment_format: YAML question banks v1, registered in assessments/index.yaml
 sections:
 - id: section-010
   title: Know How to use Ingress or Gateway API for Ingress Routing
   curriculum_item: Know How to use Ingress or Gateway API for Ingress Routing
-  capstone: false
-  section_quiz: false
+  capstone: true
+  section_quiz: true
   modules:
   - id: module-01
-    title: Cilium Ingress And Gateway Request Paths
+    title: Route External Traffic With Cilium Ingress And Gateway API
     objectives:
-    - Trace external requests through listener, route and backend.
-    - Distinguish controller selection from route acceptance.
-    - Explain Cilium proxy participation and feature prerequisites.
-    - Evaluate TLS termination separately from backend encryption.
-    outline:
-    - Cilium Ingress And Gateway Request Paths
-    playground: false
-    module_lab: false
+    - Describe how the Cilium Ingress controller turns an Ingress into a proxy and
+      a Service.
+    - Name the Gateway API resources and the role that owns each one.
+    - Trace a request through the listener, the route and the backend.
+    - Match requests by host, path and header, split traffic by weight, and read route
+      status to find a fault.
+    playground: true
+    module_lab: true
     sources:
-    - reading: sections/section-010/module-01/course-01-cilium-ingress-and-gateway-request-paths.md
-      adapted_from: null
+    - reading: sections/section-010/module-01/course-01-the-cilium-ingress-controller.md
+      adapted_from: 
+    - reading: sections/section-010/module-01/course-02-gateway-api-resources-in-cilium.md
+      adapted_from: 
+    - reading: sections/section-010/module-01/course-03-matching-splitting-and-debugging-routes.md
+      adapted_from: 
+    labs:
+    - id: lab-01
+      path: sections/section-010/module-01/labs/lab-01
+      objective: Fix And Extend A Cilium Gateway Route
+      status: draft
+      runtime_verification: pending
+    capstone:
+      path: sections/section-010/capstone/labs/lab-01
+      objective: Publish Two Services With Cilium Ingress And Gateway API
+      status: draft
+      runtime_verification: pending
+    summary: sections/section-010/module-01/course-04-summary.md
 - id: section-020
   title: Service Mesh Use Cases
   curriculum_item: Service Mesh Use Cases
-  capstone: false
-  section_quiz: false
+  capstone: true
+  section_quiz: true
   modules:
   - id: module-01
-    title: Service Mesh Use Cases And Responsibility Boundaries
+    title: Service Mesh Use Cases With Cilium
     objectives:
-    - Identify traffic management, visibility and security use cases.
-    - Distinguish service discovery from application-aware routing.
-    - Explain proxy and datapath participation in mesh features.
-    - Evaluate authentication, encryption and authorization independently.
-    outline:
-    - Service Mesh Use Cases And Responsibility Boundaries
-    playground: false
-    module_lab: false
+    - 'Name the mesh use cases: traffic management, security and observability.'
+    - Say which use cases need only the kernel and which need the Envoy proxy.
+    - Write an HTTP rule that allows one method and path, and explain why a denied
+      request gets 403 or no reply.
+    - Read flows and verdicts with Hubble.
+    playground: true
+    module_lab: true
     sources:
-    - reading: sections/section-020/module-01/course-01-service-mesh-use-cases-and-responsibility-boundaries.md
-      adapted_from: null
+    - reading: sections/section-020/module-01/course-01-what-a-service-mesh-does.md
+      adapted_from: 
+    - reading: sections/section-020/module-01/course-02-layer-7-access-control-with-ciliumnetworkpolicy.md
+      adapted_from: 
+    - reading: sections/section-020/module-01/course-03-observing-service-traffic-with-hubble.md
+      adapted_from: 
+    labs:
+    - id: lab-01
+      path: sections/section-020/module-01/labs/lab-01
+      objective: Apply Layer 7 Access Control With CiliumNetworkPolicy
+      status: draft
+      runtime_verification: pending
+    capstone:
+      path: sections/section-020/capstone/labs/lab-01
+      objective: Repair Layer 7 Policies Without A Sidecar
+      status: draft
+      runtime_verification: pending
+    summary: sections/section-020/module-01/course-04-summary.md
 - id: section-030
   title: Understand the Benefits of Gateway API over Ingress
   curriculum_item: Understand the Benefits of Gateway API over Ingress
-  capstone: false
-  section_quiz: false
+  capstone: true
+  section_quiz: true
   modules:
   - id: module-01
-    title: Gateway API Roles, Attachment And Delegation
+    title: Gateway API Compared With Ingress
     objectives:
-    - Compare Ingress's combined model with Gateway API's separated roles.
-    - Explain GatewayClass, Gateway and route ownership.
-    - Interpret attachment permissions and cross-namespace references.
-    - Evaluate portability through supported implementation features and status.
-    outline:
-    - Gateway API Roles, Attachment And Delegation
-    playground: false
-    module_lab: false
+    - List what the Ingress spec can and cannot express.
+    - Explain the roles of the GatewayClass, the Gateway and the route.
+    - Choose an allowedRoutes setting and read the Accepted and ResolvedRefs conditions.
+    - Create a narrow ReferenceGrant and explain what portable means for a route.
+    playground: true
+    module_lab: true
     sources:
-    - reading: sections/section-030/module-01/course-01-gateway-api-roles-attachment-and-delegation.md
-      adapted_from: null
+    - reading: sections/section-030/module-01/course-01-the-limits-of-ingress.md
+      adapted_from: 
+    - reading: sections/section-030/module-01/course-02-gateway-api-roles-and-delegation.md
+      adapted_from: 
+    - reading: sections/section-030/module-01/course-03-expressiveness-and-portability.md
+      adapted_from: 
+    labs:
+    - id: lab-01
+      path: sections/section-030/module-01/labs/lab-01
+      objective: Delegate Gateway Access By Namespace Label
+      status: draft
+      runtime_verification: pending
+    capstone:
+      path: sections/section-030/capstone/labs/lab-01
+      objective: Share A Backend Across Namespaces With A Gateway
+      status: draft
+      runtime_verification: pending
+    summary: sections/section-030/module-01/course-04-summary.md
 - id: section-040
   title: Encrypting Traffic in Transit with Cilium
   curriculum_item: Encrypting Traffic in Transit with Cilium
-  capstone: false
-  section_quiz: false
+  capstone: true
+  section_quiz: true
   modules:
   - id: module-01
-    title: Transparent Encryption And Its Traffic Boundaries
+    title: Encrypting Traffic In Transit With Cilium
     objectives:
-    - Compare Cilium IPsec and WireGuard at a conceptual level.
-    - Identify covered segments and exceptions in the active deployment.
-    - Separate transparent encryption from application TLS and authentication.
-    - Evaluate keys, peer reachability, MTU and observability.
-    outline:
-    - Transparent Encryption And Its Traffic Boundaries
-    playground: false
-    module_lab: false
+    - Explain transparent encryption and how it differs from TLS in the application.
+    - Describe the WireGuard device, keys and peers, and the traffic that default
+      encryption does not cover.
+    - Build the IPsec key secret and describe a key rotation.
+    - Separate encryption, authentication and authorization.
+    playground: true
+    module_lab: true
     sources:
-    - reading: sections/section-040/module-01/course-01-transparent-encryption-and-its-traffic-boundaries.md
-      adapted_from: null
+    - reading: sections/section-040/module-01/course-01-transparent-encryption-with-wireguard.md
+      adapted_from: 
+    - reading: sections/section-040/module-01/course-02-ipsec-and-choosing-an-encryption-mode.md
+      adapted_from: 
+    - reading: sections/section-040/module-01/course-03-mutual-authentication-with-spiffe-and-spire.md
+      adapted_from: 
+    labs:
+    - id: lab-01
+      path: sections/section-040/module-01/labs/lab-01
+      objective: Turn On WireGuard Encryption
+      status: draft
+      runtime_verification: pending
+    capstone:
+      path: sections/section-040/capstone/labs/lab-01
+      objective: Add Node-To-Node Encryption To WireGuard
+      status: draft
+      runtime_verification: pending
+    summary: sections/section-040/module-01/course-04-summary.md
 - id: section-050
   title: Sidecar-based versus Sidecarless Architectures
   curriculum_item: Sidecar-based versus Sidecarless Architectures
-  capstone: false
-  section_quiz: false
+  capstone: true
+  section_quiz: true
   modules:
   - id: module-01
-    title: Sidecar And Shared-Proxy Architecture Tradeoffs
+    title: Sidecar And Sidecarless Mesh Architectures
     objectives:
-    - Compare per-Pod sidecars with shared node proxy processing.
-    - Explain eBPF redirection and application-layer responsibilities.
-    - Evaluate resource, upgrade and failure-scope tradeoffs.
-    - Distinguish architecture labels from security guarantees.
-    outline:
-    - Sidecar And Shared-Proxy Architecture Tradeoffs
-    playground: false
-    module_lab: false
+    - Explain how a sidecar is injected and how traffic is redirected to it.
+    - Name the pieces of the Cilium architecture and where each runs.
+    - Say which traffic reaches Envoy and which stays in the kernel.
+    - Compare the designs on resource use, upgrades, failure scope and security boundary.
+    playground: true
+    module_lab: true
     sources:
-    - reading: sections/section-050/module-01/course-01-sidecar-and-shared-proxy-architecture-tradeoffs.md
-      adapted_from: null
+    - reading: sections/section-050/module-01/course-01-how-a-sidecar-mesh-works.md
+      adapted_from: 
+    - reading: sections/section-050/module-01/course-02-cilium-sidecarless-architecture.md
+      adapted_from: 
+    - reading: sections/section-050/module-01/course-03-comparing-sidecar-sidecarless-and-ambient.md
+      adapted_from: 
+    labs:
+    - id: lab-01
+      path: sections/section-050/module-01/labs/lab-01
+      objective: Remove A Leftover Sidecar Proxy
+      status: draft
+      runtime_verification: pending
+    capstone:
+      path: sections/section-050/capstone/labs/lab-01
+      objective: Migrate Two Services From Sidecars To The Node Proxy
+      status: draft
+      runtime_verification: pending
+    summary: sections/section-050/module-01/course-04-summary.md

@@ -1,10 +1,23 @@
 ---
-draft: true
-exam_objectives:
-- Encrypting Traffic in Transit with Cilium
+estimated_duration: 25m
 ---
-# Check The Encryption Baseline
 
-Establish whether transparent encryption is enabled.
+# Lab: Turn On WireGuard Encryption
 
-The task and solution use a separate pinned kind cluster. Run `testing/smoke.sh` with its private kubeconfig to verify initial rejection and reference success. Static validation is not live evidence. Runtime verification remains pending.
+Graded lab for the module on encryption in transit. **UNTESTED:** checked with `astrona validate` and `bash -n` only. The WireGuard checks need a host kernel with WireGuard support. The task is in `question.md` and the walkthrough is in `solution.md`.
+
+## Run it
+
+```sh
+astrona run --git ssh://git@github.com/astrona-io/ATS054.git -c sections/section-040/module-01/labs/lab-01
+astrona submit --git ssh://git@github.com/astrona-io/ATS054.git -c sections/section-040/module-01/labs/lab-01
+astrona destroy ats-054-lab-040-01
+```
+
+## Checks
+
+| Script | What it proves |
+| --- | --- |
+| `validate-wireguard-configured.sh` | `enable-wireguard` is `true` in `cilium-config` |
+| `validate-agents-report-wireguard.sh` | Every agent reports WireGuard in `cilium-dbg status` |
+| `validate-pod-traffic-works.sh` | Pods still reach each other |

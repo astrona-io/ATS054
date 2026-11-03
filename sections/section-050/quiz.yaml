@@ -1,0 +1,197 @@
+# Knowledge check for section 050. Listed in astrona.yaml as a `type: quiz` entry after the capstone lab.
+schema_version: 1
+kind: question_bank
+id: ats054-050
+course_id: ATS054
+exam_code: CCA
+status: draft
+provenance: Original practice material written for this course; not official exam questions.
+scope:
+  type: section
+  id: section-050
+  title: "Sidecar-based versus Sidecarless Architectures"
+questions:
+  - id: ats054-050-q01
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Explain how a sidecar gets into a pod"
+    source_readings:
+      - sections/section-050/module-01/course-01-how-a-sidecar-mesh-works.md
+    prompt: "How does a sidecar mesh normally add the proxy container to a pod?"
+    options:
+      - id: a
+        text: "The kubelet adds it when the node starts."
+        explanation: "The kubelet runs the pod specification it receives."
+      - id: b
+        text: "The application downloads and starts it."
+        explanation: "The application does not know the proxy exists."
+      - id: c
+        text: "A mutating admission webhook changes the pod specification when the pod is created."
+        explanation: "Correct. The running pod has more containers than the manifest lists."
+      - id: d
+        text: "An eBPF program creates it in the kernel."
+        explanation: "eBPF does not create containers."
+    correct_option: c
+    explanation: "Correct. The running pod has more containers than the manifest lists."
+
+  - id: ats054-050-q02
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Describe how traffic reaches the sidecar"
+    source_readings:
+      - sections/section-050/module-01/course-01-how-a-sidecar-mesh-works.md
+    prompt: "What forces the outgoing connections of an application through its sidecar?"
+    options:
+      - id: a
+        text: "`iptables` rules in the network namespace of the pod redirect the traffic to the proxy port."
+        explanation: "Correct. An init container or a CNI plugin writes the rules."
+      - id: b
+        text: "The application is changed to use a proxy address."
+        explanation: "The design is transparent to the application."
+      - id: c
+        text: "A Service of type LoadBalancer."
+        explanation: "Services do not redirect traffic inside a pod."
+      - id: d
+        text: "The Envoy DaemonSet on the node."
+        explanation: "That is the Cilium design."
+    correct_option: a
+    explanation: "Correct. An init container or a CNI plugin writes the rules."
+
+  - id: ats054-050-q03
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "State the upgrade cost of a sidecar"
+    source_readings:
+      - sections/section-050/module-01/course-01-how-a-sidecar-mesh-works.md
+    prompt: "What does upgrading the proxy version of a sidecar mesh normally require?"
+    options:
+      - id: a
+        text: "Only a change of the node kernel."
+        explanation: "The proxy is not part of the kernel."
+      - id: b
+        text: "Nothing, because proxies update themselves in place."
+        explanation: "A running container image does not change."
+      - id: c
+        text: "Deleting the namespace."
+        explanation: "A restart of pods is enough."
+      - id: d
+        text: "Recreating the pods, because the proxy is a container of the pod."
+        explanation: "Correct. The workload owners decide when the restart happens."
+    correct_option: d
+    explanation: "Correct. The workload owners decide when the restart happens."
+
+  - id: ats054-050-q04
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Name where Cilium runs Layer 7 processing"
+    source_readings:
+      - sections/section-050/module-01/course-02-cilium-sidecarless-architecture.md
+    prompt: "Where does Cilium run Envoy for Layer 7 rules?"
+    options:
+      - id: a
+        text: "In a container inside every application pod."
+        explanation: "That is the sidecar design."
+      - id: b
+        text: "In the `cilium-envoy` DaemonSet, one pod on each node."
+        explanation: "Correct. All application pods on the node share it."
+      - id: c
+        text: "In the Kubernetes API server."
+        explanation: "The API server does not proxy pod traffic."
+      - id: d
+        text: "In the kernel as an eBPF program."
+        explanation: "eBPF handles Layer 3 and 4. Envoy handles Layer 7."
+    correct_option: b
+    explanation: "Correct. All application pods on the node share it."
+
+  - id: ats054-050-q05
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Decide which traffic reaches Envoy"
+    source_readings:
+      - sections/section-050/module-01/course-02-cilium-sidecarless-architecture.md
+    prompt: "A policy allows `shuttle` to reach `scout` on a port with no `http` rules. Which component enforces it?"
+    options:
+      - id: a
+        text: "The Envoy proxy on the node."
+        explanation: "Envoy is used when a Layer 7 rule applies."
+      - id: b
+        text: "A sidecar container in `scout`."
+        explanation: "Cilium adds no sidecar."
+      - id: c
+        text: "The eBPF programs in the kernel, with no Envoy involved."
+        explanation: "Correct. Only Layer 7 rules need the proxy."
+      - id: d
+        text: "The Hubble Relay."
+        explanation: "Relay does not enforce policy."
+    correct_option: c
+    explanation: "Correct. Only Layer 7 rules need the proxy."
+
+  - id: ats054-050-q06
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Predict the effect of a policy change on pods"
+    source_readings:
+      - sections/section-050/module-01/course-02-cilium-sidecarless-architecture.md
+    prompt: "You apply a CiliumNetworkPolicy with an `http` rule for a running Deployment. What happens to its pods?"
+    options:
+      - id: a
+        text: "They keep running unchanged, and the agent and Envoy on each node load the rule."
+        explanation: "Correct. Nothing is injected and nothing restarts."
+      - id: b
+        text: "They are restarted so that a proxy can be injected."
+        explanation: "Cilium does not inject proxies."
+      - id: c
+        text: "They are rescheduled to another node."
+        explanation: "Policy does not move pods."
+      - id: d
+        text: "They lose network access until a manual restart."
+        explanation: "The rule applies at once."
+    correct_option: a
+    explanation: "Correct. Nothing is injected and nothing restarts."
+
+  - id: ats054-050-q07
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Compare cost growth between designs"
+    source_readings:
+      - sections/section-050/module-01/course-03-comparing-sidecar-sidecarless-and-ambient.md
+    prompt: "On which quantity does the proxy cost of a sidecar mesh grow, compared with a node-level proxy?"
+    options:
+      - id: a
+        text: "Both grow with the number of Services only."
+        explanation: "The number of proxies differs."
+      - id: b
+        text: "A sidecar mesh grows with nodes, and a node-level proxy with pods."
+        explanation: "The two are reversed."
+      - id: c
+        text: "Neither grows, because proxies are free."
+        explanation: "Proxies use memory and CPU."
+      - id: d
+        text: "A sidecar mesh grows with the number of pods, and a node-level proxy grows with the number of nodes."
+        explanation: "Correct. Many small pods per node make the difference large."
+    correct_option: d
+    explanation: "Correct. Many small pods per node make the difference large."
+
+  - id: ats054-050-q08
+    type: single_choice
+    difficulty: advanced
+    learning_objective: "Weigh failure scope and security boundary"
+    source_readings:
+      - sections/section-050/module-01/course-03-comparing-sidecar-sidecarless-and-ambient.md
+    prompt: "Which statement about a shared node-level proxy compared with a sidecar is correct?"
+    options:
+      - id: a
+        text: "It is inside the pod, so a failure affects one pod only."
+        explanation: "This describes a sidecar."
+      - id: b
+        text: "It is outside the application trust boundary, but a failure or a bad upgrade can affect every pod on the node that depends on it."
+        explanation: "Correct. The boundary improves and the failure scope grows."
+      - id: c
+        text: "It guarantees that all traffic is encrypted."
+        explanation: "The placement does not set encryption."
+      - id: d
+        text: "It removes the need to size the proxy."
+        explanation: "A shared proxy must be sized for the busiest node."
+    correct_option: b
+    explanation: "Correct. The boundary improves and the failure scope grows."
+

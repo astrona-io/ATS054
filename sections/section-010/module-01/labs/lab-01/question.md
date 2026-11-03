@@ -1,35 +1,10 @@
----
-draft: true
-exam_objectives:
-- Know How to use Ingress or Gateway API for Ingress Routing
----
-# Locate Cilium Service Exposure Boundaries
+# Question
 
-Verify internal Service ownership and realised endpoints.
+Solve this question on: `terminal`
 
-## Starting state
+The platform team runs a `Gateway` named `fleet` in the namespace `starfleet`. An application team wrote an `HTTPRoute` named `fleet` for the host `fleet.example.com`. The route does not work yet. Fix it and extend it. Do not change the `Gateway`, and do not create more routes.
 
-Cilium manages the private two-node cluster. Hubble Relay and the BGP control plane are enabled. The probe and two clients are healthy; no learner policy or evidence report exists. This baseline uses kube-proxy and tunnelling.
+1. The route must be accepted by the Gateway and all of its backend references must resolve. Every request for `fleet.example.com` must reach the Service `scout` in `starfleet`.
+2. A request for `fleet.example.com` with the header `x-fleet: probe` must reach the Service `probe` in `starfleet` instead.
 
-Use a host shell with the private kubeconfig for this independent kind environment. A kubeconfig identifies the cluster and credentials used by kubectl, the Kubernetes command-line tool.
-
-```sh
-export KUBECONFIG="$(astrona kubeconfig ats-054-lab-010-01-01)"
-test "$(kubectl config current-context)" = "kind-astro-ats-054-lab-010-01-01" || exit 1
-node_name="astro-ats-054-lab-010-01-01-control-plane"
-worker_name="astro-ats-054-lab-010-01-01-worker"
-```
-
-Keep this connection selected. Host-level commands name only this environment's node containers. They do not operate on the host operating system.
-
-## Required result
-
-Inspect the internal probe Service and Cilium agent configuration. Ingress and Gateway API require additional controllers and exposure infrastructure. This prerequisite exercise validates internal Service forwarding, not an external Gateway.
-
-Record observations in `starfleet/evidence`, whose `report.json` contains the stated report. The verifier reads the live API again; invented values do not pass.
-
-The report object uses these fields: `selector`, `ports`, `response`. Keep numeric values numeric and preserve arrays and nested objects returned by the API.
-
-## Verify The Result
-
-The grader checks the required object fields and actual observations. Wait for controller convergence before submitting. Preserve the task's namespace, workload names and unrelated components.
+The entry point of a Gateway on this cluster is the node port of the Service that Cilium created for it. You can send test requests from the pod `shuttle` in `starfleet` with `curl` and a `Host` header. `kubectl` already points at the cluster.

@@ -1,0 +1,41 @@
+# Starting state: a Gateway that accepts labelled namespaces, and a route in outpost that
+# points at the Service probe in starfleet. outpost has no label and starfleet has no grant.
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: edge
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: edge-gw
+  namespace: edge
+spec:
+  gatewayClassName: cilium
+  listeners:
+    - name: web
+      protocol: HTTP
+      port: 80
+      allowedRoutes:
+        namespaces:
+          from: Selector
+          selector:
+            matchLabels:
+              access: gateway
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: probe
+  namespace: outpost
+spec:
+  parentRefs:
+    - name: edge-gw
+      namespace: edge
+  hostnames:
+    - probe.example.com
+  rules:
+    - backendRefs:
+        - name: probe
+          namespace: starfleet
+          port: 80

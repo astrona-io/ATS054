@@ -1,31 +1,13 @@
----
-draft: true
-exam_objectives:
-- Sidecar-based versus Sidecarless Architectures
----
-# Observe A Shared L7 Proxy Boundary
+# Question
 
-Enforce a service HTTP path boundary.
+Solve this question on: `terminal`
 
-## Starting state
+The team removed an old sidecar mesh from the cluster, but the Deployment `probe` in the namespace `starfleet` still runs a leftover proxy container named `legacy-proxy` next to the container `probe`. Cilium already enforces a Layer 7 policy for `probe` on the node, with the CiliumNetworkPolicy `probe-l7`, so the leftover container is no longer needed.
 
-Cilium manages the private two-node cluster. Hubble Relay and the BGP control plane are enabled. The probe and two clients are healthy; no learner policy or evidence report exists. This baseline uses kube-proxy and tunnelling.
+Clean up the Deployment:
 
-Use a host shell with the private kubeconfig for this independent kind environment. A kubeconfig identifies the cluster and credentials used by kubectl, the Kubernetes command-line tool.
+1. Remove the container `legacy-proxy` from the pod template of the Deployment `probe`. Keep the container `probe` unchanged.
+2. Wait until the rollout finishes. Every pod with the label `app=probe` must be Ready and must have exactly one container.
+3. Keep the policy `probe-l7` and the Cilium Envoy DaemonSet as they are. Layer 7 enforcement must keep working: `GET /get` from `shuttle` returns `200`, a `POST` from `shuttle` returns `403`, and `drifter` in `outpost` gets no reply.
 
-```sh
-export KUBECONFIG="$(astrona kubeconfig ats-054-lab-050-01-01)"
-test "$(kubectl config current-context)" = "kind-astro-ats-054-lab-050-01-01" || exit 1
-node_name="astro-ats-054-lab-050-01-01-control-plane"
-worker_name="astro-ats-054-lab-050-01-01-worker"
-```
-
-Keep this connection selected. Host-level commands name only this environment's node containers. They do not operate on the host operating system.
-
-## Required result
-
-Apply Cilium L7 policy and verify two path verdicts. The probe has one application container and no sidecar; proxy enforcement belongs to Cilium.
-
-## Verify The Result
-
-The grader checks the required object fields and actual observations. Wait for controller convergence before submitting. Preserve the task's namespace, workload names and unrelated components.
+Send test requests with `kubectl exec` from `shuttle` in `starfleet` and `drifter` in `outpost`, which both have `curl`. `kubectl` already points at the cluster.

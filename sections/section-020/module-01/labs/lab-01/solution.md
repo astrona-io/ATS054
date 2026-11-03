@@ -1,80 +1,75 @@
----
-draft: true
-exam_objectives:
-- Service Mesh Use Cases
----
-# Apply Mesh Style L7 Access Control Solution
+# Solution
 
-Use a host shell with the private kubeconfig for this independent kind environment. A kubeconfig identifies the cluster and credentials used by kubectl, the Kubernetes command-line tool.
+Solve this lab on `terminal`. Each step ends with `astrona submit`. The `--keep` flag keeps the lab running so you can continue after a failed check.
+
+Start the lab if it is not running:
 
 ```sh
-export KUBECONFIG="$(astrona kubeconfig ats-054-lab-020-01-01)"
-test "$(kubectl config current-context)" = "kind-astro-ats-054-lab-020-01-01" || exit 1
-node_name="astro-ats-054-lab-020-01-01-control-plane"
-worker_name="astro-ats-054-lab-020-01-01-worker"
+astrona run --git ssh://git@github.com/astrona-io/ATS054.git -c sections/section-020/module-01/labs/lab-01
 ```
 
-Keep this connection selected. Host-level commands name only this environment's node containers. They do not operate on the host operating system.
+## Step 1: Check the starting state
 
-## Inspect And Explain
-
-Cilium manages the private two-node cluster. Hubble Relay and the BGP control plane are enabled. The probe and two clients are healthy; no learner policy or evidence report exists. This baseline uses kube-proxy and tunnelling.
-
-Inspect the current objects before changing them:
+No policy exists, so everything is open. Confirm it:
 
 ```sh
-kubectl -n starfleet get pods -o wide
-kubectl get nodes -o wide
+kubectl -n starfleet get ciliumnetworkpolicy
+kubectl -n starfleet exec deploy/shuttle -- curl -s -m 5 -o /dev/null -w '%{http_code}\n' http://probe.starfleet.svc/uuid
 ```
 
-Enforce a path-aware service boundary with Cilium. Compare this network enforcement with application identity and mesh-level retries; the latter are not implemented by this fixture.
+The list is empty and the request returns `200`.
 
-Save this as `ciliumnetworkpolicy-allow-shuttle.yaml`:
+## Step 2: Write the policy
+
+Policy applies to the pod port, so the rule uses 8080, not the Service port 80. Save this as `policy-probe-get.yaml`:
 
 ```yaml
 apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
 metadata:
-  name: allow-shuttle
+  name: probe-get
   namespace: starfleet
 spec:
   endpointSelector:
     matchLabels:
       app: probe
   ingress:
-  - fromEndpoints:
-    - matchLabels:
-        k8s:io.kubernetes.pod.namespace: starfleet
-    toPorts:
-    - ports:
-      - port: '8080'
-        protocol: TCP
-      rules:
-        http:
-        - method: GET
-          path: /public
+    - fromEndpoints:
+        - matchLabels:
+            app: shuttle
+      toPorts:
+        - ports:
+            - port: "8080"
+              protocol: TCP
+          rules:
+            http:
+              - method: GET
+                path: "/get"
 ```
 
-Apply the scoped correction:
+Apply it:
 
 ```sh
-kubectl apply -f ciliumnetworkpolicy-allow-shuttle.yaml
+kubectl apply -f policy-probe-get.yaml
 ```
 
-## Verify The Result
-
-Observe the actual result. A denied request returns a nonzero status when the denial works, so run it separately from a shell sequence that stops on error. Status convergence and a successful request establish different parts of the result.
+Then submit:
 
 ```sh
-kubectl -n starfleet exec shuttle -- python -c 'import urllib.request; print(urllib.request.urlopen('"'"'http://probe:8080/public'"'"',timeout=4).read().decode())'
-kubectl -n starfleet exec shuttle -- python -c 'import urllib.request; print(urllib.request.urlopen('"'"'http://probe:8080/private'"'"',timeout=4).read().decode())'
+astrona submit --git ssh://git@github.com/astrona-io/ATS054.git -c sections/section-020/module-01/labs/lab-01 --keep
 ```
 
-Enforce a service HTTP path boundary. The commands above deliberately target one environment. Keep its remaining components available so an unrelated failure cannot stand in for the required denial or correction. No example command output is presented as evidence of a completed run. A matching field alone does not establish that a process used it or that a controller reconciled it.
+## Step 3: Test by hand
 
-After recording your result, remove the independent lab with `astrona destroy ats-054-lab-020-01-01`.
+```sh
+kubectl -n starfleet exec deploy/shuttle -- curl -s -m 5 -o /dev/null -w '%{http_code}\n' http://probe.starfleet.svc/get
+kubectl -n starfleet exec deploy/shuttle -- curl -s -m 5 -o /dev/null -w '%{http_code}\n' http://probe.starfleet.svc/uuid
+kubectl -n outpost exec deploy/drifter -- curl -s -m 5 -o /dev/null -w '%{http_code}\n' http://probe.starfleet.svc/get
+kubectl -n outpost exec deploy/drifter -- curl -s -m 5 -o /dev/null -w '%{http_code}\n' http://scout.starfleet.svc/
+```
 
-## Common pitfalls
+The first request returns `200`. The second returns `403`, which Envoy answers. The third prints `000` after five seconds, because the kernel drops the connection from `drifter`. The fourth returns `200`, because `scout` has no policy.
 
-> [!WARNING]
-> Confirm the private context and exact node names before a change. Check the stated scope and live result. Do not change unrelated components to hide the original fault.
+## Why this is the answer
+
+`fromEndpoints` with the label `app=shuttle` limits who may connect, and the kernel drops everyone else. The `http` rule limits what an allowed client may send, and Envoy denies the rest. A policy on `probe` does not affect `scout`.

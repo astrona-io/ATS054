@@ -1,83 +1,53 @@
----
-draft: true
-exam_objectives:
-- Encrypting Traffic in Transit with Cilium
----
-# Check The Encryption Baseline Solution
+# Solution
 
-Use a host shell with the private kubeconfig for this independent kind environment. A kubeconfig identifies the cluster and credentials used by kubectl, the Kubernetes command-line tool.
+Solve this lab on `terminal`. Each step ends with `astrona submit`. The `--keep` flag keeps the lab running.
+
+Start the lab if it is not running:
 
 ```sh
-export KUBECONFIG="$(astrona kubeconfig ats-054-lab-040-01-01)"
-test "$(kubectl config current-context)" = "kind-astro-ats-054-lab-040-01-01" || exit 1
-node_name="astro-ats-054-lab-040-01-01-control-plane"
-worker_name="astro-ats-054-lab-040-01-01-worker"
+astrona run --git ssh://git@github.com/astrona-io/ATS054.git -c sections/section-040/module-01/labs/lab-01
 ```
 
-Keep this connection selected. Host-level commands name only this environment's node containers. They do not operate on the host operating system.
-
-## Inspect And Explain
-
-Cilium manages the private two-node cluster. Hubble Relay and the BGP control plane are enabled. The probe and two clients are healthy; no learner policy or evidence report exists. This baseline uses kube-proxy and tunnelling.
-
-Inspect the current objects before changing them:
+## Step 1: Read the current state
 
 ```sh
-kubectl -n starfleet get pods -o wide
-kubectl get nodes -o wide
+kubectl -n kube-system get configmap cilium-config -o jsonpath='{.data.enable-wireguard}{"\n"}'
+kubectl -n kube-system exec ds/cilium -c cilium-agent -- cilium-dbg status | grep Encryption
 ```
 
-Record enable-wireguard and enable-ipsec from live agent configuration, using false for an absent feature key. The baseline is unencrypted. This diagnostic prevents declaring encryption from connectivity alone; enabling encryption and inspecting keys is additional practice.
+The ConfigMap value is `false`, and the status line does not name WireGuard.
 
-Record observations in `starfleet/evidence`, whose `report.json` contains the stated report. The verifier reads the live API again; invented values do not pass.
-
-
-Save this as `record.py`:
-
-```python
-import json,subprocess,time,sys,tempfile,os
-
-def call(*args):
- r=subprocess.run(list(args),text=True,capture_output=True,timeout=20)
- assert r.returncode==0, 'Observation command failed: '+args[0]
- return r.stdout.strip()
-def obj(kind,name,ns='starfleet'):
- return json.loads(call('kubectl',*(['-n',ns] if ns else []),'get',kind,name,'-o','json'))
-def api(path):
- script='import urllib.request; print(urllib.request.urlopen('+repr('http://prometheus:9090'+path)+',timeout=8).read().decode())'
- return json.loads(call('kubectl','-n','starfleet','exec','shuttle','--','python','-c',script))
-def save(data):
- resource={'apiVersion':'v1','kind':'ConfigMap','metadata':{'name':'evidence','namespace':'starfleet'},'data':{'report.json':json.dumps(data,sort_keys=True)}}
- with tempfile.NamedTemporaryFile(mode='w',suffix='.json',delete=False) as f:json.dump(resource,f);path=f.name
- try:call('kubectl','apply','-f',path)
- finally:os.unlink(path)
-
-assert call('kubectl','config','current-context') == 'kind-astro-ats-054-lab-040-01-01'
-data=obj('configmap','cilium-config','kube-system')['data']
-report={'wireguard':data.get('enable-wireguard','false'),'ipsec':data.get('enable-ipsec','false')}
-save(report)
-```
-
-Apply the scoped correction:
+## Step 2: Enable WireGuard in the ConfigMap
 
 ```sh
-python3 record.py
+kubectl -n kube-system patch configmap cilium-config --type merge -p '{"data":{"enable-wireguard":"true"}}'
 ```
 
-## Verify The Result
+## Step 3: Restart the agents
 
-Observe the actual result. A denied request returns a nonzero status when the denial works, so run it separately from a shell sequence that stops on error. Status convergence and a successful request establish different parts of the result.
+The agents read the ConfigMap when they start, so restart the DaemonSet and wait:
 
 ```sh
-kubectl -n starfleet get configmaps
-kubectl -n starfleet get deployment probe -o yaml
+kubectl -n kube-system rollout restart daemonset/cilium
+kubectl -n kube-system rollout status daemonset/cilium --timeout=300s
 ```
 
-Establish whether transparent encryption is enabled. The commands above deliberately target one environment. Keep its remaining components available so an unrelated failure cannot stand in for the required denial or correction. No example command output is presented as evidence of a completed run. A matching field alone does not establish that a process used it or that a controller reconciled it.
+Then submit:
 
-After recording your result, remove the independent lab with `astrona destroy ats-054-lab-040-01-01`.
+```sh
+astrona submit --git ssh://git@github.com/astrona-io/ATS054.git -c sections/section-040/module-01/labs/lab-01 --keep
+```
 
-## Common pitfalls
+## Step 4: Test by hand
 
-> [!WARNING]
-> Confirm the private context and exact node names before a change. Check the stated scope and live result. Do not change unrelated components to hide the original fault.
+```sh
+kubectl -n kube-system exec ds/cilium -c cilium-agent -- cilium-dbg status | grep Encryption
+kubectl -n starfleet exec deploy/shuttle -- curl -s -m 10 -o /dev/null -w '%{http_code}\n' http://scout.starfleet.svc/
+kubectl -n outpost exec deploy/drifter -- curl -s -m 10 -o /dev/null -w '%{http_code}\n' http://scout.starfleet.svc/
+```
+
+The status line names WireGuard and the device `cilium_wg0`. Both requests return `200`. Packets can be dropped for a short time while the WireGuard device is configured, so repeat a request that fails once.
+
+## Why this is the answer
+
+The Helm values `encryption.enabled=true` and `encryption.type=wireguard` produce the key `enable-wireguard: "true"` in the ConfigMap. The agents read it at start, so a restart is needed. The change in the ConfigMap is not stored in the Helm release, so a later `helm upgrade` without the same values would turn it off. Production clusters change the Helm values.

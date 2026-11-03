@@ -1,0 +1,65 @@
+# yaml-language-server: $schema=https://cli.astrona.io/schema/lab-config.schema.json
+#
+# Migrate Two Services From Sidecars To The Node Proxy (LAB). Graded against the live cluster. UNTESTED.
+apiVersion: astrona.io/v1
+metadata:
+  name: ats-054-capstone-050
+  docs:
+    prerequisites: prerequisites.md
+    question: question.md
+    solution: solution.md
+
+runtime:
+  type: kind
+  kind:
+    image: kindest/node:v1.35.0@sha256:452d707d4862f52530247495d180205e029056831160e22870e37e3f6c1ac31f
+    nodes:
+      workers: 1
+    networking:
+      disableDefaultCNI: true
+      podSubnet: 10.244.0.0/16
+    preloadImages:
+      - ghcr.io/stefanprodan/podinfo:6.15.0
+      - mccutchen/go-httpbin:2.25.0
+      - curlimages/curl:8.22.0
+
+bootstrap:
+  init:
+    - name: seed-cluster
+      description: Install Cilium and create the Starfleet workloads
+      type: file
+      source: bootstrap/01-seed-cluster.sh
+
+# Applied only by `astrona test`: the reference solution.
+testing:
+  init:
+    - name: apply-solution
+      description: Apply the reference solution
+      type: file
+      source: solution/apply.sh
+
+validation:
+  scripts:
+    - name: no-sidecars-left
+      description: "The Deployments scout and probe have no mesh proxy container"
+      type: file
+      source: validation/validate-no-sidecars-left.sh
+      hint: "Remove the container mesh-proxy from the pod template of both Deployments and wait for the rollouts."
+    - name: scout-rules-enforced
+      description: "scout accepts GET from shuttle only"
+      type: file
+      source: validation/validate-scout-rules-enforced.sh
+      hint: "Policy applies to the pod port 9898. Allow only the method GET and only the shuttle pods."
+    - name: probe-rules-enforced
+      description: "probe accepts GET /get from shuttle only"
+      type: file
+      source: validation/validate-probe-rules-enforced.sh
+      hint: "Policy applies to the pod port 8080. Other paths and other methods get 403 from Envoy."
+    - name: node-proxy-healthy
+      description: "cilium-envoy is ready on every node and the pods are Ready"
+      type: file
+      source: validation/validate-node-proxy-healthy.sh
+      hint: "The node proxy does the Layer 7 work, so keep the DaemonSet as it is."
+
+teardown:
+  keepCluster: false

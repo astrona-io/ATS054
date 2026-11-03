@@ -212,6 +212,45 @@ modules:
     title: Summary
     path: sections/section-010/module-04/course-05-summary.md
   - type: reading
+    title: Troubleshoot Cilium Ingress And Gateway
+    path: sections/section-010/module-05/course.md
+  - type: reading
+    title: Read The Status Conditions
+    path: sections/section-010/module-05/course-01-read-the-status-conditions.md
+  - type: reading
+    title: Check The Controller And Its Prerequisites
+    path: sections/section-010/module-05/course-02-check-the-controller-and-its-prerequisites.md
+  - type: reading
+    title: Question
+    path: sections/section-010/module-05/labs/lab-01/question.md
+  - type: lab
+    title: Repair A Broken Gateway Route (Lab)
+    path: sections/section-010/module-05/labs/lab-01
+    difficulty: intermediate
+    estimated_duration: 25m
+    topic: cilium-gateway
+    task_kind: troubleshooting
+    tags:
+    - cilium
+    - gateway-api
+    - troubleshooting
+    - envoy
+    - hubble
+    learning_goals:
+    - The HTTPRoute is Accepted
+    - The backend reference resolves
+    - A request for fleet.example.com reaches scout
+    - The Gateway listener is unchanged
+  - type: reading
+    title: Look Inside Envoy
+    path: sections/section-010/module-05/course-03-look-inside-envoy.md
+  - type: reading
+    title: Follow The Request With Hubble And A Fault Checklist
+    path: sections/section-010/module-05/course-04-follow-the-request-and-a-fault-checklist.md
+  - type: reading
+    title: Summary
+    path: sections/section-010/module-05/course-05-summary.md
+  - type: reading
     title: Question
     path: sections/section-010/capstone/labs/lab-01/question.md
   - type: lab
@@ -282,6 +321,123 @@ modules:
   - type: reading
     title: Summary
     path: sections/section-020/module-01/course-04-summary.md
+  - type: reading
+    title: Traffic Management With The Cilium Envoy Proxy
+    path: sections/section-020/module-02/course.md
+  - type: reading
+    title: Layer 7 Load Balancing With An Annotation
+    path: sections/section-020/module-02/course-01-layer-7-load-balancing-with-an-annotation.md
+  - type: reading
+    title: Choose A Balancing Algorithm
+    path: sections/section-020/module-02/course-02-choose-a-balancing-algorithm.md
+  - type: reading
+    title: Question
+    path: sections/section-020/module-02/labs/lab-01/question.md
+  - type: lab
+    title: Turn On Layer 7 Load Balancing For A Service (Lab)
+    path: sections/section-020/module-02/labs/lab-01
+    difficulty: intermediate
+    estimated_duration: 25m
+    topic: cilium-envoy
+    task_kind: build
+    tags:
+    - cilium
+    - envoy
+    - load-balancing
+    - service-mesh
+    - ciliumenvoyconfig
+    learning_goals:
+    - The Service has lb-l7 enabled
+    - The Service uses least_request
+    - The Service answers with 200
+    - The selector and port are unchanged
+  - type: reading
+    title: CiliumEnvoyConfig Anatomy
+    path: sections/section-020/module-02/course-03-ciliumenvoyconfig-anatomy.md
+  - type: reading
+    title: Weights, Retries And When To Use Which Tool
+    path: sections/section-020/module-02/course-04-weights-retries-and-when-to-use-which-tool.md
+  - type: reading
+    title: Summary
+    path: sections/section-020/module-02/course-05-summary.md
+  - type: reading
+    title: Security Use Cases With Cilium
+    path: sections/section-020/module-03/course.md
+  - type: reading
+    title: Default Deny And Identity-Based Rules
+    path: sections/section-020/module-03/course-01-default-deny-and-identity-based-rules.md
+  - type: reading
+    title: Egress To Names And Entities
+    path: sections/section-020/module-03/course-02-egress-to-names-and-entities.md
+  - type: reading
+    title: Question
+    path: sections/section-020/module-03/labs/lab-01/question.md
+  - type: lab
+    title: Restrict The Egress Of A Pod With A CiliumNetworkPolicy (Lab)
+    path: sections/section-020/module-03/labs/lab-01
+    difficulty: intermediate
+    estimated_duration: 25m
+    topic: cilium-security
+    task_kind: build
+    tags:
+    - cilium
+    - network-policy
+    - fqdn
+    - entities
+    - mutual-authentication
+    learning_goals:
+    - A policy selects shuttle
+    - shuttle reaches scout
+    - shuttle cannot reach probe
+    - drifter still reaches probe
+  - type: reading
+    title: Deny Rules And Policy Precedence
+    path: sections/section-020/module-03/course-03-deny-rules-and-policy-precedence.md
+  - type: reading
+    title: Mutual Authentication In Policies
+    path: sections/section-020/module-03/course-04-mutual-authentication-in-policies.md
+  - type: reading
+    title: Summary
+    path: sections/section-020/module-03/course-05-summary.md
+  - type: reading
+    title: Observability With Hubble And Metrics
+    path: sections/section-020/module-04/course.md
+  - type: reading
+    title: Read Flows With The Hubble CLI
+    path: sections/section-020/module-04/course-01-read-flows-with-the-hubble-cli.md
+  - type: reading
+    title: Filter Flows To Find A Fault
+    path: sections/section-020/module-04/course-02-filter-flows-to-find-a-fault.md
+  - type: reading
+    title: Layer 7 Visibility And Service Maps
+    path: sections/section-020/module-04/course-03-layer-7-visibility-and-service-maps.md
+  - type: reading
+    title: Question
+    path: sections/section-020/module-04/labs/lab-01/question.md
+  - type: lab
+    title: Make HTTP Requests Visible To Hubble (Lab)
+    path: sections/section-020/module-04/labs/lab-01
+    difficulty: intermediate
+    estimated_duration: 25m
+    topic: cilium-observability
+    task_kind: build
+    tags:
+    - cilium
+    - hubble
+    - metrics
+    - observability
+    - layer7
+    learning_goals:
+    - A policy has HTTP rules for /get and /status
+    - GET /get returns 200
+    - GET /status/204 returns 204
+    - GET /uuid is denied with 403
+  - type: reading
+    title: Metrics For Prometheus
+    path: sections/section-020/module-04/course-04-metrics-for-prometheus.md
+  - type: reading
+    title: Summary
+    path: sections/section-020/module-04/course-05-summary.md
   - type: reading
     title: Question
     path: sections/section-020/capstone/labs/lab-01/question.md

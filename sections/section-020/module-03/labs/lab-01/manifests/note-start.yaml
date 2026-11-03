@@ -1,0 +1,8 @@
+# Starting state: a note for the learner. No policy exists yet.
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: lab-note
+  namespace: starfleet
+data:
+  task: "Restrict the egress of shuttle with a CiliumNetworkPolicy"

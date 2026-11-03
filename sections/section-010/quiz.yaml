@@ -995,3 +995,266 @@ questions:
       explanation: Incorrect. Weight 0 sends no traffic and needs no pod restart.
     correct_option: b
     explanation: Correct. Weight 0 sends no traffic and needs no pod restart.
+
+  - id: ats054-010-m05-q01
+    type: single_choice
+    difficulty: beginner
+    learning_objective: Find the first level
+    source_readings:
+    - sections/section-010/module-05/course-01-read-the-status-conditions.md
+    prompt: In which order do you read the status of Gateway API objects?
+    options:
+    - id: a
+      text: Route, listener, Gateway, GatewayClass
+      explanation: Incorrect. A fault at a level hides the levels below, so start at
+        the GatewayClass.
+    - id: b
+      text: GatewayClass, Gateway, listener, route
+      explanation: Correct. A fault at a level hides the levels below, so start at the
+        GatewayClass.
+    - id: c
+      text: Backend, route, Gateway
+      explanation: Incorrect. A fault at a level hides the levels below, so start at
+        the GatewayClass.
+    - id: d
+      text: Envoy, route, Gateway
+      explanation: Incorrect. A fault at a level hides the levels below, so start at
+        the GatewayClass.
+    correct_option: b
+    explanation: Correct. A fault at a level hides the levels below, so start at the
+      GatewayClass.
+  - id: ats054-010-m05-q02
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: Read a reason
+    source_readings:
+    - sections/section-010/module-05/course-01-read-the-status-conditions.md
+    prompt: A route shows Accepted=False with the reason NoMatchingParent. What is the
+      likely cause?
+    options:
+    - id: a
+      text: The backend port is wrong.
+      explanation: Incorrect. NoMatchingParent means no listener of the parent matches
+        the parentRef.
+    - id: b
+      text: The sectionName names a listener that does not exist.
+      explanation: Correct. NoMatchingParent means no listener of the parent matches
+        the parentRef.
+    - id: c
+      text: The Service has no endpoints.
+      explanation: Incorrect. NoMatchingParent means no listener of the parent matches
+        the parentRef.
+    - id: d
+      text: Envoy crashed.
+      explanation: Incorrect. NoMatchingParent means no listener of the parent matches
+        the parentRef.
+    correct_option: b
+    explanation: Correct. NoMatchingParent means no listener of the parent matches the
+      parentRef.
+  - id: ats054-010-m05-q03
+    type: single_choice
+    difficulty: beginner
+    learning_objective: Know ResolvedRefs
+    source_readings:
+    - sections/section-010/module-05/course-01-read-the-status-conditions.md
+    prompt: Which condition reports a missing backend Service?
+    options:
+    - id: a
+      text: "`Accepted`"
+      explanation: Incorrect. ResolvedRefs is False with BackendNotFound when a reference
+        is invalid.
+    - id: b
+      text: "`ResolvedRefs`"
+      explanation: Correct. ResolvedRefs is False with BackendNotFound when a reference
+        is invalid.
+    - id: c
+      text: "`Programmed`"
+      explanation: Incorrect. ResolvedRefs is False with BackendNotFound when a reference
+        is invalid.
+    - id: d
+      text: "`Ready`"
+      explanation: Incorrect. ResolvedRefs is False with BackendNotFound when a reference
+        is invalid.
+    correct_option: b
+    explanation: Correct. ResolvedRefs is False with BackendNotFound when a reference
+      is invalid.
+  - id: ats054-010-m05-q04
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: Install the CRDs in order
+    source_readings:
+    - sections/section-010/module-05/course-02-check-the-controller-and-its-prerequisites.md
+    prompt: The Gateway API CRDs were installed after Cilium. What is the symptom and
+      the fix?
+    options:
+    - id: a
+      text: Routes are slow; scale Envoy.
+      explanation: Incorrect. The operator needs the CRDs at start, so restart it after
+        installing them.
+    - id: b
+      text: No GatewayClass and no status; restart the operator.
+      explanation: Correct. The operator needs the CRDs at start, so restart it after
+        installing them.
+    - id: c
+      text: The Service is deleted; recreate it.
+      explanation: Incorrect. The operator needs the CRDs at start, so restart it after
+        installing them.
+    - id: d
+      text: TLS fails; renew the certificate.
+      explanation: Incorrect. The operator needs the CRDs at start, so restart it after
+        installing them.
+    correct_option: b
+    explanation: Correct. The operator needs the CRDs at start, so restart it after
+      installing them.
+  - id: ats054-010-m05-q05
+    type: single_choice
+    difficulty: beginner
+    learning_objective: Name the generated Service
+    source_readings:
+    - sections/section-010/module-05/course-02-check-the-controller-and-its-prerequisites.md
+    prompt: What is the name of the Service Cilium creates for a Gateway named fleet?
+    options:
+    - id: a
+      text: "`fleet`"
+      explanation: Incorrect. The Service is named cilium-gateway-<gateway name>.
+    - id: b
+      text: "`cilium-gateway-fleet`"
+      explanation: Correct. The Service is named cilium-gateway-<gateway name>.
+    - id: c
+      text: "`gateway-fleet-svc`"
+      explanation: Incorrect. The Service is named cilium-gateway-<gateway name>.
+    - id: d
+      text: "`cilium-fleet`"
+      explanation: Incorrect. The Service is named cilium-gateway-<gateway name>.
+    correct_option: b
+    explanation: Correct. The Service is named cilium-gateway-<gateway name>.
+  - id: ats054-010-m05-q06
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: Explain a pending address
+    source_readings:
+    - sections/section-010/module-05/course-02-check-the-controller-and-its-prerequisites.md
+    prompt: On kind, the generated Service shows EXTERNAL-IP pending. What does it mean?
+    options:
+    - id: a
+      text: The Gateway is broken.
+      explanation: Incorrect. kind has no load balancer by default, so the address stays
+        pending.
+    - id: b
+      text: No load balancer gives it an address; use the node port.
+      explanation: Correct. kind has no load balancer by default, so the address stays
+        pending.
+    - id: c
+      text: The route is rejected.
+      explanation: Incorrect. kind has no load balancer by default, so the address stays
+        pending.
+    - id: d
+      text: The CRDs are missing.
+      explanation: Incorrect. kind has no load balancer by default, so the address stays
+        pending.
+    correct_option: b
+    explanation: Correct. kind has no load balancer by default, so the address stays
+      pending.
+  - id: ats054-010-m05-q07
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: Map a status code
+    source_readings:
+    - sections/section-010/module-05/course-03-look-inside-envoy.md
+    prompt: A request reaches Envoy, a route matches, and the Service has no ready pods.
+      Which status does the client get?
+    options:
+    - id: a
+      text: "`404`"
+      explanation: Incorrect. 503 means a route matched but the backend has no ready
+        endpoints.
+    - id: b
+      text: "`503`"
+      explanation: Correct. 503 means a route matched but the backend has no ready endpoints.
+    - id: c
+      text: "`301`"
+      explanation: Incorrect. 503 means a route matched but the backend has no ready
+        endpoints.
+    - id: d
+      text: "`200`"
+      explanation: Incorrect. 503 means a route matched but the backend has no ready
+        endpoints.
+    correct_option: b
+    explanation: Correct. 503 means a route matched but the backend has no ready endpoints.
+  - id: ats054-010-m05-q08
+    type: single_choice
+    difficulty: beginner
+    learning_objective: Read a 404
+    source_readings:
+    - sections/section-010/module-05/course-03-look-inside-envoy.md
+    prompt: What does a 404 from the Gateway tell you?
+    options:
+    - id: a
+      text: The request reached Envoy and no route matched.
+      explanation: Correct. 404 means the request reached the proxy and no route matched.
+    - id: b
+      text: The backend crashed.
+      explanation: Incorrect. 404 means the request reached the proxy and no route matched.
+    - id: c
+      text: The Service is missing.
+      explanation: Incorrect. 404 means the request reached the proxy and no route matched.
+    - id: d
+      text: The CRDs are missing.
+      explanation: Incorrect. 404 means the request reached the proxy and no route matched.
+    correct_option: a
+    explanation: Correct. 404 means the request reached the proxy and no route matched.
+  - id: ats054-010-m05-q09
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: Allow the ingress entity
+    source_readings:
+    - sections/section-010/module-05/course-04-follow-the-request-and-a-fault-checklist.md
+    prompt: A route is healthy but the backend is unreachable and Hubble shows a policy
+      drop. What should the backend policy allow?
+    options:
+    - id: a
+      text: Only the client pod labels
+      explanation: Incorrect. Gateway traffic reaches the backend with the reserved
+        ingress identity.
+    - id: b
+      text: The `ingress` entity
+      explanation: Correct. Gateway traffic reaches the backend with the reserved ingress
+        identity.
+    - id: c
+      text: Only the node IP
+      explanation: Incorrect. Gateway traffic reaches the backend with the reserved
+        ingress identity.
+    - id: d
+      text: Nothing, delete the route
+      explanation: Incorrect. Gateway traffic reaches the backend with the reserved
+        ingress identity.
+    correct_option: b
+    explanation: Correct. Gateway traffic reaches the backend with the reserved ingress
+      identity.
+  - id: ats054-010-m05-q10
+    type: single_choice
+    difficulty: beginner
+    learning_objective: Change one thing
+    source_readings:
+    - sections/section-010/module-05/course-04-follow-the-request-and-a-fault-checklist.md
+    prompt: Why do you change one thing at a time while you troubleshoot?
+    options:
+    - id: a
+      text: Kubectl allows one apply per minute.
+      explanation: Incorrect. Several changes at once make it hard to know which one
+        fixed or broke the route.
+    - id: b
+      text: Each change hides the effect of the one before.
+      explanation: Correct. Several changes at once make it hard to know which one fixed
+        or broke the route.
+    - id: c
+      text: Envoy reloads once per hour.
+      explanation: Incorrect. Several changes at once make it hard to know which one
+        fixed or broke the route.
+    - id: d
+      text: The status is cached for a day.
+      explanation: Incorrect. Several changes at once make it hard to know which one
+        fixed or broke the route.
+    correct_option: b
+    explanation: Correct. Several changes at once make it hard to know which one fixed
+      or broke the route.

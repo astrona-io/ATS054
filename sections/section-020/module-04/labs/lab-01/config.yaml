@@ -1,0 +1,65 @@
+# yaml-language-server: $schema=https://cli.astrona.io/schema/lab-config.schema.json
+#
+# Make HTTP Requests Visible To Hubble (LAB). Graded against the live cluster. UNTESTED.
+apiVersion: astrona.io/v1
+metadata:
+  name: ats-054-lab-020-04
+  docs:
+    prerequisites: prerequisites.md
+    question: question.md
+    solution: solution.md
+
+runtime:
+  type: kind
+  kind:
+    image: kindest/node:v1.35.0@sha256:452d707d4862f52530247495d180205e029056831160e22870e37e3f6c1ac31f
+    nodes:
+      workers: 1
+    networking:
+      disableDefaultCNI: true
+      podSubnet: 10.244.0.0/16
+    preloadImages:
+      - ghcr.io/stefanprodan/podinfo:6.15.0
+      - mccutchen/go-httpbin:2.25.0
+      - curlimages/curl:8.22.0
+
+bootstrap:
+  init:
+    - name: seed-cluster
+      description: Install Cilium and create the Starfleet workloads
+      type: file
+      source: bootstrap/01-seed-cluster.sh
+
+# Applied only by `astrona test`: the reference solution.
+testing:
+  init:
+    - name: apply-solution
+      description: Apply the reference solution
+      type: file
+      source: solution/apply.sh
+
+validation:
+  scripts:
+    - name: policy-has-http-rules
+      description: "A policy for probe has HTTP rules for /get and /status"
+      type: file
+      source: validation/validate-policy-has-http-rules.sh
+      hint: "Add rules.http under toPorts with the paths /get and /status/.* ."
+    - name: get-allowed
+      description: "GET /get from shuttle returns 200"
+      type: file
+      source: validation/validate-get-allowed.sh
+      hint: "Allow the method GET for the path /get."
+    - name: status-allowed
+      description: "GET /status/204 from shuttle returns 204"
+      type: file
+      source: validation/validate-status-allowed.sh
+      hint: "The path is a regular expression: /status/.* matches /status/204."
+    - name: uuid-denied
+      description: "GET /uuid is denied with 403"
+      type: file
+      source: validation/validate-uuid-denied.sh
+      hint: "Do not allow other paths. Envoy answers 403 to a request that no rule allows."
+
+teardown:
+  keepCluster: false

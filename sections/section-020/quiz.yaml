@@ -195,3 +195,707 @@ questions:
     correct_option: d
     explanation: "Correct. HTTP details come from Envoy."
 
+  - id: ats054-020-m02-q01
+    type: single_choice
+    difficulty: beginner
+    learning_objective: Compare balancing levels
+    source_readings:
+    - sections/section-020/module-02/course-01-layer-7-load-balancing-with-an-annotation.md
+    prompt: How does kernel load balancing pick a backend?
+    options:
+    - id: a
+      text: Per request
+      explanation: Incorrect. The kernel picks a backend when a connection opens.
+    - id: b
+      text: Per connection
+      explanation: Correct. The kernel picks a backend when a connection opens.
+    - id: c
+      text: Per byte
+      explanation: Incorrect. The kernel picks a backend when a connection opens.
+    - id: d
+      text: Per minute
+      explanation: Incorrect. The kernel picks a backend when a connection opens.
+    correct_option: b
+    explanation: Correct. The kernel picks a backend when a connection opens.
+  - id: ats054-020-m02-q02
+    type: single_choice
+    difficulty: beginner
+    learning_objective: Know the annotation
+    source_readings:
+    - sections/section-020/module-02/course-01-layer-7-load-balancing-with-an-annotation.md
+    prompt: Which annotation hands a Service to the Cilium Envoy proxy?
+    options:
+    - id: a
+      text: "`service.cilium.io/lb-l7: enabled`"
+      explanation: Correct. service.cilium.io/lb-l7 set to enabled turns on Layer 7
+        balancing.
+    - id: b
+      text: "`cilium.io/envoy: true`"
+      explanation: Incorrect. service.cilium.io/lb-l7 set to enabled turns on Layer
+        7 balancing.
+    - id: c
+      text: "`service.kubernetes.io/l7: on`"
+      explanation: Incorrect. service.cilium.io/lb-l7 set to enabled turns on Layer
+        7 balancing.
+    - id: d
+      text: "`io.cilium/proxy: envoy`"
+      explanation: Incorrect. service.cilium.io/lb-l7 set to enabled turns on Layer
+        7 balancing.
+    correct_option: a
+    explanation: Correct. service.cilium.io/lb-l7 set to enabled turns on Layer 7 balancing.
+  - id: ats054-020-m02-q03
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: Find the prerequisite
+    source_readings:
+    - sections/section-020/module-02/course-01-layer-7-load-balancing-with-an-annotation.md
+    prompt: What must be set in Helm for the annotation to work?
+    options:
+    - id: a
+      text: "`loadBalancer.l7.backend=envoy`"
+      explanation: Correct. The Layer 7 backend must be envoy, or the annotation is
+        ignored.
+    - id: b
+      text: "`bpf.masquerade=false`"
+      explanation: Incorrect. The Layer 7 backend must be envoy, or the annotation is
+        ignored.
+    - id: c
+      text: "`ipam.mode=cluster-pool`"
+      explanation: Incorrect. The Layer 7 backend must be envoy, or the annotation is
+        ignored.
+    - id: d
+      text: "`tls.enabled=true`"
+      explanation: Incorrect. The Layer 7 backend must be envoy, or the annotation is
+        ignored.
+    correct_option: a
+    explanation: Correct. The Layer 7 backend must be envoy, or the annotation is ignored.
+  - id: ats054-020-m02-q04
+    type: single_choice
+    difficulty: beginner
+    learning_objective: List algorithms
+    source_readings:
+    - sections/section-020/module-02/course-02-choose-a-balancing-algorithm.md
+    prompt: Which is NOT a valid value of service.cilium.io/lb-l7-algorithm?
+    options:
+    - id: a
+      text: "`round_robin`"
+      explanation: Incorrect. The values are round_robin, least_request and random.
+    - id: b
+      text: "`least_request`"
+      explanation: Incorrect. The values are round_robin, least_request and random.
+    - id: c
+      text: "`random`"
+      explanation: Incorrect. The values are round_robin, least_request and random.
+    - id: d
+      text: "`sticky`"
+      explanation: Correct. The values are round_robin, least_request and random.
+    correct_option: d
+    explanation: Correct. The values are round_robin, least_request and random.
+  - id: ats054-020-m02-q05
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: Choose least_request
+    source_readings:
+    - sections/section-020/module-02/course-02-choose-a-balancing-algorithm.md
+    prompt: When does least_request fit best?
+    options:
+    - id: a
+      text: Requests are equal in cost.
+      explanation: Incorrect. It avoids sending new requests to a backend that is busy
+        with slow ones.
+    - id: b
+      text: Some requests take much longer than others.
+      explanation: Correct. It avoids sending new requests to a backend that is busy
+        with slow ones.
+    - id: c
+      text: The Service has one pod.
+      explanation: Incorrect. It avoids sending new requests to a backend that is busy
+        with slow ones.
+    - id: d
+      text: The traffic is UDP.
+      explanation: Incorrect. It avoids sending new requests to a backend that is busy
+        with slow ones.
+    correct_option: b
+    explanation: Correct. It avoids sending new requests to a backend that is busy with
+      slow ones.
+  - id: ats054-020-m02-q06
+    type: single_choice
+    difficulty: beginner
+    learning_objective: Name the Envoy objects
+    source_readings:
+    - sections/section-020/module-02/course-03-ciliumenvoyconfig-anatomy.md
+    prompt: In what order does a request pass the Envoy objects of a CiliumEnvoyConfig?
+    options:
+    - id: a
+      text: Cluster, route, listener
+      explanation: Incorrect. The listener accepts, the route configuration matches,
+        the cluster holds the endpoints.
+    - id: b
+      text: Listener, route configuration, cluster
+      explanation: Correct. The listener accepts, the route configuration matches, the
+        cluster holds the endpoints.
+    - id: c
+      text: Route, cluster, listener
+      explanation: Incorrect. The listener accepts, the route configuration matches,
+        the cluster holds the endpoints.
+    - id: d
+      text: Listener, cluster, route configuration
+      explanation: Incorrect. The listener accepts, the route configuration matches,
+        the cluster holds the endpoints.
+    correct_option: b
+    explanation: Correct. The listener accepts, the route configuration matches, the
+      cluster holds the endpoints.
+  - id: ats054-020-m02-q07
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: Tell apart scopes
+    source_readings:
+    - sections/section-020/module-02/course-03-ciliumenvoyconfig-anatomy.md
+    prompt: What is the difference between CiliumEnvoyConfig and CiliumClusterwideEnvoyConfig?
+    options:
+    - id: a
+      text: The first is namespaced and the second applies cluster-wide.
+      explanation: Correct. One lives in a namespace and the other has no namespace.
+    - id: b
+      text: The first is for TCP and the second for HTTP.
+      explanation: Incorrect. One lives in a namespace and the other has no namespace.
+    - id: c
+      text: The first is read-only.
+      explanation: Incorrect. One lives in a namespace and the other has no namespace.
+    - id: d
+      text: There is none.
+      explanation: Incorrect. One lives in a namespace and the other has no namespace.
+    correct_option: a
+    explanation: Correct. One lives in a namespace and the other has no namespace.
+  - id: ats054-020-m02-q08
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: Avoid editing generated config
+    source_readings:
+    - sections/section-020/module-02/course-03-ciliumenvoyconfig-anatomy.md
+    prompt: Why not edit a CiliumEnvoyConfig that Cilium generated?
+    options:
+    - id: a
+      text: It is read-only in the API.
+      explanation: Incorrect. A generated configuration is reconciled by the controller.
+    - id: b
+      text: The controller owns it and overwrites your change.
+      explanation: Correct. A generated configuration is reconciled by the controller.
+    - id: c
+      text: Envoy ignores edits.
+      explanation: Incorrect. A generated configuration is reconciled by the controller.
+    - id: d
+      text: It needs a restart.
+      explanation: Incorrect. A generated configuration is reconciled by the controller.
+    correct_option: b
+    explanation: Correct. A generated configuration is reconciled by the controller.
+  - id: ats054-020-m02-q09
+    type: single_choice
+    difficulty: beginner
+    learning_objective: Pick a tool
+    source_readings:
+    - sections/section-020/module-02/course-04-weights-retries-and-when-to-use-which-tool.md
+    prompt: Which tool fits north-south routing with weights and filters?
+    options:
+    - id: a
+      text: Gateway API
+      explanation: Correct. The Gateway API is the portable and supported way.
+    - id: b
+      text: A hand-written CiliumEnvoyConfig only
+      explanation: Incorrect. The Gateway API is the portable and supported way.
+    - id: c
+      text: kube-proxy
+      explanation: Incorrect. The Gateway API is the portable and supported way.
+    - id: d
+      text: A NodePort Service
+      explanation: Incorrect. The Gateway API is the portable and supported way.
+    correct_option: a
+    explanation: Correct. The Gateway API is the portable and supported way.
+  - id: ats054-020-m02-q10
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: Be careful with retries
+    source_readings:
+    - sections/section-020/module-02/course-04-weights-retries-and-when-to-use-which-tool.md
+    prompt: Why use retries only for some requests?
+    options:
+    - id: a
+      text: Retries repeat the request, so it must be safe to repeat.
+      explanation: Correct. A repeated request that is not idempotent may run twice.
+    - id: b
+      text: Envoy cannot retry.
+      explanation: Incorrect. A repeated request that is not idempotent may run twice.
+    - id: c
+      text: Retries need TLS.
+      explanation: Incorrect. A repeated request that is not idempotent may run twice.
+    - id: d
+      text: Retries change the Host header.
+      explanation: Incorrect. A repeated request that is not idempotent may run twice.
+    correct_option: a
+    explanation: Correct. A repeated request that is not idempotent may run twice.
+
+  - id: ats054-020-m03-q01
+    type: single_choice
+    difficulty: beginner
+    learning_objective: Know when deny starts
+    source_readings:
+    - sections/section-020/module-03/course-01-default-deny-and-identity-based-rules.md
+    prompt: When does a pod enter default deny for ingress?
+    options:
+    - id: a
+      text: Always.
+      explanation: Incorrect. A pod is restricted in a direction once a policy selects
+        it and has a section for that direction.
+    - id: b
+      text: When a policy selects it and has an ingress section.
+      explanation: Correct. A pod is restricted in a direction once a policy selects
+        it and has a section for that direction.
+    - id: c
+      text: When it has a label.
+      explanation: Incorrect. A pod is restricted in a direction once a policy selects
+        it and has a section for that direction.
+    - id: d
+      text: When its namespace has an annotation.
+      explanation: Incorrect. A pod is restricted in a direction once a policy selects
+        it and has a section for that direction.
+    correct_option: b
+    explanation: Correct. A pod is restricted in a direction once a policy selects it
+      and has a section for that direction.
+  - id: ats054-020-m03-q02
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: Use the pod port
+    source_readings:
+    - sections/section-020/module-03/course-01-default-deny-and-identity-based-rules.md
+    prompt: A Service listens on 80 and forwards to pod port 9898. Which port does the
+      policy name?
+    options:
+    - id: a
+      text: '80'
+      explanation: Incorrect. Cilium checks the policy after the Service is translated
+        to a pod.
+    - id: b
+      text: '9898'
+      explanation: Correct. Cilium checks the policy after the Service is translated
+        to a pod.
+    - id: c
+      text: '443'
+      explanation: Incorrect. Cilium checks the policy after the Service is translated
+        to a pod.
+    - id: d
+      text: Both
+      explanation: Incorrect. Cilium checks the policy after the Service is translated
+        to a pod.
+    correct_option: b
+    explanation: Correct. Cilium checks the policy after the Service is translated to
+      a pod.
+  - id: ats054-020-m03-q03
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: Explain a timeout
+    source_readings:
+    - sections/section-020/module-03/course-01-default-deny-and-identity-based-rules.md
+    prompt: A client calls a pod that a policy protects and gets no reply. What happened?
+    options:
+    - id: a
+      text: The packet was dropped.
+      explanation: Correct. A dropped packet gives no reply, so the client times out.
+    - id: b
+      text: The Service was deleted.
+      explanation: Incorrect. A dropped packet gives no reply, so the client times out.
+    - id: c
+      text: DNS failed with NXDOMAIN.
+      explanation: Incorrect. A dropped packet gives no reply, so the client times out.
+    - id: d
+      text: Envoy returned 403.
+      explanation: Incorrect. A dropped packet gives no reply, so the client times out.
+    correct_option: a
+    explanation: Correct. A dropped packet gives no reply, so the client times out.
+  - id: ats054-020-m03-q04
+    type: single_choice
+    difficulty: beginner
+    learning_objective: Name an entity
+    source_readings:
+    - sections/section-020/module-03/course-02-egress-to-names-and-entities.md
+    prompt: Which entity means everything outside the cluster?
+    options:
+    - id: a
+      text: "`world`"
+      explanation: Correct. world is outside the cluster.
+    - id: b
+      text: "`host`"
+      explanation: Incorrect. world is outside the cluster.
+    - id: c
+      text: "`ingress`"
+      explanation: Incorrect. world is outside the cluster.
+    - id: d
+      text: "`cluster`"
+      explanation: Incorrect. world is outside the cluster.
+    correct_option: a
+    explanation: Correct. world is outside the cluster.
+  - id: ats054-020-m03-q05
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: Make toFQDNs work
+    source_readings:
+    - sections/section-020/module-03/course-02-egress-to-names-and-entities.md
+    prompt: What does toFQDNs need besides the name rule?
+    options:
+    - id: a
+      text: A DNS rule that inspects lookups
+      explanation: Correct. Cilium learns the addresses from the DNS answer in its proxy.
+    - id: b
+      text: A NodePort
+      explanation: Incorrect. Cilium learns the addresses from the DNS answer in its
+        proxy.
+    - id: c
+      text: A Gateway
+      explanation: Incorrect. Cilium learns the addresses from the DNS answer in its
+        proxy.
+    - id: d
+      text: A SPIRE server
+      explanation: Incorrect. Cilium learns the addresses from the DNS answer in its
+        proxy.
+    correct_option: a
+    explanation: Correct. Cilium learns the addresses from the DNS answer in its proxy.
+  - id: ats054-020-m03-q06
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: Spot a weak pattern
+    source_readings:
+    - sections/section-020/module-03/course-02-egress-to-names-and-entities.md
+    prompt: Why is matchPattern '*' a poor choice for egress?
+    options:
+    - id: a
+      text: It is not valid YAML.
+      explanation: Incorrect. A wildcard of all names defeats the purpose.
+    - id: b
+      text: It allows every name.
+      explanation: Correct. A wildcard of all names defeats the purpose.
+    - id: c
+      text: It blocks DNS.
+      explanation: Incorrect. A wildcard of all names defeats the purpose.
+    - id: d
+      text: It only works for UDP.
+      explanation: Incorrect. A wildcard of all names defeats the purpose.
+    correct_option: b
+    explanation: Correct. A wildcard of all names defeats the purpose.
+  - id: ats054-020-m03-q07
+    type: single_choice
+    difficulty: beginner
+    learning_objective: Know the winner
+    source_readings:
+    - sections/section-020/module-03/course-03-deny-rules-and-policy-precedence.md
+    prompt: A deny rule and an allow rule both match. What happens?
+    options:
+    - id: a
+      text: Allowed
+      explanation: Incorrect. Deny wins over allow.
+    - id: b
+      text: Dropped
+      explanation: Correct. Deny wins over allow.
+    - id: c
+      text: Random
+      explanation: Incorrect. Deny wins over allow.
+    - id: d
+      text: Logged only
+      explanation: Incorrect. Deny wins over allow.
+    correct_option: b
+    explanation: Correct. Deny wins over allow.
+  - id: ats054-020-m03-q08
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: Predict a deny-only policy
+    source_readings:
+    - sections/section-020/module-03/course-03-deny-rules-and-policy-precedence.md
+    prompt: A policy has only ingressDeny. Does it turn on default deny for other callers?
+    options:
+    - id: a
+      text: Yes, for all callers.
+      explanation: Incorrect. A deny-only policy blocks the denied traffic and leaves
+        the rest as it was.
+    - id: b
+      text: No, others are not affected.
+      explanation: Correct. A deny-only policy blocks the denied traffic and leaves
+        the rest as it was.
+    - id: c
+      text: Only for TCP.
+      explanation: Incorrect. A deny-only policy blocks the denied traffic and leaves
+        the rest as it was.
+    - id: d
+      text: Only in the same namespace.
+      explanation: Incorrect. A deny-only policy blocks the denied traffic and leaves
+        the rest as it was.
+    correct_option: b
+    explanation: Correct. A deny-only policy blocks the denied traffic and leaves the
+      rest as it was.
+  - id: ats054-020-m03-q09
+    type: single_choice
+    difficulty: beginner
+    learning_objective: Find the field
+    source_readings:
+    - sections/section-020/module-03/course-04-mutual-authentication-in-policies.md
+    prompt: Which field requires verified identities in a rule?
+    options:
+    - id: a
+      text: "`authentication.mode: required`"
+      explanation: Correct. authentication.mode required asks for mutual authentication.
+    - id: b
+      text: "`tls.mode: Terminate`"
+      explanation: Incorrect. authentication.mode required asks for mutual authentication.
+    - id: c
+      text: "`encryption: on`"
+      explanation: Incorrect. authentication.mode required asks for mutual authentication.
+    - id: d
+      text: "`identity: strict`"
+      explanation: Incorrect. authentication.mode required asks for mutual authentication.
+    correct_option: a
+    explanation: Correct. authentication.mode required asks for mutual authentication.
+  - id: ats054-020-m03-q10
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: Separate proof and secrecy
+    source_readings:
+    - sections/section-020/module-03/course-04-mutual-authentication-in-policies.md
+    prompt: Does mutual authentication encrypt the traffic?
+    options:
+    - id: a
+      text: Yes, always.
+      explanation: Incorrect. Use WireGuard or IPsec for encryption.
+    - id: b
+      text: No, it proves identity; encryption is a separate feature.
+      explanation: Correct. Use WireGuard or IPsec for encryption.
+    - id: c
+      text: Only on HTTP.
+      explanation: Incorrect. Use WireGuard or IPsec for encryption.
+    - id: d
+      text: Only with Hubble.
+      explanation: Incorrect. Use WireGuard or IPsec for encryption.
+    correct_option: b
+    explanation: Correct. Use WireGuard or IPsec for encryption.
+
+  - id: ats054-020-m04-q01
+    type: single_choice
+    difficulty: beginner
+    learning_objective: Read a verdict
+    source_readings:
+    - sections/section-020/module-04/course-01-read-flows-with-the-hubble-cli.md
+    prompt: Which field of a Hubble flow says whether a packet went on or was stopped?
+    options:
+    - id: a
+      text: Type
+      explanation: Incorrect. The verdict is FORWARDED, DROPPED, AUDIT or REDIRECTED.
+    - id: b
+      text: Verdict
+      explanation: Correct. The verdict is FORWARDED, DROPPED, AUDIT or REDIRECTED.
+    - id: c
+      text: Identity
+      explanation: Incorrect. The verdict is FORWARDED, DROPPED, AUDIT or REDIRECTED.
+    - id: d
+      text: Port
+      explanation: Incorrect. The verdict is FORWARDED, DROPPED, AUDIT or REDIRECTED.
+    correct_option: b
+    explanation: Correct. The verdict is FORWARDED, DROPPED, AUDIT or REDIRECTED.
+  - id: ats054-020-m04-q02
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: Know what a relay does
+    source_readings:
+    - sections/section-020/module-04/course-01-read-flows-with-the-hubble-cli.md
+    prompt: What does Hubble Relay add to the per-node flows?
+    options:
+    - id: a
+      text: A cluster-wide view
+      explanation: Correct. Relay gathers flows from all nodes.
+    - id: b
+      text: Encryption
+      explanation: Incorrect. Relay gathers flows from all nodes.
+    - id: c
+      text: Policy enforcement
+      explanation: Incorrect. Relay gathers flows from all nodes.
+    - id: d
+      text: Load balancing
+      explanation: Incorrect. Relay gathers flows from all nodes.
+    correct_option: a
+    explanation: Correct. Relay gathers flows from all nodes.
+  - id: ats054-020-m04-q03
+    type: single_choice
+    difficulty: beginner
+    learning_objective: Name the identity
+    source_readings:
+    - sections/section-020/module-04/course-01-read-flows-with-the-hubble-cli.md
+    prompt: What is the number in brackets after a pod name in a flow?
+    options:
+    - id: a
+      text: The PID
+      explanation: Incorrect. It is the numeric identity of the label set.
+    - id: b
+      text: The Cilium security identity
+      explanation: Correct. It is the numeric identity of the label set.
+    - id: c
+      text: The port
+      explanation: Incorrect. It is the numeric identity of the label set.
+    - id: d
+      text: The node ID
+      explanation: Incorrect. It is the numeric identity of the label set.
+    correct_option: b
+    explanation: Correct. It is the numeric identity of the label set.
+  - id: ats054-020-m04-q04
+    type: single_choice
+    difficulty: beginner
+    learning_objective: Find drops
+    source_readings:
+    - sections/section-020/module-04/course-02-filter-flows-to-find-a-fault.md
+    prompt: Which filter selects dropped packets?
+    options:
+    - id: a
+      text: "`--verdict DROPPED`"
+      explanation: Correct. --verdict DROPPED selects them.
+    - id: b
+      text: "`--drop`"
+      explanation: Incorrect. --verdict DROPPED selects them.
+    - id: c
+      text: "`--status 403`"
+      explanation: Incorrect. --verdict DROPPED selects them.
+    - id: d
+      text: "`--deny`"
+      explanation: Incorrect. --verdict DROPPED selects them.
+    correct_option: a
+    explanation: Correct. --verdict DROPPED selects them.
+  - id: ats054-020-m04-q05
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: Combine filters
+    source_readings:
+    - sections/section-020/module-04/course-02-filter-flows-to-find-a-fault.md
+    prompt: How are filters of different kinds combined?
+    options:
+    - id: a
+      text: With AND
+      explanation: Correct. Different kinds of filters are ANDed.
+    - id: b
+      text: With OR
+      explanation: Incorrect. Different kinds of filters are ANDed.
+    - id: c
+      text: Last one wins
+      explanation: Incorrect. Different kinds of filters are ANDed.
+    - id: d
+      text: Alphabetically
+      explanation: Incorrect. Different kinds of filters are ANDed.
+    correct_option: a
+    explanation: Correct. Different kinds of filters are ANDed.
+  - id: ats054-020-m04-q06
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: Read a reason
+    source_readings:
+    - sections/section-020/module-04/course-02-filter-flows-to-find-a-fault.md
+    prompt: A flow shows DROPPED with reason Policy denied. What is the next step?
+    options:
+    - id: a
+      text: Restart the agent
+      explanation: Incorrect. The reason points at a policy.
+    - id: b
+      text: Read the policies that select the destination
+      explanation: Correct. The reason points at a policy.
+    - id: c
+      text: Scale the node pool
+      explanation: Incorrect. The reason points at a policy.
+    - id: d
+      text: Delete the Service
+      explanation: Incorrect. The reason points at a policy.
+    correct_option: b
+    explanation: Correct. The reason points at a policy.
+  - id: ats054-020-m04-q07
+    type: single_choice
+    difficulty: beginner
+    learning_objective: Know the requirement
+    source_readings:
+    - sections/section-020/module-04/course-03-layer-7-visibility-and-service-maps.md
+    prompt: When do HTTP method and path appear in Hubble?
+    options:
+    - id: a
+      text: Always
+      explanation: Incorrect. Cilium reads HTTP only in Envoy, and a Layer 7 rule sends
+        traffic there.
+    - id: b
+      text: Only when traffic passes a Layer 7 rule
+      explanation: Correct. Cilium reads HTTP only in Envoy, and a Layer 7 rule sends
+        traffic there.
+    - id: c
+      text: Only with IPsec
+      explanation: Incorrect. Cilium reads HTTP only in Envoy, and a Layer 7 rule sends
+        traffic there.
+    - id: d
+      text: Only for HTTPS
+      explanation: Incorrect. Cilium reads HTTP only in Envoy, and a Layer 7 rule sends
+        traffic there.
+    correct_option: b
+    explanation: Correct. Cilium reads HTTP only in Envoy, and a Layer 7 rule sends
+      traffic there.
+  - id: ats054-020-m04-q08
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: Predict a 403
+    source_readings:
+    - sections/section-020/module-04/course-03-layer-7-visibility-and-service-maps.md
+    prompt: A policy lists http rules for GET /get only. What happens to GET /uuid?
+    options:
+    - id: a
+      text: Allowed
+      explanation: Incorrect. Requests that match no listed rule are denied.
+    - id: b
+      text: Denied with 403
+      explanation: Correct. Requests that match no listed rule are denied.
+    - id: c
+      text: Redirected
+      explanation: Incorrect. Requests that match no listed rule are denied.
+    - id: d
+      text: Mirrored
+      explanation: Incorrect. Requests that match no listed rule are denied.
+    correct_option: b
+    explanation: Correct. Requests that match no listed rule are denied.
+  - id: ats054-020-m04-q09
+    type: single_choice
+    difficulty: beginner
+    learning_objective: Name a port
+    source_readings:
+    - sections/section-020/module-04/course-04-metrics-for-prometheus.md
+    prompt: On which port does the Cilium agent publish Prometheus metrics?
+    options:
+    - id: a
+      text: '9962'
+      explanation: Correct. The agent uses 9962.
+    - id: b
+      text: '80'
+      explanation: Incorrect. The agent uses 9962.
+    - id: c
+      text: '443'
+      explanation: Incorrect. The agent uses 9962.
+    - id: d
+      text: '8080'
+      explanation: Incorrect. The agent uses 9962.
+    correct_option: a
+    explanation: Correct. The agent uses 9962.
+  - id: ats054-020-m04-q10
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: Choose a group
+    source_readings:
+    - sections/section-020/module-04/course-04-metrics-for-prometheus.md
+    prompt: Which Hubble metric group counts HTTP requests and status codes?
+    options:
+    - id: a
+      text: "`dns`"
+      explanation: Incorrect. httpV2 gives HTTP request metrics.
+    - id: b
+      text: "`httpV2`"
+      explanation: Correct. httpV2 gives HTTP request metrics.
+    - id: c
+      text: "`icmp`"
+      explanation: Incorrect. httpV2 gives HTTP request metrics.
+    - id: d
+      text: "`port-distribution`"
+      explanation: Incorrect. httpV2 gives HTTP request metrics.
+    correct_option: b
+    explanation: Correct. httpV2 gives HTTP request metrics.

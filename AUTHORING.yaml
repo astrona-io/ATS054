@@ -53,12 +53,12 @@ sections:
     - id: lab-01
       path: sections/section-010/module-01/labs/lab-01
       objective: Fix And Extend A Cilium Gateway Route
-      status: draft
+      status: alpha
       runtime_verification: pending
     capstone:
       path: sections/section-010/capstone/labs/lab-01
       objective: Publish Two Services With Cilium Ingress And Gateway API
-      status: draft
+      status: alpha
       runtime_verification: pending
     summary: sections/section-010/module-01/course-04-summary.md
   - id: module-02
@@ -86,7 +86,7 @@ sections:
     - id: lab-01
       path: sections/section-010/module-02/labs/lab-01
       objective: Fix TLS On A Cilium Ingress
-      status: draft
+      status: alpha
       runtime_verification: pending
     summary: sections/section-010/module-02/course-05-summary.md
   - id: module-03
@@ -111,7 +111,7 @@ sections:
     - id: lab-01
       path: sections/section-010/module-03/labs/lab-01
       objective: Fix An HTTPS Listener On A Cilium Gateway
-      status: draft
+      status: alpha
       runtime_verification: pending
     summary: sections/section-010/module-03/course-05-summary.md
   - id: module-04
@@ -136,7 +136,7 @@ sections:
     - id: lab-01
       path: sections/section-010/module-04/labs/lab-01
       objective: Add A Redirect And A Rewrite To An HTTPRoute
-      status: draft
+      status: alpha
       runtime_verification: pending
     summary: sections/section-010/module-04/course-05-summary.md
   - id: module-05
@@ -161,7 +161,7 @@ sections:
     - id: lab-01
       path: sections/section-010/module-05/labs/lab-01
       objective: Repair A Broken Gateway Route
-      status: draft
+      status: alpha
       runtime_verification: pending
     summary: sections/section-010/module-05/course-05-summary.md
 - id: section-020
@@ -191,12 +191,12 @@ sections:
     - id: lab-01
       path: sections/section-020/module-01/labs/lab-01
       objective: Apply Layer 7 Access Control With CiliumNetworkPolicy
-      status: draft
+      status: alpha
       runtime_verification: pending
     capstone:
       path: sections/section-020/capstone/labs/lab-01
       objective: Repair Layer 7 Policies Without A Sidecar
-      status: draft
+      status: alpha
       runtime_verification: pending
     summary: sections/section-020/module-01/course-04-summary.md
   - id: module-02
@@ -221,7 +221,7 @@ sections:
     - id: lab-01
       path: sections/section-020/module-02/labs/lab-01
       objective: Turn On Layer 7 Load Balancing For A Service
-      status: draft
+      status: alpha
       runtime_verification: pending
     summary: sections/section-020/module-02/course-05-summary.md
   - id: module-03
@@ -246,7 +246,7 @@ sections:
     - id: lab-01
       path: sections/section-020/module-03/labs/lab-01
       objective: Restrict The Egress Of A Pod With A CiliumNetworkPolicy
-      status: draft
+      status: alpha
       runtime_verification: pending
     summary: sections/section-020/module-03/course-05-summary.md
   - id: module-04
@@ -271,7 +271,7 @@ sections:
     - id: lab-01
       path: sections/section-020/module-04/labs/lab-01
       objective: Make HTTP Requests Visible To Hubble
-      status: draft
+      status: alpha
       runtime_verification: pending
     summary: sections/section-020/module-04/course-05-summary.md
 - id: section-030
@@ -300,12 +300,12 @@ sections:
     - id: lab-01
       path: sections/section-030/module-01/labs/lab-01
       objective: Delegate Gateway Access By Namespace Label
-      status: draft
+      status: alpha
       runtime_verification: pending
     capstone:
       path: sections/section-030/capstone/labs/lab-01
       objective: Share A Backend Across Namespaces With A Gateway
-      status: draft
+      status: alpha
       runtime_verification: pending
     summary: sections/section-030/module-01/course-04-summary.md
   - id: module-02
@@ -330,7 +330,7 @@ sections:
     - id: lab-01
       path: sections/section-030/module-02/labs/lab-01
       objective: Migrate An Ingress To A Gateway And An HTTPRoute
-      status: draft
+      status: alpha
       runtime_verification: pending
     summary: sections/section-030/module-02/course-05-summary.md
   - id: module-03
@@ -355,7 +355,7 @@ sections:
     - id: lab-01
       path: sections/section-030/module-03/labs/lab-01
       objective: Inventory The Gateway API Of A Cluster
-      status: draft
+      status: alpha
       runtime_verification: pending
     summary: sections/section-030/module-03/course-05-summary.md
 - id: section-040
@@ -385,12 +385,12 @@ sections:
     - id: lab-01
       path: sections/section-040/module-01/labs/lab-01
       objective: Turn On WireGuard Encryption
-      status: draft
+      status: alpha
       runtime_verification: pending
     capstone:
       path: sections/section-040/capstone/labs/lab-01
       objective: Add Node-To-Node Encryption To WireGuard
-      status: draft
+      status: alpha
       runtime_verification: pending
     summary: sections/section-040/module-01/course-04-summary.md
   - id: module-02
@@ -415,7 +415,7 @@ sections:
     - id: lab-01
       path: sections/section-040/module-02/labs/lab-01
       objective: Record The WireGuard Settings Of A Cluster
-      status: draft
+      status: alpha
       runtime_verification: pending
     summary: sections/section-040/module-02/course-05-summary.md
   - id: module-03
@@ -440,7 +440,7 @@ sections:
     - id: lab-01
       path: sections/section-040/module-03/labs/lab-01
       objective: Rotate The IPsec Key Secret
-      status: draft
+      status: alpha
       runtime_verification: pending
     summary: sections/section-040/module-03/course-05-summary.md
   - id: module-04
@@ -465,7 +465,7 @@ sections:
     - id: lab-01
       path: sections/section-040/module-04/labs/lab-01
       objective: Require Mutual Authentication For A Service
-      status: draft
+      status: alpha
       runtime_verification: pending
     summary: sections/section-040/module-04/course-05-summary.md
 - id: section-050
@@ -494,12 +494,12 @@ sections:
     - id: lab-01
       path: sections/section-050/module-01/labs/lab-01
       objective: Remove A Leftover Sidecar Proxy
-      status: draft
+      status: alpha
       runtime_verification: pending
     capstone:
       path: sections/section-050/capstone/labs/lab-01
       objective: Migrate Two Services From Sidecars To The Node Proxy
-      status: draft
+      status: alpha
       runtime_verification: pending
     summary: sections/section-050/module-01/course-04-summary.md
   - id: module-02
@@ -524,7 +524,7 @@ sections:
     - id: lab-01
       path: sections/section-050/module-02/labs/lab-01
       objective: Prove The Cluster Runs Without Sidecars
-      status: draft
+      status: alpha
       runtime_verification: pending
     summary: sections/section-050/module-02/course-05-summary.md
   - id: module-03
@@ -549,6 +549,6 @@ sections:
     - id: lab-01
       path: sections/section-050/module-03/labs/lab-01
       objective: Inventory A Cluster Before A Sidecar Migration
-      status: draft
+      status: alpha
       runtime_verification: pending
     summary: sections/section-050/module-03/course-05-summary.md

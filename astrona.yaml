@@ -116,7 +116,7 @@ modules:
     difficulty: intermediate
     estimated_duration: 25m
     topic: cilium-ingress
-    task_kind: fix
+    task_kind: troubleshooting
     tags:
     - cilium
     - ingress
@@ -151,7 +151,7 @@ modules:
     difficulty: intermediate
     estimated_duration: 25m
     topic: cilium-gateway
-    task_kind: fix
+    task_kind: troubleshooting
     tags:
     - cilium
     - gateway-api
@@ -564,7 +564,7 @@ modules:
     difficulty: intermediate
     estimated_duration: 25m
     topic: gateway-api-channels
-    task_kind: investigate
+    task_kind: troubleshooting
     tags:
     - gateway-api
     - channels
@@ -685,7 +685,7 @@ modules:
     difficulty: intermediate
     estimated_duration: 25m
     topic: wireguard-operations
-    task_kind: investigate
+    task_kind: troubleshooting
     tags:
     - wireguard
     - encryption
@@ -875,7 +875,7 @@ modules:
     difficulty: intermediate
     estimated_duration: 25m
     topic: sidecarless-practice
-    task_kind: investigate
+    task_kind: troubleshooting
     tags:
     - sidecarless
     - envoy
@@ -914,7 +914,7 @@ modules:
     difficulty: intermediate
     estimated_duration: 25m
     topic: mesh-migration
-    task_kind: investigate
+    task_kind: troubleshooting
     tags:
     - migration
     - sidecar
